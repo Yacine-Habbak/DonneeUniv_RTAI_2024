@@ -1,7 +1,8 @@
 <?php
 
+use App\Http\Controllers\RecupApiController;
+
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+Route::get('/', [RecupApiController::class, 'RecupDataFromApi']);
