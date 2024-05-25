@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use App\Models\Etablissement;
 use App\Models\Discipline;
+use App\Models\Enseignant;
 use Illuminate\Support\Facades\Log;
 
 class RecupApiController extends Controller
@@ -15,6 +16,8 @@ class RecupApiController extends Controller
     {
         $this->RecupDataUnivFromApi();
         $this->RecupDataDisciplineFromApi();
+        $this->RecupDataEnseignantFromApi();
+
         return response()->json(['message' => 'Les données ont été correctement récupéré']);
     }
 
@@ -95,19 +98,19 @@ class RecupApiController extends Controller
         $startRecord = 0;
         $limit = 100;
         $allData = [];
-    
+
         do {
             try {
                 $response = $client->get("https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-insersup/records?start={$startRecord}&limit={$limit}");
-    
+
                 if ($response->getStatusCode() == 200) {
                     $data = json_decode($response->getBody(), true);
-    
+
                     if (isset($data['results']) && is_array($data['results'])) {
                         $allData = array_merge($allData, $data['results']);
                         $startRecord += $limit;
                     } else {
-                        Log::error('Structure de donnée incorrecte recue par l\'API');
+                        Log::error('Structure de donnée incorrecte reçue par l\'API');
                         break;
                     }
                 } else {
@@ -119,28 +122,93 @@ class RecupApiController extends Controller
                 break;
             }
         } while (!empty($data['results']));
-    
 
         Discipline::truncate();
-    
+
         foreach ($allData as $item) {
             try {
-                $discipline = new Discipline();
-                $discipline->Discipline = $item['discipli_lib'];
-                $discipline->Etablissement = $item['uo_lib'];
-                $discipline->Academie = $item['aca_nom'];
-                $discipline->Region = $item['reg_nom'];
-                $discipline->Type_diplome = $item['type_diplome_long'];
-                $discipline->Nom_diplome = $item['libelle_diplome'];
-                $discipline->Nbr_poursuivants = $item['nb_poursuivants'] ?? null;
-                $discipline->Nbr_sortants = $item['nb_sortants'] ?? null;
-                $discipline->Taux_emploi_salarié = $item['taux_emploi_sal_fr'] ?? null;
-                $discipline->Date_insertion = $item['date_inser'] ?? null;
-                $discipline->Taux_insertion = $item['taux_insertion'] ?? null;
-    
-                $discipline->save();
+                $etablissement = Etablissement::where('Etablissement', $item['uo_lib'])->first();
+
+                if ($etablissement) {
+                    $discipline = new Discipline();
+                    $discipline->univ_id = $etablissement->id;
+                    $discipline->Discipline = $item['discipli_lib'];
+                    $discipline->Etablissement = $item['uo_lib'];
+                    $discipline->Academie = $item['aca_nom'];
+                    $discipline->Region = $item['reg_nom'];
+                    $discipline->Type_diplome = $item['type_diplome_long'];
+                    $discipline->Nom_diplome = $item['libelle_diplome'];
+                    $discipline->Nbr_poursuivants = $item['nb_poursuivants'] ?? null;
+                    $discipline->Nbr_sortants = $item['nb_sortants'] ?? null;
+                    $discipline->Taux_emploi_salarié = $item['taux_emploi_sal_fr'] ?? null;
+                    $discipline->Date_insertion = $item['date_inser'] ?? null;
+                    $discipline->Taux_insertion = $item['taux_insertion'] ?? null;
+
+                    $discipline->save();
+                } else {
+                    Log::warning("L'établissement '{$item['uo_lib']}' n'existe pas dans la table 'etablissements'.");
+                }
             } catch (\Exception $e) {
                 Log::error('Erreur lors de l\'enregistrement de la discipline: ' . $e->getMessage());
+            }
+        }
+    }
+
+
+    // POUR LA TABLE ENSEIGNANTS
+    public function RecupDataEnseignantFromApi()
+    {
+        $client = new Client(['verify' => false]);
+        $startRecord = 0;
+        $limit = 100;
+        $allData = [];
+
+        do {
+            try {
+                $response = $client->get("https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-enseignants-titulaires-esr-public/records?start={$startRecord}&limit={$limit}");
+
+                if ($response->getStatusCode() == 200) {
+                    $data = json_decode($response->getBody(), true);
+
+                    if (isset($data['results']) && is_array($data['results'])) {
+                        $allData = array_merge($allData, $data['results']);
+                        $startRecord += $limit;
+                    } else {
+                        Log::error('Structure de donnée incorrecte reçue par l\'API');
+                        break;
+                    }
+                } else {
+                    Log::error('Erreur de transfert de donnée depuis l\'API');
+                    break;
+                }
+            } catch (\Exception $e) {
+                Log::error('Erreur de transfert de donnée depuis l\'API : ' . $e->getMessage());
+                break;
+            }
+        } while (!empty($data['results']));
+
+        Enseignant::truncate();
+
+        foreach ($allData as $item) {
+            try {
+                $etablissement = Etablissement::where('Etablissement', $item['etablissement_lib'])->first();
+
+                if ($etablissement) {
+                    $enseignant = new Enseignant();
+                    $enseignant->univ_id = $etablissement->id;
+                    $enseignant->Etablissement = $item['etablissement_lib'];
+                    $enseignant->Type_personnel = $item['categorie_assimilation'];
+                    $enseignant->Grande_discipline = $item['grande_discipline'];
+                    $enseignant->Sexe = $item['sexe'];
+                    $enseignant->Temps = $item['quotite'] ?? null;
+                    $enseignant->Effectif = $item['effectif'] ?? null;
+
+                    $enseignant->save();
+                } else {
+                    Log::warning("L'établissement '{$item['etablissement_lib']}' n'existe pas dans la table 'etablissements'.");
+                }
+            } catch (\Exception $e) {
+                Log::error('Erreur lors de l\'enregistrement de l\'enseignant: ' . $e->getMessage());
             }
         }
     }

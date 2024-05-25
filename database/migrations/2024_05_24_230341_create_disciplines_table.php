@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('disciplines', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('univ_id');
             $table->string('Discipline');
             $table->string('Etablissement');
             $table->string('Academie');
@@ -22,6 +23,8 @@ return new class extends Migration
             $table->string('Date_insertion')->nullable();
             $table->string('Taux_reussite')->nullable();
             $table->string('Taux_insertion')->nullable();
+
+            $table->foreign('univ_id')->references('id')->on('etablissements')->onDelete('cascade');
 
             $table->timestamps();
         });

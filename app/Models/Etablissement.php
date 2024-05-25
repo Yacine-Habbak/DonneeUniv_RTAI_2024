@@ -36,4 +36,9 @@ class Etablissement extends Model
         'linkedin',
         'Wikipedia',
     ];
+
+    public function disciplines()
+    {
+        return $this->hasMany(Discipline::class, 'univ_id');
+    }
 }
