@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Etablissement;
 use App\Models\Discipline;
 use App\Models\Enseignant;
+use App\Models\Personnel;
 use Illuminate\Support\Facades\Log;
 
 class RecupApiController extends Controller
@@ -17,6 +18,7 @@ class RecupApiController extends Controller
         $this->RecupDataUnivFromApi();
         $this->RecupDataDisciplineFromApi();
         $this->RecupDataEnseignantFromApi();
+        $this->RecupDataPersonnelFromApi();
 
         return response()->json(['message' => 'Les données ont été correctement récupéré']);
     }
@@ -133,9 +135,6 @@ class RecupApiController extends Controller
                     $discipline = new Discipline();
                     $discipline->univ_id = $etablissement->id;
                     $discipline->Discipline = $item['discipli_lib'];
-                    $discipline->Etablissement = $item['uo_lib'];
-                    $discipline->Academie = $item['aca_nom'];
-                    $discipline->Region = $item['reg_nom'];
                     $discipline->Type_diplome = $item['type_diplome_long'];
                     $discipline->Nom_diplome = $item['libelle_diplome'];
                     $discipline->Nbr_poursuivants = $item['nb_poursuivants'] ?? null;
@@ -196,8 +195,7 @@ class RecupApiController extends Controller
                 if ($etablissement) {
                     $enseignant = new Enseignant();
                     $enseignant->univ_id = $etablissement->id;
-                    $enseignant->Etablissement = $item['etablissement_lib'];
-                    $enseignant->Type_personnel = $item['categorie_assimilation'];
+                    $enseignant->Type_enseignant = $item['categorie_assimilation'];
                     $enseignant->Grande_discipline = $item['grande_discipline'];
                     $enseignant->Sexe = $item['sexe'];
                     $enseignant->Temps = $item['quotite'] ?? null;
@@ -214,4 +212,61 @@ class RecupApiController extends Controller
     }
     
 
+    // POUR LA TABLE PERSONNELS
+    public function RecupDataPersonnelFromApi()
+    {
+        $client = new Client(['verify' => false]);
+        $startRecord = 0;
+        $limit = 100;
+        $allData = [];
+
+        do {
+            try {
+                $response = $client->get("https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-personnels-biatss-etablissements-publics/records?start={$startRecord}&limit={$limit}");
+
+                if ($response->getStatusCode() == 200) {
+                    $data = json_decode($response->getBody(), true);
+
+                    if (isset($data['results']) && is_array($data['results'])) {
+                        $allData = array_merge($allData, $data['results']);
+                        $startRecord += $limit;
+                    } else {
+                        Log::error('Structure de donnée incorrecte reçue par l\'API');
+                        break;
+                    }
+                } else {
+                    Log::error('Erreur de transfert de donnée depuis l\'API');
+                    break;
+                }
+            } catch (\Exception $e) {
+                Log::error('Erreur de transfert de donnée depuis l\'API : ' . $e->getMessage());
+                break;
+            }
+        } while (!empty($data['results']));
+
+        Personnel::truncate();
+
+        foreach ($allData as $item) {
+            try {
+                $etablissement = Etablissement::where('Etablissement', $item['etablissement_lib'])->first();
+
+                if ($etablissement) {
+                    $personnel = new Personnel();
+                    $personnel->univ_id = $etablissement->id;
+                    $personnel->Type_personnel = $item['type_personnel'];
+                    $personnel->Corps = $item['corps_lib'];
+                    $personnel->Classe_Age = $item['classe_age3'] ?? null;
+                    $personnel->Effectif = $item['effectif'];
+                    $personnel->Effectif_H = $item['effectif_hommes'];
+                    $personnel->Effectif_F = $item['effectif_femmes'];
+
+                    $personnel->save();
+                } else {
+                    Log::warning("L'établissement '{$item['etablissement_lib']}' n'existe pas dans la table 'etablissements'.");
+                }
+            } catch (\Exception $e) {
+                Log::error('Erreur lors de l\'enregistrement du personnel: ' . $e->getMessage());
+            }
+        }
+    }
 }

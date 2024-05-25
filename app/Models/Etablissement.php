@@ -41,4 +41,14 @@ class Etablissement extends Model
     {
         return $this->hasMany(Discipline::class, 'univ_id');
     }
+
+    public function enseignants()
+    {
+        return $this->hasMany(Enseignant::class, 'univ_id');
+    }
+
+    public function personnels()
+    {
+        return $this->hasMany(Personnel::class, 'univ_id');
+    }
 }

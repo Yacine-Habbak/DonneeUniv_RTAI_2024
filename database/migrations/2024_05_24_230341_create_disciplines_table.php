@@ -12,9 +12,6 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('univ_id');
             $table->string('Discipline');
-            $table->string('Etablissement');
-            $table->string('Academie');
-            $table->string('Region');
             $table->string('Type_diplome');
             $table->string('Nom_diplome');
             $table->string('Nbr_poursuivants')->nullable();

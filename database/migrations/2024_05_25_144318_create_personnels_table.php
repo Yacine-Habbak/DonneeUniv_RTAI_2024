@@ -8,14 +8,15 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('enseignants', function (Blueprint $table) {
+        Schema::create('personnels', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('univ_id');
-            $table->string('Type_enseignant');
-            $table->string('Grande_discipline');
-            $table->string('Sexe');
-            $table->string('Temps')->nullable();
-            $table->integer('Effectif')->nullable();
+            $table->string('Type_personnel');
+            $table->string('Corps');
+            $table->string('Classe_Age')->nullable();
+            $table->integer('Effectif');
+            $table->integer('Effectif_H');
+            $table->integer('Effectif_F');
             $table->timestamps();
 
             $table->foreign('univ_id')->references('id')->on('etablissements')->onDelete('cascade');
@@ -24,6 +25,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('enseignants');
+        Schema::dropIfExists('personnels');
     }
 };
