@@ -1,0 +1,41 @@
+body {
+    background-color: #F0F8FF;
+}
+/* POUR LA BARRE DE MENU */
+.navbar-brand img {
+    height: 60px;
+}
+.nav-link {
+    font-size: 20px;
+    font-weight: 600;
+}
+.nav-link:hover {
+    color: #2B6DA7;
+}
+.active-lien {
+    color: #2B6DA7;
+    font-weight: bold;
+    border-bottom: 2px solid #2B6DA7;
+}
+.active-lien:hover {
+    color: blue;
+    font-weight: bold;
+    border-bottom: 2px solid blue;
+}
+/* POUR LE FOOTER */
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
+}
+.footer-barre {
+    border-top: 2px solid #5D5858;
+    width: 60%;
+    margin: 0 auto 10px;
+}
+.contact-text {
+    font-weight: bold;
+    font-size: 18px;
+}

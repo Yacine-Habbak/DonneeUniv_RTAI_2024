@@ -20,7 +20,8 @@ class RecupApiController extends Controller
         $this->RecupDataEnseignantFromApi();
         $this->RecupDataPersonnelFromApi();
 
-        return response()->json(['message' => 'Les données ont été correctement récupéré']);
+        return redirect()->route('accueil')
+            ->with('Les données ont bien été mis à jour.');
     }
 
 
