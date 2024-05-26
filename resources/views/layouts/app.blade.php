@@ -13,7 +13,9 @@
     @include('include.header')
 </head>
 <body>
-    @yield('content')
+    <div>
+        @yield('content')
+    </div>
     
     @include('include.footer')
 </body>

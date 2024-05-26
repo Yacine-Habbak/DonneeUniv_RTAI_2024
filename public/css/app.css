@@ -39,6 +39,68 @@ body {
     margin: 0 auto 10px;
 }
 .contact-text {
-    font-weight: bold;
     font-size: 18px;
+    color: black;
+}
+.contact-text:hover {
+    font-weight: bold;
+}
+/* LA PAGE D'ACCUEIL */
+h1{
+    font-size: 2vw;
+    font-weight: bold;
+    font-style: italic;
+    font-family: 'Segoe UI';
+    margin-top: 2%;
+    margin-left: 2%;
+}
+h3{
+    font-size: 1.2vw;
+    font-weight: 600;
+    font-family: 'Segoe UI';
+    margin-top: 2%;
+    margin-left: 3%;
+}
+.texte_explication{
+    font-size: 0.9vw;
+    font-family: 'Segoe UI';
+    margin-top: 13%;
+    margin-left: 5%;
+}
+.position-bottom {
+    position: fixed;
+    bottom: 6%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.bouton {
+    font-weight: 600;
+    font-size: 19px;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+}
+.btn-success {
+    background-color: #529A44;
+}
+.btn-success:hover {
+    background-color: #62b12a;
+}
+.btn-primary {
+    background-color: #5770B2;
+}
+.btn-primary:hover {
+    background-color: blue;
+}
+.LeSaviezVous_1{
+    position: absolute;
+    top: 25%;
+    right: 1%;
+    width: 20%;
+}
+.LeSaviezVous_2{
+    position: absolute;
+    top: 55%;
+    right: 6%;
+    width: 20%;
 }
