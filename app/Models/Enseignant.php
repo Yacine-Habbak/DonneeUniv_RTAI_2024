@@ -13,6 +13,7 @@ class Enseignant extends Model
 
     protected $fillable = [
         'univ_id',
+        'annee',
         'Type_enseignant',
         'Grande_discipline',
         'Sexe',

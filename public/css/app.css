@@ -2,6 +2,9 @@ body {
     background-color: #F0F8FF;
 }
 /* POUR LA BARRE DE MENU */
+.navbar{
+    border-bottom: 1px solid #ccc;
+}
 .navbar-brand img {
     height: 60px;
 }

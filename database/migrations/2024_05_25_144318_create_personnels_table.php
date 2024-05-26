@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('personnels', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('univ_id');
+            $table->integer('rentree');
             $table->string('Type_personnel');
             $table->string('Corps');
             $table->string('Classe_Age')->nullable();

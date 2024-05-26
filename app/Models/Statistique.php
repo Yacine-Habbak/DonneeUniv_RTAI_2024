@@ -5,21 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Personnel extends Model
+class Statistique extends Model
 {
     use HasFactory;
 
-    protected $table = 'personnels';
+    protected $table = 'statistiques';
 
     protected $fillable = [
         'univ_id',
         'annee',
-        'Type_personnel',
-        'Corps',
-        'Classe_Age',
-        'Effectif',
-        'Effectif_H',
-        'Effectif_F',
+        'Etudiants_inscrits',
+        'Etudiants_inscrits_H',
+        'Etudiants_inscrits_F',
+        'Bac_Gen',
+        'Bac_STMG',
+        'Bac_Autre',
+        'Bac_PRO',
+        'Bac_Dispense',
+        'Etudiants_mobilite',
+        'Bac4',
+        'Bac5',
     ];
 
     public function etablissement()

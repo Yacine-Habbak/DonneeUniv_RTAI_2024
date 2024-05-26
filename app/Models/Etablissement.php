@@ -51,4 +51,9 @@ class Etablissement extends Model
     {
         return $this->hasMany(Personnel::class, 'univ_id');
     }
+
+    public function statistiques()
+    {
+        return $this->hasMany(Statistique::class, 'univ_id');
+    }
 }
