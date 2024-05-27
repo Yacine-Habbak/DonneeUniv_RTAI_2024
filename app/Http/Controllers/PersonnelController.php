@@ -69,7 +69,7 @@ class PersonnelController extends Controller
             }
         }
 
-        // Mise à jour des personnels non enseignants pour chaque établissement
+        // Mise à jour des personnels pour chaque établissement
         $etablissements = Etablissement::all();
 
         foreach ($etablissements as $etablissement) {

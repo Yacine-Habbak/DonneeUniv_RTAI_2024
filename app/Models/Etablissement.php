@@ -27,6 +27,7 @@ class Etablissement extends Model
         'Etudiants_inscrits_2019',
         'Etudiants_inscrits_2018',
         'Personnels_non_enseignant',
+        'Enseignants',
         'siret',
         'date_creation',
         'contact',

@@ -12,6 +12,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
     @include('include.header')
+    @yield('styles')
 </head>
 <body>
     <div>

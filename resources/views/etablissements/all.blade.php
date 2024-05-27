@@ -51,11 +51,12 @@
                             <tr>
                                 <th>Rang</th>
                                 <th style="cursor: pointer;">Établissement</th>
-                                <th style="cursor: pointer;">Type</th>
+                                <th style="cursor: pointer;">Catégorie</th>
                                 <th style="cursor: pointer;">Commune</th>
                                 <th style="cursor: pointer;">Secteur</th>
-                                <th style="cursor: pointer;">Étudiants inscrits</th>
-                                <th style="cursor: pointer;">Personnels non enseignant</th>
+                                <th style="cursor: pointer;">Étudiants inscrits <sup>1</sup></th>
+                                <th style="cursor: pointer;">Effectif Personnels <sup>2</sup></th>
+                                <th style="cursor: pointer;">Effectif enseignants</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -68,13 +69,24 @@
                                     <td>{{ $etablissement->Commune }}</td>
                                     <td>{{ $etablissement->Secteur }}</td>
                                     <td>{{ $etablissement->Etudiants_inscrits_2022 ?? 'nd' }}</td>
-                                    <td>{{ $etablissement->Personnels_non_enseignant ?? 'nd' }}</td>
+                                    <td>{{ $etablissement->Personnels_non_enseignant == 0 ? 'nd' : $etablissement->Personnels_non_enseignant ?? 'nd' }}</td>
+                                    <td>{{ $etablissement->Enseignants == 0 ? 'nd' : $etablissement->Enseignants ?? 'nd' }}</td>
                                     <td><a href="#"><img src="{{ asset('images/fiche.png') }}" class="icone-img" alt="Fiche de l'établissement"></a></td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
+                
+                <div class="row mt-3">
+                    <div class="col-md-2">
+                        <p><sup>1</sup> Étudiants inscrits sur l'année 2022-2023</p>
+                    </div>
+                    <div class="col-md-2">
+                        <p><sup>2</sup> Personnels hors enseignants</p>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -83,14 +95,24 @@
 
     <script>
         $(document).ready(function() {
-            var tableContainer = $('.table-responsive');
             var table = $('#etablissementsTable').DataTable({
                 paging: false,
                 ordering: true,
                 orderCellsTop: true,
                 fixedHeader: true,
                 columnDefs: [
-                    { orderable: false, targets: 0 }
+                    { orderable: false, targets: 0 },
+                    { render: function (data, type, row) {
+                        if (type === 'display') {
+                            if (data === 'nd' || data === null || data === 0) {
+                                return 'nd';
+                            } else {
+                                return parseInt(data);
+                            }
+                        }
+                        return data === 'nd' || data === null ? 0 : parseInt(data);
+                    }, targets: [5, 6, 7]
+                    }
                 ],
                 dom: 'lrtip',
                 language: {
@@ -142,4 +164,5 @@
             });
         });
     </script>
+
 @endsection

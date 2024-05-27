@@ -12,8 +12,8 @@ class DisciplineController extends Controller
 {
     public function allDiscipline()
     {
-        $discipline = Discipline::all();
-        return view('disciplines.all', compact('discipline'));
+        $disciplines = Discipline::all();
+        return view('disciplines.all', compact('disciplines'));
     }
 
 

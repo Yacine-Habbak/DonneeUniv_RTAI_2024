@@ -69,6 +69,20 @@ class EnseignantController extends Controller
             }
         }
 
+
+        // Mise à jour des enseignants pour chaque établissement
+        $etablissements = Etablissement::all();
+
+        foreach ($etablissements as $etablissement) {
+            $totalEnseignants = Enseignant::where('univ_id', $etablissement->id)
+                                            ->sum('Effectif');
+
+            $etablissement->update([
+                'Enseignants' => $totalEnseignants,
+            ]);
+        }
+
+
         return redirect()->route('DataPersonnel')
             ->with('Les données des enseignants ont bien été mis à jour.');
     }

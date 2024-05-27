@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('Nbr_poursuivants')->nullable();
             $table->string('Nbr_sortants')->nullable();
             $table->string('Taux_emploi_salarié', 5, 2)->nullable();
-            $table->string('Date_insertion')->nullable();
+            $table->integer('Date_insertion')->nullable();
             $table->string('Taux_reussite')->nullable();
             $table->string('Taux_insertion')->nullable();
 

@@ -120,7 +120,7 @@ h3{
 }
 thead{
     background-color: #274CFF;
-    font-size: 1.1vw;
+    font-size: 1vw;
     font-weight: bold;
     font-family: 'Segoe UI';
 }
@@ -170,10 +170,6 @@ table th,.table td {
     right: 9%;
     top: 32%;
 }
-  
-
-  
-  /* Styles pour le rendu responsive */
 @media (max-width: 767px) {
     .table-responsive {
         overflow-x: auto;

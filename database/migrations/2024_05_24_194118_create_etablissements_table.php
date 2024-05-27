@@ -25,6 +25,7 @@ return new class extends Migration
             $table->integer('Etudiants_inscrits_2019')->nullable();
             $table->integer('Etudiants_inscrits_2018')->nullable();
             $table->integer('Personnels_non_enseignant')->nullable();
+            $table->integer('Enseignants')->nullable();
             $table->string('siret')->nullable();
             $table->string('date_creation')->nullable();
             $table->string('contact')->nullable();
