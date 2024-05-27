@@ -1,3 +1,7 @@
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
 body {
     background-color: #F0F8FF;
 }
@@ -47,7 +51,7 @@ body {
 }
 /* LA PAGE D'ACCUEIL */
 h1{
-    font-size: 2vw;
+    font-size: 1.7vw;
     font-weight: bold;
     font-style: italic;
     font-family: 'Segoe UI';
@@ -103,4 +107,76 @@ h3{
     top: 55%;
     right: 6%;
     width: 20%;
+}
+/* LA LISTE DES ETABLISSEMENTS */
+.icone-img{
+    border-radius: 50%;
+    width: 45px;
+    padding: 5px;
+}
+.table-responsive {
+    max-height: calc(100vh - 3%);
+    overflow-y: auto;
+}
+thead{
+    background-color: #274CFF;
+    font-size: 1.1vw;
+    font-weight: bold;
+    font-family: 'Segoe UI';
+}
+td{
+    font-size: 0.9vw;
+    font-weight: 600;
+    font-family: 'Segoe UI';
+}
+.table tbody tr:nth-child(even) {
+    background-color: white;
+    color: dark;
+}
+.table tbody tr:nth-child(odd) {
+    background-color: #000038;
+    color: white;
+}
+table th,.table td {
+    vertical-align: middle;
+}
+.form-check-input {
+    border-color: #333;
+    border-width: 1px;
+}
+.form-check-label {
+    font-style: normal;
+}
+.filtre-case{
+    margin-top: 3%;
+    margin-left: 3%;
+    font-style: italic;
+    font-size: 17px;
+    text-align: center;
+    border-radius: 25px;
+}
+.filtre{
+    width: 15%;
+    height: 40px;
+    text-align: center;
+    margin-top: 7%;
+    margin-left: 3%;
+    font-style: italic;
+    font-size: 17px;
+    border-radius: 25px;
+}
+.btn-group{
+    position: absolute;
+    right: 9%;
+    top: 32%;
+}
+  
+
+  
+  /* Styles pour le rendu responsive */
+@media (max-width: 767px) {
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
 }

@@ -11,8 +11,8 @@ class EtablissementController extends Controller
 {
     public function allEtablissement()
     {
-        $etablissement = Etablissement::all();
-        return view('etablissements.all', compact('etablissement'));
+        $etablissements = Etablissement::all();
+        return view('etablissements.all', compact('etablissements'));
     }
 
 

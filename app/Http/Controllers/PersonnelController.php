@@ -10,12 +10,10 @@ use Illuminate\Support\Facades\Log;
 
 class PersonnelController extends Controller
 {
-
-
     // POUR RECUPERER LES DONNEES
     public function RecupDataPersonnelFromApi()
     {
-        $client = new Client(['verify' => false,'timeout' => 300]);
+        $client = new Client(['verify' => false, 'timeout' => 300]);
         $startRecord = 0;
         $limit = 100;
         $apikey = '9a63b08bae72b9014f2a17c4c47f428ccec2c5b6d3e97cf7f6aa480e';
@@ -71,7 +69,19 @@ class PersonnelController extends Controller
             }
         }
 
+        // Mise à jour des personnels non enseignants pour chaque établissement
+        $etablissements = Etablissement::all();
+
+        foreach ($etablissements as $etablissement) {
+            $totalPersonnels = Personnel::where('univ_id', $etablissement->id)
+                                            ->sum('Effectif');
+
+            $etablissement->update([
+                'Personnels_non_enseignant' => $totalPersonnels,
+            ]);
+        }
+
         return redirect()->route('DataStatistique')
-            ->with('Les données des personnels ont bien été mis à jour.');
+            ->with('success', 'Les données des personnels ont bien été mises à jour.');
     }
 }
