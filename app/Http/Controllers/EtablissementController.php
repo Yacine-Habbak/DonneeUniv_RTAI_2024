@@ -19,6 +19,7 @@ class EtablissementController extends Controller
     // POUR RECUPERER LES DONNEES
     public function RecupDataUnivFromApi()
     {
+        ini_set('max_execution_time', 0);
         $client = new Client(['verify' => false,'timeout' => 300]);
         $startRecord = 0;
         $limit = 100;

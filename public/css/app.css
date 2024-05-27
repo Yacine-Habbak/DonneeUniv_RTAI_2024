@@ -73,7 +73,7 @@ h3{
 }
 .position-bottom {
     position: fixed;
-    bottom: 6%;
+    bottom: 7%;
     left: 50%;
     transform: translateX(-50%);
 }
@@ -114,8 +114,12 @@ h3{
     width: 45px;
     padding: 5px;
 }
-.table-responsive {
-    max-height: calc(100vh - 3%);
+.table-responsive-univ {
+    max-height: calc(100vh - 2.8%);
+    overflow-y: auto;
+}
+.table-responsive-stat{
+    max-height: calc(100vh - 365px);
     overflow-y: auto;
 }
 thead{
@@ -148,30 +152,41 @@ table th,.table td {
     font-style: normal;
 }
 .filtre-case{
-    margin-top: 3%;
+    margin-top: 1%;
     margin-left: 3%;
     font-style: italic;
     font-size: 17px;
     text-align: center;
     border-radius: 25px;
 }
-.filtre{
+.filtre,.filtre-stat{
     width: 15%;
     height: 40px;
     text-align: center;
-    margin-top: 7%;
     margin-left: 3%;
     font-style: italic;
     font-size: 17px;
     border-radius: 25px;
 }
+.filtre{
+    margin-top: 5%;
+}
+.filtre-stat{
+    margin-top: 3%;
+}
 .btn-group{
     position: absolute;
-    right: 9%;
+}
+.btn-univ{
+    right: 5%;
     top: 32%;
 }
+.btn-stat{
+    right: 5%;
+    top: 25%;
+}
 @media (max-width: 767px) {
-    .table-responsive {
+    .table-responsive-univ,.table-responsive-stat {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
     }

@@ -12,14 +12,16 @@ class StatistiqueController extends Controller
 {
     public function allStatistique()
     {
-        $statistique = Statistique::all();
-        return view('statistique.index', compact('statistique'));
+        $etablissements = Etablissement::all();
+        $statistiques = Statistique::all();
+        return view('statistiques.index', compact('statistiques','etablissements'));
     }
 
 
     // POUR RECUPERER LES DONNEES
     public function RecupDataStatistiqueFromApi()
     {
+        ini_set('max_execution_time', 0);
         $client = new Client(['verify' => false,'timeout' => 300]);
         $startRecord = 0;
         $limit = 100;
@@ -63,14 +65,27 @@ class StatistiqueController extends Controller
                     $statistique->Etudiants_inscrits = $item['effectif_total'];
                     $statistique->Etudiants_inscrits_H = $item['sexem'];
                     $statistique->Etudiants_inscrits_F = $item['sexef'];
-                    $statistique->Bac_Gen = $item['baca'] ?? null;
-                    $statistique->Bac_STMG = $item['bac4'] ?? null;
-                    $statistique->Bac_Autre = $item['bac5'] ?? null;
-                    $statistique->Bac_PRO = $item['bac6'] ?? null;
-                    $statistique->Bac_Dispense = $item['bac7'] ?? null;
-                    $statistique->Etudiants_mobilite = $item['mobilite_internm'] ?? null;
-                    $statistique->Bac4 = $item['degetu4'] ?? null;
-                    $statistique->Bac5 = $item['degetu5'] ?? null;
+                    $statistique->Bac_Gen = $item['baca'];
+                    $statistique->Bac_STMG = $item['bac4'];
+                    $statistique->Bac_Autre = $item['bac5'];
+                    $statistique->Bac_PRO = $item['bac6'];
+                    $statistique->Bac_Dispense = $item['bac7'];
+                    $statistique->Avance_bac = $item['bac_ageavance'];
+                    $statistique->Alheure_bac = $item['bac_agea_l_heure'];
+                    $statistique->Retard_bac = $item['bac_ageretard'];
+                    $statistique->G_Droit = $item['gd_discisciplinedsa'];
+                    $statistique->G_Lettre_langues = $item['gd_discisciplinellsh'];
+                    $statistique->G_Science_inge = $item['gd_discisciplinesi'];
+                    $statistique->G_STAPS = $item['gd_discisciplinestaps'];
+                    $statistique->Science_eco = $item['discipline02'];
+                    $statistique->lettre_science = $item['discipline04'];
+                    $statistique->Langue = $item['discipline05'];
+                    $statistique->Science_hu = $item['discipline32'];
+                    $statistique->Science_vie = $item['discipline09'];
+                    $statistique->Science_Fo = $item['discipline10'];
+                    $statistique->Etudiants_mobilite = $item['mobilite_internm'];
+                    $statistique->Bac4 = $item['degetu4'];
+                    $statistique->Bac5 = $item['degetu5'];
 
                     $statistique->save();
                 } else {

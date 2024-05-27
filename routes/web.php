@@ -22,12 +22,4 @@ Route::get('/accueil', function () {
 
 Route::get('/listeEtablissement', [EtablissementController::class, 'allEtablissement'])->name('etablissements.all');
 Route::get('/listeDiscipline', [DisciplineController::class, 'allDiscipline'])->name('disciplines.all');
-
-
-
-
-
-// Temporaire
-Route::get('/statistiques', function () {
-    return view('statistiques.index');
-})->name('statistiques.index');
+Route::get('/statistiques', [StatistiqueController::class, 'allStatistique'])->name('statistiques.index');

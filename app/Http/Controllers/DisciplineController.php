@@ -20,6 +20,7 @@ class DisciplineController extends Controller
     // POUR RECUPERER LES DONNEES
     public function RecupDataDisciplineFromApi()
     {
+        ini_set('max_execution_time', 0);
         $client = new Client(['verify' => false,'timeout' => 300]);
         $startRecord = 0;
         $limit = 100;
@@ -62,11 +63,11 @@ class DisciplineController extends Controller
                     $discipline->Discipline = $item['discipli_lib'];
                     $discipline->Type_diplome = $item['type_diplome_long'];
                     $discipline->Nom_diplome = $item['libelle_diplome'];
-                    $discipline->Nbr_poursuivants = $item['nb_poursuivants'] ?? null;
-                    $discipline->Nbr_sortants = $item['nb_sortants'] ?? null;
-                    $discipline->Taux_emploi_salarié = $item['taux_emploi_sal_fr'] ?? null;
-                    $discipline->Date_insertion = $item['date_inser'] ?? null;
-                    $discipline->Taux_insertion = $item['taux_insertion'] ?? null;
+                    $discipline->Nbr_poursuivants = $item['nb_poursuivants'];
+                    $discipline->Nbr_sortants = $item['nb_sortants'];
+                    $discipline->Taux_emploi_salarié = $item['taux_emploi_sal_fr'];
+                    $discipline->Date_insertion = $item['date_inser'];
+                    $discipline->Taux_insertion = $item['taux_insertion'];
 
                     $discipline->save();
                 } else {

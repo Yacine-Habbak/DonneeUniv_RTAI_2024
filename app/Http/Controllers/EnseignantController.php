@@ -14,6 +14,7 @@ class EnseignantController extends Controller
     // POUR RECUPERER LES DONNEES
     public function RecupDataEnseignantFromApi()
     {
+        ini_set('max_execution_time', 0);
         $client = new Client(['verify' => false,'timeout' => 300]);
         $startRecord = 0;
         $limit = 100;

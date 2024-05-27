@@ -4,7 +4,7 @@
     <div class="container-fluid">
         <h1>Principaux établissements de l'enseignement supérieur</h1>
         <div class="row justify-content-center">
-            <div class="col-md-10">
+            <div class="col-md-11">
                 <div class="mb-3 d-flex">
                     <input type="text" id="filtreTitle" class="filtreTitle filtre" placeholder="Rechercher un établissement">
                     <input type="text" id="filtreCommune" class="filtreCommune filtre" placeholder="Rechercher une commune">
@@ -25,7 +25,7 @@
                         <div class="form-check">
                             <input class="form-check-input filtreType" type="checkbox" name="typeEtablissement" id="typeAutre" value="Autre établissement">
                             <label class="form-check-label" for="typeAutre">Autre établissement</label>
-                        </div>
+                        </div>  
                     </div>
 
                     <div class="filtre-case">
@@ -40,12 +40,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="btn-group mb-3" role="group">
+                <div class="btn-group btn-univ" role="group">
                     <button type="button" class="btn btn-outline-primary">Vue Carte</button>
                     <button type="button" class="btn btn-outline-primary">Vue Graphique</button>
                 </div>
 
-                <div class="table-responsive">
+                <div class="table-responsive-univ">
                     <table id="etablissementsTable" class="table text-center">
                         <thead class="text-white">
                             <tr>
@@ -78,7 +78,7 @@
                     </table>
                 </div>
                 
-                <div class="row mt-3">
+                <div class="row">
                     <div class="col-md-2">
                         <p><sup>1</sup> Étudiants inscrits sur l'année 2022-2023</p>
                     </div>
