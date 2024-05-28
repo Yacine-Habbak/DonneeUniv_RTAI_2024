@@ -62,6 +62,8 @@ class EtablissementController extends Controller
                 $etablissement->Region = $item['reg_nom'] ?? null;
                 $etablissement->Academie = $item['aca_nom'] ?? null;
                 $etablissement->Adresse = $item['adresse_uai'] ?? null;
+                $etablissement->lon = $item['coordonnees']['lon'];
+                $etablissement->lat = $item['coordonnees']['lat'];
                 $etablissement->Secteur = $item['secteur_d_etablissement'];
                 $etablissement->url = $item['url'] ?? null;
                 $etablissement->Etudiants_inscrits_2022 = $item['inscrits_2022'] ?? null;

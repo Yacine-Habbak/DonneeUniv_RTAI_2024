@@ -19,6 +19,8 @@ class Etablissement extends Model
         'Region',
         'Academie',
         'Adresse',
+        'Lon',
+        'Lat',
         'Secteur',
         'url',
         'Etudiants_inscrits_2022',

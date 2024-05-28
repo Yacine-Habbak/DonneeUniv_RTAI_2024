@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('Region')->nullable();
             $table->string('Academie')->nullable();
             $table->string('Adresse')->nullable();
+            $table->decimal('lat', 10, 8);
+            $table->decimal('lon', 11, 8);
             $table->string('Secteur');
             $table->string('url')->nullable();
             $table->integer('Etudiants_inscrits_2022')->nullable();
