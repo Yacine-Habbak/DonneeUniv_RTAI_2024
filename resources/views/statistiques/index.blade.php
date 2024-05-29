@@ -39,7 +39,7 @@
                                 <tr>
                                     <td>{{ $statistique->id }}</td>
                                     <td>{{ $statistique->rentree }}</td>
-                                    <td>{{ $statistique->etablissement->Etablissement }}</td>
+                                    <td><a href="{{ route('etablissements.show', $statistique->etablissement) }}" class="text-decoration-none" style="color: inherit;">{{ $statistique->etablissement->Etablissement }}</a></td>
                                     <td>{{ $statistique->etablissement->Commune }}</td>
                                     <td>{{ $statistique->Etudiants_inscrits }}</td>
                                     <td>{{ $statistique->Etudiants_inscrits_H }}</td>
@@ -75,7 +75,7 @@
                                 <tr>
                                     <td>{{ $statistique->id }}</td>
                                     <td>{{ $statistique->rentree }}</td>
-                                    <td>{{ $statistique->etablissement->Etablissement }}</td>
+                                    <td><a href="{{ route('etablissements.show', $statistique->etablissement) }}" class="text-decoration-none" style="color: inherit;">{{ $statistique->etablissement->Etablissement }}</a></td>
                                     <td>{{ $statistique->etablissement->Commune }}</td>
                                     <td>{{ $statistique->Etudiants_inscrits }}</td>
                                     <td>{{ $statistique->Bac_Gen }}</td>
@@ -109,7 +109,7 @@
                                 <tr>
                                     <td>{{ $statistique->id }}</td>
                                     <td>{{ $statistique->rentree }}</td>
-                                    <td>{{ $statistique->etablissement->Etablissement }}</td>
+                                    <td><a href="{{ route('etablissements.show', $statistique->etablissement) }}" class="text-decoration-none" style="color: inherit;">{{ $statistique->etablissement->Etablissement }}</a></td>
                                     <td>{{ $statistique->etablissement->Commune }}</td>
                                     <td>{{ $statistique->Etudiants_inscrits }}</td>
                                     <td>{{ $statistique->Etudiants_mobilite }}</td>
@@ -139,7 +139,7 @@
                                 <tr>
                                     <td>{{ $etablissement->id }}</td>
                                     <td>{{ $etablissement->Secteur }}</td>
-                                    <td>{{ $etablissement->Etablissement }}</td>
+                                    <td><a href="{{ route('etablissements.show', $statistique->etablissement) }}" class="text-decoration-none" style="color: inherit;">{{ $statistique->etablissement->Etablissement }}</a></td>
                                     <td>{{ $etablissement->Commune }}</td>
                                     <td>{{ $etablissement->Etudiants_inscrits_2018 ?? 'nd' }}</td>
                                     <td>{{ $etablissement->Etudiants_inscrits_2019 ?? 'nd' }}</td>
@@ -170,7 +170,7 @@
                                 <tr>
                                     <td>{{ $statistique->id }}</td>
                                     <td>{{ $statistique->rentree }}</td>
-                                    <td>{{ $statistique->etablissement->Etablissement }}</td>
+                                    <td><a href="{{ route('etablissements.show', $statistique->etablissement) }}" class="text-decoration-none" style="color: inherit;">{{ $statistique->etablissement->Etablissement }}</a></td>
                                     <td>{{ $statistique->etablissement->Commune }}</td>
                                     <td>{{ $statistique->G_Droit }}</td>
                                     <td>{{ $statistique->G_Lettre_langues }}</td>
@@ -202,7 +202,7 @@
                                 <tr>
                                     <td>{{ $statistique->id }}</td>
                                     <td>{{ $statistique->rentree }}</td>
-                                    <td>{{ $statistique->etablissement->Etablissement }}</td>
+                                    <td><a href="{{ route('etablissements.show', $statistique->etablissement) }}" class="text-decoration-none" style="color: inherit;">{{ $statistique->etablissement->Etablissement }}</a></td>
                                     <td>{{ $statistique->etablissement->Commune }}</td>
                                     <td>{{ $statistique->Science_eco }}</td>
                                     <td>{{ $statistique->lettre_science }}</td>

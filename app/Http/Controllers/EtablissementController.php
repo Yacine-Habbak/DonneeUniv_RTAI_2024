@@ -58,7 +58,6 @@ class EtablissementController extends Controller
         } while (!empty($data['results']));
     
         Etablissement::truncate();
-        //dd($allData);
         foreach ($allData as $item) {
             try {
                 $etablissement = new Etablissement();

@@ -73,12 +73,13 @@ class PersonnelController extends Controller
         $etablissements = Etablissement::all();
 
         foreach ($etablissements as $etablissement) {
-            $totalPersonnels = Personnel::where('univ_id', $etablissement->id)
-                                            ->sum('Effectif');
-
-            $etablissement->update([
-                'Personnels_non_enseignant' => $totalPersonnels,
-            ]);
+            $totalPersonnels = Personnel::where('univ_id', $etablissement->id)->sum('Effectif');
+        
+            if ($totalPersonnels != 0) {
+                $etablissement->update([
+                    'Personnels_non_enseignant' => $totalPersonnels,
+                ]);
+            }
         }
 
         return redirect()->route('DataStatistique')

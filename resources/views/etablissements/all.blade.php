@@ -10,22 +10,28 @@
                     <input type="text" id="filtreCommune" class="filtreCommune filtre" placeholder="Rechercher une commune">
                     <div class="filtre-case">
                         <label for="filtreType">Type d'établissement :</label><br>
-                        <div class="form-check">
-                            <input class="form-check-input filtreType" type="checkbox" name="typeEtablissement" id="typeUniversite" value="Université">
-                            <label class="form-check-label" for="typeUniversite">Université</label>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input filtreType" type="checkbox" name="typeEtablissement" id="typeUniversite" value="Université">
+                                    <label class="form-check-label" for="typeUniversite">Université</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input filtreType" type="checkbox" name="typeEtablissement" id="typeEcole" value="École">
+                                    <label class="form-check-label" for="typeEcole">École</label>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-check">
+                                    <input class="form-check-input filtreType" type="checkbox" name="typeEtablissement" id="typeGrand" value="Grand établissement">
+                                    <label class="form-check-label" for="typeGrand">Grand établissement</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input filtreType" type="checkbox" name="typeEtablissement" id="typeAutre" value="Autre établissement">
+                                    <label class="form-check-label" for="typeAutre">Autre établissement</label>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input filtreType" type="checkbox" name="typeEtablissement" id="typeEcole" value="École">
-                            <label class="form-check-label" for="typeEcole">École</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input filtreType" type="checkbox" name="typeEtablissement" id="typeGrand" value="Grand établissement">
-                            <label class="form-check-label" for="typeGrand">Grand établissement</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input filtreType" type="checkbox" name="typeEtablissement" id="typeAutre" value="Autre établissement">
-                            <label class="form-check-label" for="typeAutre">Autre établissement</label>
-                        </div>  
                     </div>
 
                     <div class="filtre-case">

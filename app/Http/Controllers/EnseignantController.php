@@ -74,12 +74,13 @@ class EnseignantController extends Controller
         $etablissements = Etablissement::all();
 
         foreach ($etablissements as $etablissement) {
-            $totalEnseignants = Enseignant::where('univ_id', $etablissement->id)
-                                            ->sum('Effectif');
-
-            $etablissement->update([
-                'Enseignants' => $totalEnseignants,
-            ]);
+            $totalEnseignants = Enseignant::where('univ_id', $etablissement->id)->sum('Effectif');
+        
+            if ($totalEnseignants != 0) {
+                $etablissement->update([
+                    'Enseignants' => $totalEnseignants,
+                ]);
+            }
         }
 
 

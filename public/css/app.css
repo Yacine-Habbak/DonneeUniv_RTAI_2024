@@ -36,7 +36,6 @@ body {
     width: 100%;
     text-align: center;
     padding: 20px 0;
-    background-color: #F0F8FF;
 }
 .footer-barre {
     border-top: 2px solid #5D5858;
@@ -116,7 +115,7 @@ h3{
     padding: 5px;
 }
 .table-responsive-univ {
-    max-height: calc(100vh - 2.8%);
+    max-height: calc(100vh - 2.6%);
     overflow-y: auto;
 }
 .table-responsive-stat{
@@ -153,7 +152,7 @@ table th,.table td {
     font-style: normal;
 }
 .filtre-case{
-    margin-top: 1%;
+    margin-top: 2%;
     margin-left: 3%;
     font-style: italic;
     font-size: 17px;
@@ -170,7 +169,7 @@ table th,.table td {
     border-radius: 25px;
 }
 .filtre{
-    margin-top: 5%;
+    margin-top: 3%;
 }
 .filtre-stat{
     margin-top: 3%;
@@ -180,32 +179,77 @@ table th,.table td {
 }
 .btn-univ{
     right: 5%;
-    top: 32%;
+    top: 28%;
 }
 .btn-stat{
     right: 5%;
     top: 25%;
 }
+/* POUR LA PAGE DETAILS DE L'UNIVERSITE */
 .titre_univ{
     font-size: 1.8vw;
     font-style: normal;
     margin-top: 1%;
-    margin-left: 5%;
+    margin-left: 12%;
 }
 .sousTitre{
     font-size: 1.3vw;
     font-weight: 600;
     font-family: 'Segoe UI';
-    margin-top: 3%;
+    text-decoration: underline;
 }
 .texteInfo{
-    margin-left: 32%;
-    margin-top: 5%;
     font-family: 'Arial';
     font-size: 1vw;
+    margin-left: 32%;
 }
 .Info{
     font-weight: 600;
+}
+.decalage{
+    margin-left: 10%;
+}
+.site-img{
+    width: 30px;
+}
+.btn_telecharger {
+    position: relative;
+    background-color: #4b7430;
+    border-radius: 10px;
+    width: 200px;
+    height: 40px;
+    line-height: 20px;
+    text-align: center;
+    color: #ffffff;
+    padding: 10px;
+    transition: background-color 0.3s ease;
+}
+.btn_telecharger:hover {
+    background-color: #3a6027;
+}
+.btn_telecharger:active {
+    transform: translateY(2px);
+}
+#btn_retour {
+    position: relative;
+    margin-left: 2%;
+    background-color: rgb(206, 201, 201);
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 1.2rem;
+    width: 200px;
+    height: 40px;
+    line-height: 20px;
+    text-align: center;
+    color: #000000;
+    padding: 10px;
+    transition: background-color 0.3s ease;
+}
+#btn_retour:hover {
+    background-color: rgb(161, 161, 161);
+}
+#btn_retour:active {
+    transform: translateY(2px);
 }
 @media (max-width: 767px) {
     .table-responsive-univ,.table-responsive-stat {
