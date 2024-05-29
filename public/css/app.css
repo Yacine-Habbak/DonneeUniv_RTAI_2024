@@ -31,11 +31,12 @@ body {
 }
 /* POUR LE FOOTER */
 .footer {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     width: 100%;
     text-align: center;
     padding: 20px 0;
+    background-color: #F0F8FF;
 }
 .footer-barre {
     border-top: 2px solid #5D5858;
@@ -184,6 +185,27 @@ table th,.table td {
 .btn-stat{
     right: 5%;
     top: 25%;
+}
+.titre_univ{
+    font-size: 1.8vw;
+    font-style: normal;
+    margin-top: 1%;
+    margin-left: 5%;
+}
+.sousTitre{
+    font-size: 1.3vw;
+    font-weight: 600;
+    font-family: 'Segoe UI';
+    margin-top: 3%;
+}
+.texteInfo{
+    margin-left: 32%;
+    margin-top: 5%;
+    font-family: 'Arial';
+    font-size: 1vw;
+}
+.Info{
+    font-weight: 600;
 }
 @media (max-width: 767px) {
     .table-responsive-univ,.table-responsive-stat {

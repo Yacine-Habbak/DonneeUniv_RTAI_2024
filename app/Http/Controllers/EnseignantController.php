@@ -17,13 +17,13 @@ class EnseignantController extends Controller
         ini_set('max_execution_time', 0);
         $client = new Client(['verify' => false,'timeout' => 300]);
         $startRecord = 0;
-        $limit = 100;
+        $limit = 1000;
         $apikey = '9a63b08bae72b9014f2a17c4c47f428ccec2c5b6d3e97cf7f6aa480e';
         $allData = [];
 
         do {
             try {
-                $response = $client->get("https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-enseignants-titulaires-esr-public/records?start={$startRecord}&limit={$limit}&apikey={$apikey}");
+                $response = $client->get("https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-enseignants-titulaires-esr-public/records?group_by=etablissement_lib%2Ccategorie_assimilation%2Cgrande_discipline%2Csexe%2Cquotite%2Ceffectif&refine=rentree%3A%222021%22&start={$startRecord}&limit={$limit}&apikey={$apikey}");
 
                 if ($response->getStatusCode() == 200) {
                     $data = json_decode($response->getBody(), true);
@@ -54,7 +54,6 @@ class EnseignantController extends Controller
                 if ($etablissement) {
                     $enseignant = new Enseignant();
                     $enseignant->univ_id = $etablissement->id;
-                    $enseignant->rentree = $item['rentree'];
                     $enseignant->Type_enseignant = $item['categorie_assimilation'];
                     $enseignant->Grande_discipline = $item['grande_discipline'];
                     $enseignant->Sexe = $item['sexe'];

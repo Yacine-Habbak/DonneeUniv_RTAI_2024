@@ -16,13 +16,13 @@ class PersonnelController extends Controller
         ini_set('max_execution_time', 0);
         $client = new Client(['verify' => false, 'timeout' => 300]);
         $startRecord = 0;
-        $limit = 100;
+        $limit = 1000;
         $apikey = '9a63b08bae72b9014f2a17c4c47f428ccec2c5b6d3e97cf7f6aa480e';
         $allData = [];
 
         do {
             try {
-                $response = $client->get("https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-personnels-biatss-etablissements-publics/records?start={$startRecord}&limit={$limit}&apikey={$apikey}");
+                $response = $client->get("https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-personnels-biatss-etablissements-publics/records?group_by=etablissement_lib%2Ctype_personnel%2Ccorps_lib%2Cclasse_age3%2Ceffectif%2Ceffectif_hommes%2Ceffectif_femmes&refine=rentree%3A%222021%22&start={$startRecord}&limit={$limit}&apikey={$apikey}");
 
                 if ($response->getStatusCode() == 200) {
                     $data = json_decode($response->getBody(), true);
@@ -53,7 +53,6 @@ class PersonnelController extends Controller
                 if ($etablissement) {
                     $personnel = new Personnel();
                     $personnel->univ_id = $etablissement->id;
-                    $personnel->rentree = $item['rentree'];
                     $personnel->Type_personnel = $item['type_personnel'];
                     $personnel->Corps = $item['corps_lib'];
                     $personnel->Classe_Age = $item['classe_age3'] ?? null;

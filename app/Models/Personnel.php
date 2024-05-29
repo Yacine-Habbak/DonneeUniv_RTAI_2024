@@ -13,7 +13,6 @@ class Personnel extends Model
 
     protected $fillable = [
         'univ_id',
-        'annee',
         'Type_personnel',
         'Corps',
         'Classe_Age',

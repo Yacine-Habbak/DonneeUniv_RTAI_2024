@@ -16,12 +16,19 @@ class EtablissementController extends Controller
     }
 
 
+    public function showEtablissement($id)
+    {
+        $etablissement = Etablissement::findOrFail($id);
+        return view('etablissements.show', compact('etablissement'));
+    }
+
+
     // POUR RECUPERER LES DONNEES
     public function RecupDataUnivFromApi()
     {
         ini_set('max_execution_time', 0);
         $client = new Client(['verify' => false,'timeout' => 300]);
-        $startRecord = 0;
+	    $startRecord = 0;
         $limit = 100;
         $apikey = '9a63b08bae72b9014f2a17c4c47f428ccec2c5b6d3e97cf7f6aa480e';
         $allData = [];
@@ -32,10 +39,10 @@ class EtablissementController extends Controller
     
                 if ($response->getStatusCode() == 200) {
                     $data = json_decode($response->getBody(), true);
-    
+
                     if (isset($data['results']) && is_array($data['results'])) {
                         $allData = array_merge($allData, $data['results']);
-                        $startRecord += $limit;
+			            $startRecord += $limit;
                     } else {
                         Log::error('Structure de donnée incorrecte recue par l\'API');
                         break;
@@ -51,7 +58,7 @@ class EtablissementController extends Controller
         } while (!empty($data['results']));
     
         Etablissement::truncate();
-    
+        //dd($allData);
         foreach ($allData as $item) {
             try {
                 $etablissement = new Etablissement();

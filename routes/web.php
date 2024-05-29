@@ -21,5 +21,7 @@ Route::get('/accueil', function () {
 })->name('accueil');
 
 Route::get('/listeEtablissement', [EtablissementController::class, 'allEtablissement'])->name('etablissements.all');
+Route::get('/detailsEtablissement/{id}', [EtablissementController::class, 'showEtablissement'])->name('etablissements.show');
+
 Route::get('/listeDiscipline', [DisciplineController::class, 'allDiscipline'])->name('disciplines.all');
 Route::get('/statistiques', [StatistiqueController::class, 'allStatistique'])->name('statistiques.index');

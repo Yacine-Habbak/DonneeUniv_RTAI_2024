@@ -13,7 +13,7 @@ class StatistiqueController extends Controller
     public function allStatistique()
     {
         $etablissements = Etablissement::all();
-        $statistiques = Statistique::all();
+        $statistiques = Statistique::with('etablissement')->get();
         return view('statistiques.index', compact('statistiques','etablissements'));
     }
 
@@ -24,13 +24,13 @@ class StatistiqueController extends Controller
         ini_set('max_execution_time', 0);
         $client = new Client(['verify' => false,'timeout' => 300]);
         $startRecord = 0;
-        $limit = 100;
+        $limit = 400;
         $apikey = '9a63b08bae72b9014f2a17c4c47f428ccec2c5b6d3e97cf7f6aa480e';
         $allData = [];
 
         do {
             try {
-                $response = $client->get("https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-espe-inspe/records?start={$startRecord}&limit={$limit}&apikey={$apikey}");
+                $response = $client->get("https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-statistiques-sur-les-effectifs-d-etudiants-inscrits-par-espe-inspe/records?group_by=etablissement_lib%2Crentree%2Ceffectif_total%2Csexem%2Csexef%2Cbaca%2Cbac4%2Cbac5%2Cbac6%2Cbac7%2Cbac_ageavance%2Cbac_agea_l_heure%2Cbac_ageretard%2Cgd_discisciplinedsa%2Cgd_discisciplinellsh%2Cgd_discisciplinesi%2Cgd_discisciplinestaps%2Cdiscipline02%2Cdiscipline04%2Cdiscipline05%2Cdiscipline32%2Cdiscipline09%2Cdiscipline10%2Cmobilite_internm%2Cdegetu4%2Cdegetu5&start={$startRecord}&limit={$limit}&apikey={$apikey}");
 
                 if ($response->getStatusCode() == 200) {
                     $data = json_decode($response->getBody(), true);

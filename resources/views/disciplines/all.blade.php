@@ -1,14 +1,5 @@
 @extends('layouts.app')
 
-@section('styles')
-<style>
-    html, body {
-        height: 100%;
-        overflow: visible;
-    }
-</style>
-@endsection
-
 @section('content')
     <div class="container-fluid">
         <h1>Liste des disciplines</h1>
@@ -38,7 +29,7 @@
                     <button type="button" class="btn btn-outline-primary">Vue Graphique</button>
                 </div>
 
-                <div>
+                <div class="table-responsive-stat">
                     <table id="disciplineTable" class="table text-center">
                         <thead class="text-white">
                             <tr>

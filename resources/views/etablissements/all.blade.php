@@ -64,7 +64,7 @@
                             @foreach ($etablissements as $etablissement)
                                 <tr>
                                     <td>{{ $etablissement->id }}</td>
-                                    <td>{{ $etablissement->Etablissement }}</td>
+                                    <td><a href="{{ route('etablissements.show', $etablissement) }}" class="text-decoration-none" style="color: inherit;">{{ $etablissement->Etablissement }}</a></td>
                                     <td>{{ $etablissement->Type }}</td>
                                     <td>{{ $etablissement->Commune }}</td>
                                     <td>{{ $etablissement->Secteur }}</td>

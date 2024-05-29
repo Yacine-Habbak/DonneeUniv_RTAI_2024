@@ -231,7 +231,9 @@
 
     <script>
         $(document).ready(function() {
-            var etudiantTable = $('#EtudiantTable').DataTable({
+        // Fonction pour initialiser une DataTable avec des options communes
+        function initialiserTable(tableId) {
+            return $('#' + tableId).DataTable({
                 paging: false,
                 ordering: true,
                 orderCellsTop: true,
@@ -255,192 +257,76 @@
                     });
                 }
             });
+        }
 
-            var bacTable = $('#BacTable').DataTable({
-                paging: false,
-                ordering: true,
-                orderCellsTop: true,
-                fixedHeader: true,
-                columnDefs: [
-                    { orderable: false, targets: 0 },
-                ],
-                dom: 'lrtip',
-                language: {
-                    "emptyTable": "Aucun résultat trouvé",
-                    "zeroRecords": "Aucun résultat trouvé",
-                    "info": "",
-                    "infoEmpty": "",
-                    "infoFiltered": "",
-                },
-                drawCallback: function() {
-                    var api = this.api();
-                    var rows = api.rows({ page: 'current' }).nodes();
-                    api.column(0, { page: 'current' }).nodes().each(function(cell, i) {
-                        cell.innerHTML = i + 1;
-                    });
-                }
-            });
+        // Initialisation des DataTables
+        var etudiantTable = initialiserTable('EtudiantTable');
+        var bacTable = initialiserTable('BacTable');
+        var mobiliteTable = initialiserTable('MobiliteTable');
+        var inscritsTable = initialiserTable('InscritsTable');
+        var GDTable = initialiserTable('GDTable');
+        var DiscTable = initialiserTable('Disc-table');
 
-            var mobiliteTable = $('#MobiliteTable').DataTable({
-                paging: false,
-                ordering: true,
-                orderCellsTop: true,
-                fixedHeader: true,
-                columnDefs: [
-                    { orderable: false, targets: 0 },
-                ],
-                dom: 'lrtip',
-                language: {
-                    "emptyTable": "Aucun résultat trouvé",
-                    "zeroRecords": "Aucun résultat trouvé",
-                    "info": "",
-                    "infoEmpty": "",
-                    "infoFiltered": "",
-                },
-                drawCallback: function() {
-                    var api = this.api();
-                    var rows = api.rows({ page: 'current' }).nodes();
-                    api.column(0, { page: 'current' }).nodes().each(function(cell, i) {
-                        cell.innerHTML = i + 1;
-                    });
-                }
-            });
+        // Filtrage des données
+        $.fn.dataTable.ext.search.push(
+            function(settings, data, dataIndex) {
+                var filtreTitle = $('#filtreTitle').val().toLowerCase();
+                var filtreCommune = $('#filtreCommune').val().toLowerCase();
 
-            var inscritsTable = $('#InscritsTable').DataTable({
-                paging: false,
-                ordering: true,
-                orderCellsTop: true,
-                fixedHeader: true,
-                columnDefs: [
-                    { orderable: false, targets: 0 },
-                ],
-                dom: 'lrtip',
-                language: {
-                    "emptyTable": "Aucun résultat trouvé",
-                    "zeroRecords": "Aucun résultat trouvé",
-                    "info": "",
-                    "infoEmpty": "",
-                    "infoFiltered": "",
-                },
-                drawCallback: function() {
-                    var api = this.api();
-                    var rows = api.rows({ page: 'current' }).nodes();
-                    api.column(0, { page: 'current' }).nodes().each(function(cell, i) {
-                        cell.innerHTML = i + 1;
-                    });
-                }
-            });
+                var etablissement = data[2].toLowerCase();
+                var commune = data[3].toLowerCase();
 
-            var GDTable = $('#GDTable').DataTable({
-                paging: false,
-                ordering: true,
-                orderCellsTop: true,
-                fixedHeader: true,
-                columnDefs: [
-                    { orderable: false, targets: 0 },
-                ],
-                dom: 'lrtip',
-                language: {
-                    "emptyTable": "Aucun résultat trouvé",
-                    "zeroRecords": "Aucun résultat trouvé",
-                    "info": "",
-                    "infoEmpty": "",
-                    "infoFiltered": "",
-                },
-                drawCallback: function() {
-                    var api = this.api();
-                    var rows = api.rows({ page: 'current' }).nodes();
-                    api.column(0, { page: 'current' }).nodes().each(function(cell, i) {
-                        cell.innerHTML = i + 1;
-                    });
-                }
-            });
+                var matchesTitle = filtreTitle === '' || etablissement.includes(filtreTitle);
+                var matchesCommune = filtreCommune === '' || commune.includes(filtreCommune);
 
-            var DiscTable = $('#Disc-table').DataTable({
-                paging: false,
-                ordering: true,
-                orderCellsTop: true,
-                fixedHeader: true,
-                columnDefs: [
-                    { orderable: false, targets: 0 },
-                ],
-                dom: 'lrtip',
-                language: {
-                    "emptyTable": "Aucun résultat trouvé",
-                    "zeroRecords": "Aucun résultat trouvé",
-                    "info": "",
-                    "infoEmpty": "",
-                    "infoFiltered": "",
-                },
-                drawCallback: function() {
-                    var api = this.api();
-                    var rows = api.rows({ page: 'current' }).nodes();
-                    api.column(0, { page: 'current' }).nodes().each(function(cell, i) {
-                        cell.innerHTML = i + 1;
-                    });
-                }
-            });
-
-            // Filtrage
-            $.fn.dataTable.ext.search.push(
-                function(settings, data, dataIndex) {
-                    var filtreTitle = $('#filtreTitle').val().toLowerCase();
-                    var filtreCommune = $('#filtreCommune').val().toLowerCase();
-
-                    var etablissement = data[2].toLowerCase();
-                    var commune = data[3].toLowerCase();
-
-                    var matchesTitle = filtreTitle === '' || etablissement.includes(filtreTitle);
-                    var matchesCommune = filtreCommune === '' || commune.includes(filtreCommune);
-
-                    return matchesTitle && matchesCommune;
-                }
-            );
-
-            $('#filtreTitle, #filtreCommune').on('input', function() {
-                etudiantTable.draw();
-                bacTable.draw();
-                mobiliteTable.draw();
-                inscritsTable.draw();
-                GDTable.draw();
-                DiscTable.draw();
-            });
-
-            const buttons = document.querySelectorAll('.btn-group.btn-stat button');
-
-            const tables = {
-                'genre-table': etudiantTable,
-                'baccalaureat-table': bacTable,
-                'mobilite-table': mobiliteTable,
-                'inscrits-table': inscritsTable,
-                'GD-table': GDTable,
-                'Disc-table':DiscTable
-            };
-
-            function showTable(tableId) {
-                buttons.forEach(btn => btn.classList.remove('active'));
-
-                Object.values(tables).forEach(table => table.table().node().style.display = 'none');
-
-                document.getElementById('bac-info').style.display = 'none';
-                tables[tableId].table().node().style.display = '';
-
-                if (tableId === 'baccalaureat-table') {
-                    document.getElementById('bac-info').style.display = '';
-                }
-                const selectedButton = document.querySelector(`.btn-group.btn-stat button[data-table="${tableId}"]`);
-                selectedButton.classList.add('active');
+                return matchesTitle && matchesCommune;
             }
+        );
 
-            buttons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const tableId = btn.dataset.table;
-                    showTable(tableId);
-                });
-            });
-
-            showTable('genre-table');
+        $('#filtreTitle, #filtreCommune').on('input', function() {
+            etudiantTable.draw();
+            bacTable.draw();
+            mobiliteTable.draw();
+            inscritsTable.draw();
+            GDTable.draw();
+            DiscTable.draw();
         });
+
+        // Gestion des boutons de sélection des tableaux
+        const buttons = document.querySelectorAll('.btn-group.btn-stat button');
+
+        const tables = {
+            'genre-table': etudiantTable,
+            'baccalaureat-table': bacTable,
+            'mobilite-table': mobiliteTable,
+            'inscrits-table': inscritsTable,
+            'GD-table': GDTable,
+            'Disc-table': DiscTable
+        };
+
+        function showTable(tableId) {
+            buttons.forEach(btn => btn.classList.remove('active'));
+            Object.values(tables).forEach(table => table.table().node().style.display = 'none');
+
+            document.getElementById('bac-info').style.display = 'none';
+            tables[tableId].table().node().style.display = '';
+
+            if (tableId === 'baccalaureat-table') {
+                document.getElementById('bac-info').style.display = '';
+            }
+            const selectedButton = document.querySelector(`.btn-group.btn-stat button[data-table="${tableId}"]`);
+            selectedButton.classList.add('active');
+        }
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tableId = btn.dataset.table;
+                showTable(tableId);
+            });
+        });
+
+        showTable('genre-table');
+    });
     </script>
 
 @endsection
