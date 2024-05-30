@@ -22,6 +22,10 @@ Route::get('/accueil', function () {
     return view('accueil');
 })->name('accueil');
 
+Route::get('/carte', function () {
+    return view('carte');
+})->name('carte');
+
 Route::get('/listeEtablissement', [EtablissementController::class, 'allEtablissement'])->name('etablissements.all');
 Route::get('/etablissements', [EtablissementController::class, 'index'])->name('etablissements.index');
 

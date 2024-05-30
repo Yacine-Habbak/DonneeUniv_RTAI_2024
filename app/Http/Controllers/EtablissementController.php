@@ -124,4 +124,8 @@ class EtablissementController extends Controller
         return redirect()->route('accueil')
             ->with('Les Taux d\'encadrement ont bien été inséré.');
     }
+
+    public function carte()  {
+        return view('carte');
+    }
 }
