@@ -15,12 +15,16 @@ Route::get('/DataDiscipline', [DisciplineController::class, 'RecupDataDiscipline
 Route::get('/DataEnseignant', [EnseignantController::class, 'RecupDataEnseignantFromApi'])->name('DataEnseignant');
 Route::get('/DataPersonnel', [PersonnelController::class, 'RecupDataPersonnelFromApi'])->name('DataPersonnel');
 Route::get('/DataStatistique', [StatistiqueController::class, 'RecupDataStatistiqueFromApi'])->name('DataStatistique');
+Route::get('/CalculTE', [EtablissementController::class, 'CalculTE'])->name('CalculTE');
+
 
 Route::get('/accueil', function () {
     return view('accueil');
 })->name('accueil');
 
 Route::get('/listeEtablissement', [EtablissementController::class, 'allEtablissement'])->name('etablissements.all');
+Route::get('/etablissements', [EtablissementController::class, 'index'])->name('etablissements.index');
+
 Route::get('/detailsEtablissement/{id}', [EtablissementController::class, 'showEtablissement'])->name('etablissements.show');
 
 Route::get('/listeDiscipline', [DisciplineController::class, 'allDiscipline'])->name('disciplines.all');

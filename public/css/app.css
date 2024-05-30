@@ -115,7 +115,7 @@ h3{
     padding: 5px;
 }
 .table-responsive-univ {
-    max-height: calc(100vh - 2.6%);
+    max-height: calc(100vh - 2.8%);
     overflow-y: auto;
 }
 .table-responsive-stat{
@@ -180,6 +180,10 @@ table th,.table td {
 .btn-univ{
     right: 5%;
     top: 28%;
+}
+.btn-graphique{
+    right: 5%;
+    top: 33%;
 }
 .btn-stat{
     right: 5%;

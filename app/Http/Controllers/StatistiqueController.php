@@ -96,7 +96,7 @@ class StatistiqueController extends Controller
             }
         }
 
-        return redirect()->route('accueil')
+        return redirect()->route('CalculTE')
             ->with('Les données des statistiques ont bien été mis à jour.');
     }
 }

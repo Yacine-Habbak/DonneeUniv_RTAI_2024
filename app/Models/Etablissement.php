@@ -30,6 +30,8 @@ class Etablissement extends Model
         'Etudiants_inscrits_2018',
         'Personnels_non_enseignant',
         'Enseignants',
+        'TE_Total',
+        'TE_enseignants',
         'siret',
         'date_creation',
         'contact',

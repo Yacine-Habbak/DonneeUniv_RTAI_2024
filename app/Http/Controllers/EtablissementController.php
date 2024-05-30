@@ -23,6 +23,13 @@ class EtablissementController extends Controller
     }
 
 
+    public function index()
+    {
+        $etablissements = Etablissement::all();
+        return response()->json($etablissements);
+    }
+
+
     // POUR RECUPERER LES DONNEES
     public function RecupDataUnivFromApi()
     {
@@ -94,5 +101,27 @@ class EtablissementController extends Controller
 
         return redirect()->route('DataDiscipline')
             ->with('Les données des établissements ont bien été mis à jour.');
+    }
+
+
+    public function CalculTE(){
+        $etablissements = Etablissement::all();
+
+        foreach ($etablissements as $etablissement) {
+            try {
+                if ($etablissement->Enseignants && $etablissement->Etudiants_inscrits_2022) {
+                    $etablissement->TE_enseignants = ($etablissement->Enseignants * 1000) / $etablissement->Etudiants_inscrits_2022;
+                    if ($etablissement->Personnels_non_enseignant) {
+                        $etablissement->TE_Total = (($etablissement->Personnels_non_enseignant + $etablissement->Enseignants) * 1000) / $etablissement->Etudiants_inscrits_2022;
+                    }
+                        $etablissement->save();
+                }
+            } catch (\Exception $e) {
+                \Log::error("Erreur lors du calcul du taux d'encadrement de : {$etablissement->Etablissement} - " . $e->getMessage());
+            }
+        }
+
+        return redirect()->route('accueil')
+            ->with('Les Taux d\'encadrement ont bien été inséré.');
     }
 }
