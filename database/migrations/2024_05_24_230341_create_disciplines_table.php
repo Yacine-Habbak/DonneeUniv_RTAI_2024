@@ -11,15 +11,7 @@ return new class extends Migration
         Schema::create('disciplines', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('univ_id');
-            $table->string('Discipline');
-            $table->string('Type_diplome');
-            $table->string('Nom_diplome');
-            $table->string('Nbr_poursuivants')->nullable();
-            $table->string('Nbr_sortants')->nullable();
-            $table->string('Taux_emploi_salarié', 5, 2)->nullable();
-            $table->integer('Date_insertion')->nullable();
-            $table->string('Taux_reussite')->nullable();
-            $table->string('Taux_insertion')->nullable();
+            $table->text('Discipline');
 
             $table->foreign('univ_id')->references('id')->on('etablissements')->onDelete('cascade');
 

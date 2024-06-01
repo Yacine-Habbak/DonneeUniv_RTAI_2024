@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Etablissement;
 use App\Models\Discipline;
+use App\Models\Diplome;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
@@ -16,27 +17,26 @@ class DisciplineController extends Controller
         return view('disciplines.all', compact('disciplines'));
     }
 
-
-    // POUR RECUPERER LES DONNEES
+    // Récupérer les données
     public function RecupDataDisciplineFromApi()
     {
         ini_set('max_execution_time', 0);
-        $client = new Client(['verify' => false,'timeout' => 300]);
-        $startRecord = 0;
-        $limit = 1000;
-        $apikey = '9a63b08bae72b9014f2a17c4c47f428ccec2c5b6d3e97cf7f6aa480e';
-        $allData = [];
-
+        $client = new Client(['verify' => false, 'timeout' => 300]);
+        $debut = 0;
+        $limite = 1000;
+        $cleApi = '9a63b08bae72b9014f2a17c4c47f428ccec2c5b6d3e97cf7f6aa480e';
+        $toutesDonnees = [];
+        
         do {
             try {
-                $response = $client->get("https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-insersup/records?group_by=uo_lib%2Cdiscipli_lib%2Ctype_diplome_long%2Clibelle_diplome%2Cnb_poursuivants%2Cnb_sortants%2Ctaux_emploi_sal_fr%2Cdate_inser%2Ctaux_insertion&refine=source%3A%22insersup%22&refine=promo%3A%222021%22&start={$startRecord}&limit={$limit}&apikey={$apikey}&refine=source%3A%22insersup%22&refine=promo%3A%222021%22");
+                $reponse = $client->get("https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-insersup/records?group_by=uo_lib%2Cdiscipli_lib%2Ctype_diplome_long%2Clibelle_diplome%2Cnb_poursuivants%2Cnb_sortants&refine=source%3A%22insersup%22&start={$debut}&limit={$limite}&apikey={$cleApi}");
 
-                if ($response->getStatusCode() == 200) {
-                    $data = json_decode($response->getBody(), true);
+                if ($reponse->getStatusCode() == 200) {
+                    $data = json_decode($reponse->getBody(), true);
 
                     if (isset($data['results']) && is_array($data['results'])) {
-                        $allData = array_merge($allData, $data['results']);
-                        $startRecord += $limit;
+                        $toutesDonnees = array_merge($toutesDonnees, $data['results']);
+                        $debut += $limite;
                     } else {
                         Log::error('Structure de donnée incorrecte reçue par l\'API');
                         break;
@@ -51,34 +51,88 @@ class DisciplineController extends Controller
             }
         } while (!empty($data['results']));
 
+        $etabDisciplines = [];
+        $etabDiplomes = [];
+
+        foreach ($toutesDonnees as $element) {
+            $nomEtab = $element['uo_lib'];
+            $discipline = $element['discipli_lib'];
+
+            if ($discipline === 'Toutes disciplines') {
+                continue;
+            }
+
+            if (!isset($etabDisciplines[$nomEtab])) {
+                $etabDisciplines[$nomEtab] = [];
+            }
+
+            if (!in_array($discipline, $etabDisciplines[$nomEtab])) {
+                $etabDisciplines[$nomEtab][] = $discipline;
+            }
+
+            $typeDiplome = $element['type_diplome_long'] ?? null;
+            $libelleDiplome = $element['libelle_diplome'] ?? null;
+            $nbPoursuivants = $element['nb_poursuivants'] ?? 0;
+            $nbSortants = $element['nb_sortants'] ?? 0;
+
+            if (!isset($etabDiplomes[$nomEtab])) {
+                $etabDiplomes[$nomEtab] = [];
+            }
+
+            if (!isset($etabDiplomes[$nomEtab][$typeDiplome])) {
+                $etabDiplomes[$nomEtab][$typeDiplome] = [];
+            }
+
+            if (!isset($etabDiplomes[$nomEtab][$typeDiplome][$libelleDiplome])) {
+                $etabDiplomes[$nomEtab][$typeDiplome][$libelleDiplome] = [
+                    'nbr_Pour' => 0,
+                    'nbr_Sort' => 0,
+                ];
+            }
+
+            $etabDiplomes[$nomEtab][$typeDiplome][$libelleDiplome]['nbr_Pour'] += $nbPoursuivants;
+            $etabDiplomes[$nomEtab][$typeDiplome][$libelleDiplome]['nbr_Sort'] += $nbSortants;
+        }
+
         Discipline::truncate();
+        Diplome::truncate();
 
-        foreach ($allData as $item) {
+        foreach ($etabDisciplines as $nomEtab => $disciplines) {
             try {
-                $etablissement = Etablissement::where('Etablissement', $item['uo_lib'])->first();
-
+                $etablissement = Etablissement::where('Etablissement', $nomEtab)->first();
                 if ($etablissement) {
                     $discipline = new Discipline();
                     $discipline->univ_id = $etablissement->id;
-                    $discipline->Discipline = $item['discipli_lib'];
-                    $discipline->Type_diplome = $item['type_diplome_long'];
-                    $discipline->Nom_diplome = $item['libelle_diplome'];
-                    $discipline->Nbr_poursuivants = $item['nb_poursuivants'];
-                    $discipline->Nbr_sortants = $item['nb_sortants'];
-                    $discipline->Taux_emploi_salarié = $item['taux_emploi_sal_fr'];
-                    $discipline->Date_insertion = $item['date_inser'];
-                    $discipline->Taux_insertion = $item['taux_insertion'];
-
+                    $discipline->Discipline = implode('//', $disciplines);
                     $discipline->save();
-                } else {
-                    Log::warning("L'établissement '{$item['uo_lib']}' n'existe pas dans la table 'etablissements'.");
                 }
             } catch (\Exception $e) {
-                Log::error('Erreur lors de l\'enregistrement de la discipline: ' . $e->getMessage());
+                Log::error('Erreur lors de l\'enregistrement des données de l\'API : ' . $e->getMessage());
             }
         }
 
-        return redirect()->route('DataEnseignant')
-            ->with('Les données des disciplines ont bien été mis à jour.');
+        foreach ($etabDiplomes as $nomEtab => $types) {
+            try {
+                $etablissement = Etablissement::where('Etablissement', $nomEtab)->first();
+                if ($etablissement) {
+                    foreach ($types as $type => $diplomes) {
+                        foreach ($diplomes as $libelle => $data) {
+                            $diplome = new Diplome();
+                            $diplome->univ_id = $etablissement->id;
+                            $diplome->Type = $type;
+                            $diplome->Diplome = $libelle;
+                            $diplome->nbr_Pour = $data['nbr_Pour'];
+                            $diplome->nbr_Sort = $data['nbr_Sort'];
+                            $diplome->save();
+                        }
+                    }
+                }
+            } catch (\Exception $e) {
+                Log::error('Erreur lors de l\'enregistrement des données de l\'API : ' . $e->getMessage());
+            }
+        }
+
+        return redirect()->route('DataStatistique')
+        ->with('success', 'Les disciplines et les diplômes ont bien été mis à jour.');
     }
 }

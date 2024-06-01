@@ -21,12 +21,9 @@ return new class extends Migration
             $table->decimal('lon', 11, 8);
             $table->string('Secteur');
             $table->string('url')->nullable();
-            $table->integer('Etudiants_inscrits_2022')->nullable();
-            $table->integer('Etudiants_inscrits_2021')->nullable();
-            $table->integer('Etudiants_inscrits_2020')->nullable();
-            $table->integer('Etudiants_inscrits_2019')->nullable();
-            $table->integer('Etudiants_inscrits_2018')->nullable();
             $table->integer('Personnels_non_enseignant')->nullable();
+            $table->integer('Personnels_non_enseignant_H')->nullable();
+            $table->integer('Personnels_non_enseignant_F')->nullable();
             $table->integer('Enseignants')->nullable();
             $table->decimal('TE_enseignants', 8, 2)->nullable();
             $table->decimal('TE_Total', 8, 2)->nullable();

@@ -23,12 +23,9 @@ class Etablissement extends Model
         'Lat',
         'Secteur',
         'url',
-        'Etudiants_inscrits_2022',
-        'Etudiants_inscrits_2021',
-        'Etudiants_inscrits_2020',
-        'Etudiants_inscrits_2019',
-        'Etudiants_inscrits_2018',
         'Personnels_non_enseignant',
+        'Personnels_non_enseignant_H',
+        'Personnels_non_enseignant_F',
         'Enseignants',
         'TE_Total',
         'TE_enseignants',
@@ -45,6 +42,16 @@ class Etablissement extends Model
     public function disciplines()
     {
         return $this->hasMany(Discipline::class, 'univ_id');
+    }
+
+    public function etudiants()
+    {
+        return $this->hasOne(Etudiant::class, 'univ_id');
+    }
+
+    public function diplomes()
+    {
+        return $this->hasMany(Diplome::class, 'univ_id');
     }
 
     public function enseignants()

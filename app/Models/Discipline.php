@@ -14,14 +14,6 @@ class Discipline extends Model
     protected $fillable = [
         'univ_id',
         'Discipline',
-        'Type_diplome',
-        'Nom_diplome',
-        'Nbr_poursuivants',
-        'Nbr_sortants',
-        'Taux_emploi_salarié',
-        'Date_insertion',
-        'Taux_reussite',
-        'Taux_insertion',
     ];
 
     public function etablissement()

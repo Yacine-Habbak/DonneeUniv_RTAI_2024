@@ -10,27 +10,25 @@ use Illuminate\Support\Facades\Log;
 
 class EnseignantController extends Controller
 {
-
-    // POUR RECUPERER LES DONNEES
     public function RecupDataEnseignantFromApi()
     {
         ini_set('max_execution_time', 0);
-        $client = new Client(['verify' => false,'timeout' => 300]);
-        $startRecord = 0;
-        $limit = 1000;
-        $apikey = '9a63b08bae72b9014f2a17c4c47f428ccec2c5b6d3e97cf7f6aa480e';
-        $allData = [];
-
+        $client = new Client(['verify' => false, 'timeout' => 300]);
+        $debut = 0;
+        $limite = 1000;
+        $cleApi = '9a63b08bae72b9014f2a17c4c47f428ccec2c5b6d3e97cf7f6aa480e';
+        $toutesDonnees = [];
+        
         do {
             try {
-                $response = $client->get("https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-enseignants-titulaires-esr-public/records?group_by=etablissement_lib%2Ccategorie_assimilation%2Cgrande_discipline%2Csexe%2Cquotite%2Ceffectif&refine=rentree%3A%222021%22&start={$startRecord}&limit={$limit}&apikey={$apikey}");
+                $reponse = $client->get("https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-enseignants-titulaires-esr-public/records?group_by=etablissement_lib%2Ccategorie_assimilation%2Ceffectif%2Csexe&refine=rentree%3A%222021%22&start={$debut}&limit={$limite}&apikey={$cleApi}");
 
-                if ($response->getStatusCode() == 200) {
-                    $data = json_decode($response->getBody(), true);
+                if ($reponse->getStatusCode() == 200) {
+                    $data = json_decode($reponse->getBody(), true);
 
                     if (isset($data['results']) && is_array($data['results'])) {
-                        $allData = array_merge($allData, $data['results']);
-                        $startRecord += $limit;
+                        $toutesDonnees = array_merge($toutesDonnees, $data['results']);
+                        $debut += $limite;
                     } else {
                         Log::error('Structure de donnée incorrecte reçue par l\'API');
                         break;
@@ -45,46 +43,72 @@ class EnseignantController extends Controller
             }
         } while (!empty($data['results']));
 
+        $donneesTriees = [];
+
+        foreach ($toutesDonnees as $donnee) {
+            $etabLib = $donnee['etablissement_lib'];
+            $type = $donnee['categorie_assimilation'];
+            $sexe = $donnee['sexe'];
+            $effectif = $donnee['effectif'];
+            
+            if (!isset($donneesTriees[$etabLib])) {
+                $donneesTriees[$etabLib] = [];
+            }
+
+            if (!isset($donneesTriees[$etabLib][$type])) {
+                $donneesTriees[$etabLib][$type] = [
+                    'effectif_total' => 0,
+                    'effectif_h' => 0,
+                    'effectif_f' => 0
+                ];
+            }
+
+            if ($sexe == 'Homme') {
+                $donneesTriees[$etabLib][$type]['effectif_h'] += $effectif;
+            } else if ($sexe == 'Femme') {
+                $donneesTriees[$etabLib][$type]['effectif_f'] += $effectif;
+            }
+
+            $donneesTriees[$etabLib][$type]['effectif_total'] += $effectif;
+        }
+
         Enseignant::truncate();
 
-        foreach ($allData as $item) {
-            try {
-                $etablissement = Etablissement::where('Etablissement', $item['etablissement_lib'])->first();
+        foreach ($donneesTriees as $etabLib => $types) {
+            $etab = Etablissement::where('Etablissement', $etabLib)->first();
 
-                if ($etablissement) {
-                    $enseignant = new Enseignant();
-                    $enseignant->univ_id = $etablissement->id;
-                    $enseignant->Type_enseignant = $item['categorie_assimilation'];
-                    $enseignant->Grande_discipline = $item['grande_discipline'];
-                    $enseignant->Sexe = $item['sexe'];
-                    $enseignant->Temps = $item['quotite'] ?? null;
-                    $enseignant->Effectif = $item['effectif'] ?? null;
+            if ($etab) {
+                $effectifTotalUniv = 0;
 
-                    $enseignant->save();
-                } else {
-                    Log::warning("L'établissement '{$item['etablissement_lib']}' n'existe pas dans la table 'etablissements'.");
+                foreach ($types as $type => $effectifs) {
+                    try {
+                        Log::info("Enregistrement des enseignants: établissement = {$etabLib}, type = {$type}, total = {$effectifs['effectif_total']}, hommes = {$effectifs['effectif_h']}, femmes = {$effectifs['effectif_f']}");
+                        $enseignant = new Enseignant();
+                        $enseignant->univ_id = $etab->id;
+                        $enseignant->Type = $type;
+                        $enseignant->Effectif = $effectifs['effectif_total'];
+                        $enseignant->Effectif_H = $effectifs['effectif_h'];
+                        $enseignant->Effectif_F = $effectifs['effectif_f'];
+                        $enseignant->save();
+
+                        $effectifTotalUniv += $effectifs['effectif_total'];
+                    } catch (\Exception $e) {
+                        Log::error('Erreur lors de l\'enregistrement de l\'enseignant: ' . $e->getMessage());
+                    }
                 }
-            } catch (\Exception $e) {
-                Log::error('Erreur lors de l\'enregistrement de l\'enseignant: ' . $e->getMessage());
+
+                try {
+                    $etab->Enseignants = $effectifTotalUniv;
+                    $etab->save();
+                } catch (\Exception $e) {
+                    Log::error('Erreur lors de la mise à jour de l\'effectif total dans la table etablissements: ' . $e->getMessage());
+                }
+            } else {
+                Log::warning("L'établissement '{$etabLib}' n'existe pas dans la table 'etablissements'.");
             }
         }
 
-
-        // Mise à jour des enseignants pour chaque établissement
-        $etablissements = Etablissement::all();
-
-        foreach ($etablissements as $etablissement) {
-            $totalEnseignants = Enseignant::where('univ_id', $etablissement->id)->sum('Effectif');
-        
-            if ($totalEnseignants != 0) {
-                $etablissement->update([
-                    'Enseignants' => $totalEnseignants,
-                ]);
-            }
-        }
-
-
-        return redirect()->route('DataPersonnel')
-            ->with('Les données des enseignants ont bien été mis à jour.');
+        return redirect()->route('CalculTE')
+        ->with('success', 'Les données des enseignants ont bien été mis à jour.');
     }
 }

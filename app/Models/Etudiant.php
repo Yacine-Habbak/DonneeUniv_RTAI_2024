@@ -5,18 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Personnel extends Model
+class Etudiant extends Model
 {
     use HasFactory;
 
-    protected $table = 'personnels';
+    protected $table = 'etudiants';
 
     protected $fillable = [
         'univ_id',
-        'Type',
-        'Effectif',
-        'Effectif_H',
-        'Effectif_F',
+        'Effectif_2022',
+        'Effectif_2021',
+        'Effectif_2020',
+        'Effectif_2019',
+        'Effectif_2018',
+        'Effectif_2017',
+        'Effectif_2016',
+        'Effectif_2015',
+        'Effectif_2014',
+        'Effectif_2013',
     ];
 
     public function etablissement()

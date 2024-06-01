@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('statistiques', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('univ_id');
-            $table->integer('rentree');
+            $table->integer('Rentree');
             $table->integer('Etudiants_inscrits');
             $table->integer('Etudiants_inscrits_H')->nullable();
             $table->integer('Etudiants_inscrits_F')->nullable();
@@ -23,7 +23,6 @@ return new class extends Migration
             $table->integer('Bac_Autre')->nullable();
             $table->integer('Bac_PRO')->nullable();
             $table->integer('Bac_Dispense')->nullable();
-            
             $table->integer('Avance_bac')->nullable();
             $table->integer('Alheure_bac')->nullable();
             $table->integer('Retard_bac')->nullable();
@@ -37,8 +36,6 @@ return new class extends Migration
             $table->integer('Science_hu')->nullable();
             $table->integer('Science_vie')->nullable();
             $table->integer('Science_Fo')->nullable();
-    
-
             $table->integer('Etudiants_mobilite')->nullable();
             $table->integer('Bac4')->nullable();
             $table->integer('Bac5')->nullable();

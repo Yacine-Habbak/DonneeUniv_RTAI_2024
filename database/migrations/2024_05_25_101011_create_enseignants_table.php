@@ -11,11 +11,10 @@ return new class extends Migration
         Schema::create('enseignants', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('univ_id');
-            $table->string('Type_enseignant');
-            $table->string('Grande_discipline');
-            $table->string('Sexe');
-            $table->string('Temps')->nullable();
+            $table->string('Type');
             $table->integer('Effectif')->nullable();
+            $table->integer('Effectif_H')->nullable();
+            $table->integer('Effectif_F')->nullable();
             $table->timestamps();
 
             $table->foreign('univ_id')->references('id')->on('etablissements')->onDelete('cascade');

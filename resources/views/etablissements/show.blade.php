@@ -113,7 +113,7 @@
         </div>
 
         
-        @if ($etablissement->Etudiants_inscrits_2022 && ($etablissement->Personnels_non_enseignant || $etablissement->Enseignants))
+        @if ($etablissement->etudiants->Effectif_2022 && ($etablissement->Personnels_non_enseignant || $etablissement->Enseignants))
             <div class="row justify-content-around">
                 <div class="col-md-4">
                     <h2 class="text-center sousTitre mt-5 mb-5">Effectifs des Étudiants par Année</h2>
@@ -125,11 +125,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if ($etablissement->Etudiants_inscrits_2022) <tr><td>2022</td><td>{{ $etablissement->Etudiants_inscrits_2022 }}</td></tr> @endif
-                            @if ($etablissement->Etudiants_inscrits_2021) <tr><td>2021</td><td>{{ $etablissement->Etudiants_inscrits_2021 }}</td></tr> @endif
-                            @if ($etablissement->Etudiants_inscrits_2020) <tr><td>2020</td><td>{{ $etablissement->Etudiants_inscrits_2020 }}</td></tr> @endif
-                            @if ($etablissement->Etudiants_inscrits_2019) <tr><td>2019</td><td>{{ $etablissement->Etudiants_inscrits_2019 }}</td></tr> @endif
-                            @if ($etablissement->Etudiants_inscrits_2018) <tr><td>2018</td><td>{{ $etablissement->Etudiants_inscrits_2018 }}</td></tr> @endif
+                            @if ($etablissement->etudiants->Effectif_2022) <tr><td>2022</td><td>{{ $etablissement->etudiants->Effectif_2022 }}</td></tr> @endif
+                            @if ($etablissement->etudiants->Effectif_2021) <tr><td>2021</td><td>{{ $etablissement->etudiants->Effectif_2021 }}</td></tr> @endif
+                            @if ($etablissement->etudiants->Effectif_2020) <tr><td>2020</td><td>{{ $etablissement->etudiants->Effectif_2020 }}</td></tr> @endif
+                            @if ($etablissement->etudiants->Effectif_2019) <tr><td>2019</td><td>{{ $etablissement->etudiants->Effectif_2019 }}</td></tr> @endif
+                            @if ($etablissement->etudiants->Effectif_2018) <tr><td>2018</td><td>{{ $etablissement->etudiants->Effectif_2018 }}</td></tr> @endif
                         </tbody>
                     </table>
                 </div>
@@ -169,7 +169,7 @@
                 </div>
             </div>
 
-        @elseif ($etablissement->Etudiants_inscrits_2022 && !($etablissement->Personnels_non_enseignant || $etablissement->Enseignants))
+        @elseif ($etablissement->etudiants->Effectif_2022 && !($etablissement->Personnels_non_enseignant || $etablissement->Enseignants))
             <div class="row justify-content-around decalage">
                 <div class="col-md-4">
                     <h2 class="text-center sousTitre mt-5 mb-5">Effectifs des Étudiants par Année</h2>
@@ -181,11 +181,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if ($etablissement->Etudiants_inscrits_2022) <tr><td>2022</td><td>{{ $etablissement->Etudiants_inscrits_2022 }}</td></tr> @endif
-                            @if ($etablissement->Etudiants_inscrits_2021) <tr><td>2021</td><td>{{ $etablissement->Etudiants_inscrits_2021 }}</td></tr> @endif
-                            @if ($etablissement->Etudiants_inscrits_2020) <tr><td>2020</td><td>{{ $etablissement->Etudiants_inscrits_2020 }}</td></tr> @endif
-                            @if ($etablissement->Etudiants_inscrits_2019) <tr><td>2019</td><td>{{ $etablissement->Etudiants_inscrits_2019 }}</td></tr> @endif
-                            @if ($etablissement->Etudiants_inscrits_2018) <tr><td>2018</td><td>{{ $etablissement->Etudiants_inscrits_2018 }}</td></tr> @endif
+                            @if ($etablissement->etudiants->Effectif_2022) <tr><td>2022</td><td>{{ $etablissement->etudiants->Effectif_2022 }}</td></tr> @endif
+                            @if ($etablissement->etudiants->Effectif_2021) <tr><td>2021</td><td>{{ $etablissement->etudiants->Effectif_2021 }}</td></tr> @endif
+                            @if ($etablissement->etudiants->Effectif_2020) <tr><td>2020</td><td>{{ $etablissement->etudiants->Effectif_2020 }}</td></tr> @endif
+                            @if ($etablissement->etudiants->Effectif_2019) <tr><td>2019</td><td>{{ $etablissement->etudiants->Effectif_2019 }}</td></tr> @endif
+                            @if ($etablissement->etudiants->Effectif_2018) <tr><td>2018</td><td>{{ $etablissement->etudiants->Effectif_2018 }}</td></tr> @endif
                         </tbody>
                     </table>
                 </div>
@@ -206,7 +206,7 @@
                     </div>
                 </div>
             </div>
-        @elseif (!$etablissement->Etudiants_inscrits_2022 && ($etablissement->Personnels_non_enseignant || $etablissement->Enseignants))
+        @elseif (!$etablissement->etudiants->Effectif_2022 && ($etablissement->Personnels_non_enseignant || $etablissement->Enseignants))
             <div class="row justify-content-around decalage">
                 <div class="col-md-3">
                     <h2 class="text-center sousTitre mt-5 mb-5">Le Personnel</h2>

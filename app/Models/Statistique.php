@@ -13,7 +13,7 @@ class Statistique extends Model
 
     protected $fillable = [
         'univ_id',
-        'annee',
+        'Rentree',
         'Etudiants_inscrits',
         'Etudiants_inscrits_H',
         'Etudiants_inscrits_F',

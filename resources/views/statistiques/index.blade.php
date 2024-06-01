@@ -19,8 +19,8 @@
                 </div>
 
                 <div class="table-responsive-stat">
-                    <!-- TABLEAU SUR LES ETUDIANTS -->
-                    <table id="EtudiantTable" class="table text-center">
+                    <!-- TABLEAU SUR LES INSCRIPTIONS -->
+                    <table id="InscritsTable" class="table text-center">
                         <thead class="text-white">
                             <tr>
                                 <th>Rang</th>
@@ -38,8 +38,8 @@
                             @foreach ($statistiques as $statistique)
                                 <tr>
                                     <td>{{ $statistique->id }}</td>
-                                    <td>{{ $statistique->rentree }}</td>
-                                    <td><a href="{{ route('etablissements.show', $statistique->etablissement) }}" class="text-decoration-none" style="color: inherit;">{{ $statistique->etablissement->Etablissement }}</a></td>
+                                    <td>{{ $statistique->Rentree }}</td>
+                                    <td><a href="{{ route('etablissements.show', $statistique->etablissement->id) }}" class="text-decoration-none" style="color: inherit;">{{ $statistique->etablissement->Etablissement }}</a></td>
                                     <td>{{ $statistique->etablissement->Commune }}</td>
                                     <td>{{ $statistique->Etudiants_inscrits }}</td>
                                     <td>{{ $statistique->Etudiants_inscrits_H }}</td>
@@ -74,8 +74,8 @@
                             @foreach ($statistiques as $statistique)
                                 <tr>
                                     <td>{{ $statistique->id }}</td>
-                                    <td>{{ $statistique->rentree }}</td>
-                                    <td><a href="{{ route('etablissements.show', $statistique->etablissement) }}" class="text-decoration-none" style="color: inherit;">{{ $statistique->etablissement->Etablissement }}</a></td>
+                                    <td>{{ $statistique->Rentree }}</td>
+                                    <td><a href="{{ route('etablissements.show', $statistique->etablissement->id) }}" class="text-decoration-none" style="color: inherit;">{{ $statistique->etablissement->Etablissement }}</a></td>
                                     <td>{{ $statistique->etablissement->Commune }}</td>
                                     <td>{{ $statistique->Etudiants_inscrits }}</td>
                                     <td>{{ $statistique->Bac_Gen }}</td>
@@ -108,8 +108,8 @@
                             @foreach ($statistiques as $statistique)
                                 <tr>
                                     <td>{{ $statistique->id }}</td>
-                                    <td>{{ $statistique->rentree }}</td>
-                                    <td><a href="{{ route('etablissements.show', $statistique->etablissement) }}" class="text-decoration-none" style="color: inherit;">{{ $statistique->etablissement->Etablissement }}</a></td>
+                                    <td>{{ $statistique->Rentree }}</td>
+                                    <td><a href="{{ route('etablissements.show', $statistique->etablissement->id) }}" class="text-decoration-none" style="color: inherit;">{{ $statistique->etablissement->Etablissement }}</a></td>
                                     <td>{{ $statistique->etablissement->Commune }}</td>
                                     <td>{{ $statistique->Etudiants_inscrits }}</td>
                                     <td>{{ $statistique->Etudiants_mobilite }}</td>
@@ -119,35 +119,35 @@
                     </table>
 
 
-                    <!-- TABLEAU SUR LES ETUDIANTS INSCRIS-->
-                    <table id="InscritsTable" class="table text-center">
+                    <!-- TABLEAU SUR LES EFFECTIFS ETUDIANTS-->
+                    <table id="EtudiantTable" class="table text-center">
                         <thead class="text-white">
                             <tr>
                                 <th>Rang</th>
-                                <th style="cursor: pointer;">Secteur</th>
                                 <th style="cursor: pointer;">Etablissement</th>
                                 <th style="cursor: pointer;">Commune</th>
-                                <th style="cursor: pointer;">Etudiants inscrits en 2018</th>
-                                <th style="cursor: pointer;">Etudiants inscrits en 2019</th>
-                                <th style="cursor: pointer;">Etudiants inscrits en 2020</th>
-                                <th style="cursor: pointer;">Etudiants inscrits en 2021</th>
-                                <th style="cursor: pointer;">Etudiants inscrits en 2022</th>
+                                <th style="cursor: pointer;">Etudiants en 2018</th>
+                                <th style="cursor: pointer;">Etudiants en 2019</th>
+                                <th style="cursor: pointer;">Etudiants en 2020</th>
+                                <th style="cursor: pointer;">Etudiants en 2021</th>
+                                <th style="cursor: pointer;">Etudiants en 2022</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($etablissements as $etablissement)
+                        @foreach ($etablissements as $etablissement)
+                            @if ($etablissement->Type === 'Université')
                                 <tr>
                                     <td>{{ $etablissement->id }}</td>
-                                    <td>{{ $etablissement->Secteur }}</td>
-                                    <td><a href="{{ route('etablissements.show', $statistique->etablissement) }}" class="text-decoration-none" style="color: inherit;">{{ $statistique->etablissement->Etablissement }}</a></td>
+                                    <td><a href="{{ route('etablissements.show', $etablissement->id) }}" class="text-decoration-none" style="color: inherit;">{{ $etablissement->Etablissement }}</a></td>
                                     <td>{{ $etablissement->Commune }}</td>
-                                    <td>{{ $etablissement->Etudiants_inscrits_2018 ?? 'nd' }}</td>
-                                    <td>{{ $etablissement->Etudiants_inscrits_2019 ?? 'nd' }}</td>
-                                    <td>{{ $etablissement->Etudiants_inscrits_2020 ?? 'nd' }}</td>
-                                    <td>{{ $etablissement->Etudiants_inscrits_2021 ?? 'nd' }}</td>
-                                    <td>{{ $etablissement->Etudiants_inscrits_2022 ?? 'nd' }}</td>
+                                    <td>{{ optional($etablissement->etudiants)->Effectif_2018 ?? 'nd' }}</td>
+                                    <td>{{ optional($etablissement->etudiants)->Effectif_2019 ?? 'nd' }}</td>
+                                    <td>{{ optional($etablissement->etudiants)->Effectif_2020 ?? 'nd' }}</td>
+                                    <td>{{ optional($etablissement->etudiants)->Effectif_2021 ?? 'nd' }}</td>
+                                    <td>{{ optional($etablissement->etudiants)->Effectif_2022 ?? 'nd' }}</td>
                                 </tr>
-                            @endforeach
+                            @endif
+                        @endforeach
                         </tbody>
                     </table>
 
@@ -169,8 +169,8 @@
                             @foreach ($statistiques as $statistique)
                                 <tr>
                                     <td>{{ $statistique->id }}</td>
-                                    <td>{{ $statistique->rentree }}</td>
-                                    <td><a href="{{ route('etablissements.show', $statistique->etablissement) }}" class="text-decoration-none" style="color: inherit;">{{ $statistique->etablissement->Etablissement }}</a></td>
+                                    <td>{{ $statistique->Rentree }}</td>
+                                    <td><a href="{{ route('etablissements.show', $statistique->etablissement->id) }}" class="text-decoration-none" style="color: inherit;">{{ $statistique->etablissement->Etablissement }}</a></td>
                                     <td>{{ $statistique->etablissement->Commune }}</td>
                                     <td>{{ $statistique->G_Droit }}</td>
                                     <td>{{ $statistique->G_Lettre_langues }}</td>
@@ -201,8 +201,8 @@
                             @foreach ($statistiques as $statistique)
                                 <tr>
                                     <td>{{ $statistique->id }}</td>
-                                    <td>{{ $statistique->rentree }}</td>
-                                    <td><a href="{{ route('etablissements.show', $statistique->etablissement) }}" class="text-decoration-none" style="color: inherit;">{{ $statistique->etablissement->Etablissement }}</a></td>
+                                    <td>{{ $statistique->Rentree }}</td>
+                                    <td><a href="{{ route('etablissements.show', $statistique->etablissement->id) }}" class="text-decoration-none" style="color: inherit;">{{ $statistique->etablissement->Etablissement }}</a></td>
                                     <td>{{ $statistique->etablissement->Commune }}</td>
                                     <td>{{ $statistique->Science_eco }}</td>
                                     <td>{{ $statistique->lettre_science }}</td>
@@ -231,7 +231,6 @@
 
     <script>
         $(document).ready(function() {
-        // Fonction pour initialiser une DataTable avec des options communes
         function initialiserTable(tableId) {
             return $('#' + tableId).DataTable({
                 paging: false,
@@ -292,7 +291,6 @@
             DiscTable.draw();
         });
 
-        // Gestion des boutons de sélection des tableaux
         const buttons = document.querySelectorAll('.btn-group.btn-stat button');
 
         const tables = {

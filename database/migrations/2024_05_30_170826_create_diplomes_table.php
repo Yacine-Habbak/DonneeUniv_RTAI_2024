@@ -6,23 +6,30 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::create('personnels', function (Blueprint $table) {
+        Schema::create('diplomes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('univ_id');
             $table->string('Type');
-            $table->integer('Effectif')->nullable();
-            $table->integer('Effectif_H')->nullable();
-            $table->integer('Effectif_F')->nullable();
+            $table->string('Diplome');
+            $table->integer('nbr_Pour')->nullable();
+            $table->integer('nbr_Sort')->nullable();
+
             $table->timestamps();
 
             $table->foreign('univ_id')->references('id')->on('etablissements')->onDelete('cascade');
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('personnels');
+        Schema::dropIfExists('diplomes');
     }
 };

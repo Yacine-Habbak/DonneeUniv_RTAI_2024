@@ -5,18 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Personnel extends Model
+class Diplome extends Model
 {
     use HasFactory;
 
-    protected $table = 'personnels';
+    protected $table = 'diplomes';
 
     protected $fillable = [
         'univ_id',
         'Type',
-        'Effectif',
-        'Effectif_H',
-        'Effectif_F',
+        'Diplome',
+        'nbr_Pour',
+        'nbr_Sort',
     ];
 
     public function etablissement()

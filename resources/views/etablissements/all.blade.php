@@ -84,7 +84,7 @@
                                     <td>{{ $etablissement->Type }}</td>
                                     <td>{{ $etablissement->Commune }}</td>
                                     <td>{{ $etablissement->Secteur }}</td>
-                                    <td>{{ $etablissement->Etudiants_inscrits_2022 ?? 'nd' }}</td>
+                                    <td>{{ $etablissement->etudiants->Effectif_2022 ?? 'nd' }}</td>
                                     <td>{{ $etablissement->Personnels_non_enseignant == 0 ? 'nd' : $etablissement->Personnels_non_enseignant ?? 'nd' }}</td>
                                     <td>{{ $etablissement->Enseignants == 0 ? 'nd' : $etablissement->Enseignants ?? 'nd' }}</td>
                                     <td>{{ $etablissement->TE_enseignants ?? 'nd' }}</td>
@@ -111,10 +111,10 @@
                     <div class="col-md-2">
                         <p><sup>2</sup> Personnels hors enseignants</p>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <p><sup>3</sup> Taux d'encadrement (Enseignants uniquement) pour 1000 étudiants par université</p>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <p><sup>4</sup> Taux d'encadrement (Personnels et Enseignants) pour 1000 étudiants par université</p>
                     </div>
                 </div>
