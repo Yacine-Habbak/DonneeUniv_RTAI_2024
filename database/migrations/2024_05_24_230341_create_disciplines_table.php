@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('disciplines', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('univ_id');
+            $table->string('univ_id');
             $table->text('Discipline');
 
             $table->foreign('univ_id')->references('id')->on('etablissements')->onDelete('cascade');

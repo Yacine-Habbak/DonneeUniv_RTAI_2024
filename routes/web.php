@@ -6,7 +6,7 @@ use App\Http\Controllers\DisciplineController;
 use App\Http\Controllers\EnseignantController;
 use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\StatistiqueController;
-use App\Http\Controllers\DiplomeController;
+use App\Http\Controllers\InsertionController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -18,6 +18,7 @@ Route::get('/DataDiscipline', [DisciplineController::class, 'RecupDataDiscipline
 Route::get('/DataEnseignant', [EnseignantController::class, 'RecupDataEnseignantFromApi'])->name('DataEnseignant');
 Route::get('/DataPersonnel', [PersonnelController::class, 'RecupDataPersonnelFromApi'])->name('DataPersonnel');
 Route::get('/DataStatistique', [StatistiqueController::class, 'RecupDataStatistiqueFromApi'])->name('DataStatistique');
+Route::get('/DataInsertion', [InsertionController::class, 'RecupDataInsertionFromApi'])->name('DataInsertion');
 
 
 Route::get('/accueil', function () {

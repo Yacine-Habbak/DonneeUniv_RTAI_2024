@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('statistiques', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('univ_id');
+            $table->string('univ_id');
             $table->integer('Rentree');
             $table->integer('Etudiants_inscrits');
             $table->integer('Etudiants_inscrits_H')->nullable();

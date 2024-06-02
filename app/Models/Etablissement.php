@@ -11,7 +11,12 @@ class Etablissement extends Model
 
     protected $table = 'etablissements';
 
+    protected $primaryKey = 'id';
+    public $incrementing = false;
+    protected $keyType = 'string';
+
     protected $fillable = [
+        'id',
         'Etablissement',
         'Type',
         'Commune',
@@ -19,8 +24,8 @@ class Etablissement extends Model
         'Region',
         'Academie',
         'Adresse',
-        'Lon',
-        'Lat',
+        'lon',
+        'lat',
         'Secteur',
         'url',
         'Personnels_non_enseignant',
@@ -41,7 +46,7 @@ class Etablissement extends Model
 
     public function disciplines()
     {
-        return $this->hasMany(Discipline::class, 'univ_id');
+        return $this->hasOne(Discipline::class, 'univ_id');
     }
 
     public function etudiants()
@@ -67,5 +72,10 @@ class Etablissement extends Model
     public function statistiques()
     {
         return $this->hasMany(Statistique::class, 'univ_id');
+    }
+
+    public function insertions()
+    {
+        return $this->hasOne(Insertion::class, 'univ_id');
     }
 }

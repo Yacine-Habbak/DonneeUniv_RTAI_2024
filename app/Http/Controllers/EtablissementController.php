@@ -67,6 +67,7 @@ class EtablissementController extends Controller
         foreach ($allData as $element) {
             try {
                 $etablissement = new Etablissement();
+                $etablissement->id = $element['uai'];
                 $etablissement->Etablissement = $element['uo_lib'];
                 $etablissement->Type = is_array($element['type_d_etablissement']) ? implode(', ', $element['type_d_etablissement']) : $element['type_d_etablissement'];
                 $etablissement->Commune = $element['com_nom'];
@@ -89,7 +90,7 @@ class EtablissementController extends Controller
                 $etablissement->save();
 
                 $etudiant = new Etudiant();
-                $etudiant->univ_id = $etablissement->id;
+                $etudiant->univ_id = $element['uai'];
                 $etudiant->Effectif_2022 = $element['inscrits_2022'] ?? null;
                 $etudiant->Effectif_2021 = $element['inscrits_2021'] ?? null;
                 $etudiant->Effectif_2020 = $element['inscrits_2020'] ?? null;
@@ -118,6 +119,7 @@ class EtablissementController extends Controller
     
         foreach ($etablissements as $etablissement) {
             try {
+                
                 if ($etablissement->etudiants) {
                     $etudiant = $etablissement->etudiants;
                     if ($etablissement->Enseignants && $etudiant->Effectif_2021) {

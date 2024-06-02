@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('diplomes', function (Blueprint $table) {
+        Schema::create('insertions', function (Blueprint $table) {
             $table->id();
             $table->string('univ_id');
-            $table->string('Type');
-            $table->string('Diplome');
-            $table->integer('nbr_Pour')->nullable();
-            $table->integer('nbr_Sort')->nullable();
-
+            $table->decimal('inser_Licence',4,1)->nullable();
+            $table->decimal('inser_Master',4,1)->nullable();
             $table->timestamps();
 
             $table->foreign('univ_id')->references('id')->on('etablissements')->onDelete('cascade');
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('diplomes');
+        Schema::dropIfExists('insertion');
     }
 };

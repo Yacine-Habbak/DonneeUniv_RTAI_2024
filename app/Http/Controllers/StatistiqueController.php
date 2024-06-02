@@ -96,7 +96,7 @@ class StatistiqueController extends Controller
             }
         }
 
-        return redirect()->route('accueil')
+        return redirect()->route('DataInsertion')
         ->with('success', 'Les données des statistiques ont bien été mis à jour.');
 
 

@@ -115,7 +115,7 @@ h3{
     padding: 5px;
 }
 .table-responsive-univ {
-    max-height: calc(100vh - 2.8%);
+    max-height: calc(100vh - 2.9%);
     overflow-y: auto;
 }
 .table-responsive-stat{
@@ -188,6 +188,12 @@ table th,.table td {
 .btn-stat{
     right: 5%;
     top: 25%;
+}
+#graphique-options button.active {
+    background-color: #461981;
+}
+#indice{
+    margin-top: 0px;
 }
 /* POUR LA PAGE DETAILS DE L'UNIVERSITE */
 .titre_univ{

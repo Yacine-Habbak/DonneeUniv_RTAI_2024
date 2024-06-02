@@ -5,8 +5,8 @@
         <h1>Principaux établissements de l'enseignement supérieur</h1>
         <div id="filtres" style="display: none;">
             <div class="mb-3 d-flex">
-                <input type="text" id="filtreTitle" class="filtreTitle filtre" placeholder="Rechercher un établissement">
-                <input type="text" id="filtreCommune" class="filtreCommune filtre" placeholder="Rechercher une commune">
+                <input type="text" id="filtreNom" class="filtreNom filtre" placeholder="Rechercher un établissement">
+                <input type="text" id="filtreVille" class="filtreVille filtre" placeholder="Rechercher une ville">
                 <div class="filtre-case">
                     <label for="filtreType">Type d'établissement :</label><br>
                     <div class="row">
@@ -50,13 +50,17 @@
         <div class="row justify-content-center">
             <div class="col-md-11">
                 <div class="btn-group btn-univ" role="group">
-                    <button type="button" class="btn btn-outline-primary active" data-table="tableau">Vue Tableau</button>
-                    <button type="button" class="btn btn-outline-primary" data-table="graphique">Vue Graphique</button>
-                    <button type="button" class="btn btn-outline-primary" data-table="carte">Vue Carte</button>
+                    <button type="button" class="btn btn-outline-primary active" data-vue="tableau">Vue Tableau</button>
+                    <button type="button" class="btn btn-outline-primary" data-vue="graphique">Vue Graphique</button>
+                    <button type="button" class="btn btn-outline-primary" data-vue="carte">Vue Carte</button>
                 </div>
                 <div class="btn-group btn-graphique" role="group" id="graphique-options" style="display: none;">
-                    <button type="button" class="btn btn-outline-primary active" data-table="TE_Global">TE Global</button>
-                    <button type="button" class="btn btn-outline-primary" data-table="TE">TE (Enseignants uniquement)</button>
+                <button type="button" class="btn btn-outline-primary active" data-vue="effectif_E">Effectif etudiant</button>
+                    <button type="button" class="btn btn-outline-primary active" data-vue="TE_Global">TE Global</button>
+                    <button type="button" class="btn btn-outline-primary" data-vue="TE">TE (Enseignants uniquement)</button>
+                    <!--<button type="button" class="btn btn-outline-primary" data-vue="TI_Licence">TI en Licence Pro</button>
+                    <button type="button" class="btn btn-outline-primary" data-vue="TI_Master">TI en Master LMD/ENS</button>-->
+                    <button type="button" class="btn btn-outline-primary" data-vue="secteur">Secteur Public/Privé</button>
                 </div>
 
                 <div class="table-responsive-univ" id="tableau" style="display: block;">
@@ -66,29 +70,33 @@
                                 <th>Rang</th>
                                 <th style="cursor: pointer;">Établissement</th>
                                 <th style="cursor: pointer;">Catégorie</th>
-                                <th style="cursor: pointer;">Commune</th>
+                                <th style="cursor: pointer;">Ville</th>
                                 <th style="cursor: pointer;">Secteur</th>
                                 <th style="cursor: pointer;">Étudiants inscrits<sup>1</sup></th>
                                 <th style="cursor: pointer;">Effectif Personnels<sup>2</sup></th>
                                 <th style="cursor: pointer;">Effectif enseignants</th>
                                 <th style="cursor: pointer;">TE<sup>3</sup></th>
                                 <th style="cursor: pointer;">TE Global<sup>4</sup></th>
+                                <th style="cursor: pointer;">TI Licence Pro<sup>5</sup></th>
+                                <th style="cursor: pointer;">TI Master<sup>6</sup></th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($etablissements as $etablissement)
+                            @foreach ($etablissements as $etab)
                                 <tr>
-                                    <td>{{ $etablissement->id }}</td>
-                                    <td><a href="{{ route('etablissements.show', $etablissement) }}" class="text-decoration-none" style="color: inherit;">{{ $etablissement->Etablissement }}</a></td>
-                                    <td>{{ $etablissement->Type }}</td>
-                                    <td>{{ $etablissement->Commune }}</td>
-                                    <td>{{ $etablissement->Secteur }}</td>
-                                    <td>{{ $etablissement->etudiants->Effectif_2022 ?? 'nd' }}</td>
-                                    <td>{{ $etablissement->Personnels_non_enseignant == 0 ? 'nd' : $etablissement->Personnels_non_enseignant ?? 'nd' }}</td>
-                                    <td>{{ $etablissement->Enseignants == 0 ? 'nd' : $etablissement->Enseignants ?? 'nd' }}</td>
-                                    <td>{{ $etablissement->TE_enseignants ?? 'nd' }}</td>
-                                    <td>{{ $etablissement->TE_Total ?? 'nd' }}</td>
+                                    <td>{{ $etab->id }}</td>
+                                    <td><a href="{{ route('etablissements.show', $etab) }}" class="text-decoration-none" style="color: inherit;">{{ $etab->Etablissement }}</a></td>
+                                    <td>{{ $etab->Type }}</td>
+                                    <td>{{ $etab->Commune }}</td>
+                                    <td>{{ $etab->Secteur }}</td>
+                                    <td>{{ $etab->etudiants->Effectif_2022 ?? 'nd' }}</td>
+                                    <td>{{ $etab->Personnels_non_enseignant == 0 ? 'nd' : $etab->Personnels_non_enseignant ?? 'nd' }}</td>
+                                    <td>{{ $etab->Enseignants == 0 ? 'nd' : $etab->Enseignants ?? 'nd' }}</td>
+                                    <td>{{ $etab->TE_enseignants ?? 'nd' }}</td>
+                                    <td>{{ $etab->TE_Total ?? 'nd' }}</td>
+                                    <td>{{ $etab->insertions->inser_Licence ?? 'nd' }}</td>
+                                    <td>{{ $etab->insertions->inser_Master ?? 'nd' }}</td>
                                     <td><a href="#"><img src="{{ asset('images/fiche.png') }}" class="icone-img" alt="Fiche de l'établissement"></a></td>
                                 </tr>
                             @endforeach
@@ -99,25 +107,40 @@
                 <div id="graphique" style="display: none;">
                     <canvas id="tauxEncadrementChart" width="400" height="170"></canvas>
                 </div>
+
+                <div id="graphiqueSecteursContainer" style="display: none;">
+                    <canvas id="graphiqueSecteursChart" width="1300" height="700"></canvas>
+                </div>
                 
                 <div id="carte" style="display: none;">
                     <!-- Tu mets la carte juste la -->
                 </div>
                 
-                <div class="row" id="indice">
-                    <div class="col-md-2">
-                        <p><sup>1</sup> Étudiants inscrits sur l'année 2022-2023</p>
+                <div id="indice">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <span><sup>1</sup> Étudiants inscrits à la rentrée 2022</span>
+                        </div>
+                        <div class="col-md-2">
+                            <span><sup>2</sup> Personnels hors enseignants à la rentrée 2022</span>
+                        </div>
+                        <div class="col-md-4">
+                            <span><sup>3</sup> Taux d'encadrement (Enseignants uniquement) pour 1000 étudiants par université</span>
+                        </div>
+                        <div class="col-md-4">
+                            <span><sup>4</sup> Taux d'encadrement (Personnels et Enseignants) pour 1000 étudiants par université</span>
+                        </div>
                     </div>
-                    <div class="col-md-2">
-                        <p><sup>2</sup> Personnels hors enseignants</p>
-                    </div>
-                    <div class="col-md-3">
-                        <p><sup>3</sup> Taux d'encadrement (Enseignants uniquement) pour 1000 étudiants par université</p>
-                    </div>
-                    <div class="col-md-3">
-                        <p><sup>4</sup> Taux d'encadrement (Personnels et Enseignants) pour 1000 étudiants par université</p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span><sup>5</sup> Taux d'insertion 18 mois apres le diplome en Licence Professionnel en 2020</span>
+                        </div>
+                        <div class="col-md-6">
+                            <span><sup>6</sup> Taux d'insertion 18 mois apres le diplome en Master LMD/ENS en 2020</span>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -127,8 +150,10 @@
 
     <script>
         $(document).ready(function() {
-            var etablissements = @json($etablissements);
-            var graphiqueInstance = null;
+            var etabs = @json($etablissements);
+            var graphInstance = null;
+            var graphSecteurInstance = null;
+            var currentGraphType = 'TE_Global';
             var table = $('#etablissementsTable').DataTable({
                 paging: false,
                 ordering: true,
@@ -136,16 +161,31 @@
                 fixedHeader: true,
                 columnDefs: [
                     { orderable: false, targets: 0 },
-                    { render: function (data, type, row) {
-                        if (type === 'display') {
-                            if (data === 'nd' || data === null || data === 0) {
-                                return 'nd';
-                            } else {
-                                return parseInt(data);
+                    { 
+                        render: function (data, type, row) {
+                            if (type === 'display') {
+                                if (data === 'nd' || data === null || data === 0) {
+                                    return 'nd';
+                                } else {
+                                    return parseInt(data);
+                                }
                             }
-                        }
-                        return data === 'nd' || data === null ? 0 : parseInt(data);
-                    }, targets: [5, 6, 7, 8, 9]
+                            return data === 'nd' || data === null ? 0 : parseInt(data);
+                        }, 
+                        targets: [5, 6, 7, 8, 9]
+                    },
+                    { 
+                        render: function (data, type, row) {
+                            if (type === 'display') {
+                                if (data === 'nd' || data === null || data === 0) {
+                                    return 'nd';
+                                } else {
+                                    return parseFloat(data).toFixed(1);
+                                }
+                            }
+                            return data === 'nd' || data === null ? 0 : parseFloat(data);
+                        },
+                        targets: [10, 11]
                     }
                 ],
                 dom: 'lrtip',
@@ -164,9 +204,9 @@
                 }
             });
 
+
             afficherVue('tableau');
 
-            // Initialisation des vues
             function afficherVue(vue) {
                 $('#tableau').hide();
                 $('#graphique').hide();
@@ -174,75 +214,87 @@
                 $('#filtres').hide();
                 $('#indice').hide();
                 $('#graphique-options').hide();
+                $('#graphiqueSecteursContainer').hide();
                 $('.btn-group.btn-univ button').removeClass('active');
                 $(`#${vue}`).show();
-                $(`.btn-group.btn-univ button[data-table="${vue}"]`).addClass('active');
+                $(`.btn-group.btn-univ button[data-vue="${vue}"]`).addClass('active');
 
                 if (vue === 'tableau') {
                     $('#filtres').show();
                     $('#indice').show();
                 } else if (vue === 'graphique') {
                     $('#graphique-options').show();
-                    dessinerGraphique('TE_Global');
+                    $('#graphique-options button').removeClass('active');
+                    $(`#graphique-options button[data-vue="${currentGraphType}"]`).addClass('active');
+                    dessinerGraphique(currentGraphType);
                 }
             }
 
             $('.btn-group.btn-univ button').on('click', function() {
-                var vue = $(this).data('table');
+                var vue = $(this).data('vue');
                 afficherVue(vue);
             });
 
             $('#graphique-options button').on('click', function() {
-                var typeGraphique = $(this).data('table');
+                var typeGraphique = $(this).data('vue');
+                currentGraphType = typeGraphique;
 
                 $('#graphique-options button').removeClass('active');
-
                 $(this).addClass('active');
 
-                dessinerGraphique(typeGraphique);
+                if (typeGraphique === 'secteur') {
+                    $('#graphique').hide();
+                    $('#graphiqueSecteursContainer').show();
+                    dessinerGraphiqueSecteurs();
+                } else {
+                    $('#graphiqueSecteursContainer').hide();
+                    $('#graphique').show();
+                    dessinerGraphique(typeGraphique);
+                }
             });
 
             function dessinerGraphique(typeGraphique) {
-                if (graphiqueInstance) {
-                    graphiqueInstance.destroy();
+                if (graphInstance) {
+                    graphInstance.destroy();
                 }
 
                 var labels = [];
                 var donnees = [];
 
-                etablissements.forEach(function(etablissement) {
-                    if (etablissement.Type === 'Université') {
-                        labels.push(etablissement.Etablissement);
-                        
-                        if (typeGraphique === 'TE_Global' && etablissement.TE_Total !== null) {
-                            donnees.push(etablissement.TE_Total);
-                        } else if (typeGraphique === 'TE' && etablissement.TE_enseignants !== null) {
-                            donnees.push(etablissement.TE_enseignants);
+                etabs.forEach(function (etab) {
+                    if (etab.Type === 'Université') {
+                        labels.push(etab.Etablissement);
+
+                        if (typeGraphique === 'TE_Global' && etab.TE_Total !== null) {
+                            donnees.push(etab.TE_Total);
+                        } else if (typeGraphique === 'TE' && etab.TE_enseignants !== null) {
+                            donnees.push(etab.TE_enseignants);
+                        } else if (typeGraphique === 'effectif_E' && etab.etudiants && etab.etudiants.Effectif_2022 !== null) {
+                            donnees.push(etab.etudiants.Effectif_2022);
                         }
                     }
                 });
 
-                // Trier par ordre décroissant
-                var donneesTriees = donnees.map(function(valeur, index) {
+                var donneesTriees = donnees.map(function (valeur, index) {
                     return { valeur: valeur, index: index };
-                }).sort(function(a, b) {
+                }).sort(function (a, b) {
                     return b.valeur - a.valeur;
                 });
 
-                var labelsTriees = donneesTriees.map(function(item) {
+                var labelsTriees = donneesTriees.map(function (item) {
                     return labels[item.index];
                 });
-                var donneesTriees = donneesTriees.map(function(item) {
+                var donneesTriees = donneesTriees.map(function (item) {
                     return item.valeur;
                 });
 
                 var ctx = document.getElementById('tauxEncadrementChart').getContext('2d');
-                graphiqueInstance = new Chart(ctx, {
+                graphInstance = new Chart(ctx, {
                     type: 'bar',
                     data: {
                         labels: labelsTriees,
                         datasets: [{
-                            label: typeGraphique === 'TE_Global' ? 'Taux d\'encadrement total (Personnels + Enseignants) pour 1000 étudiants par Université - Donnée 2021' : 'Taux d\'encadrement enseignants pour 1000 étudiants par Université - Donnée 2021',
+                            label: typeGraphique === 'TE_Global' ? 'Taux d\'encadrement total (Personnels + Enseignants) pour 1000 étudiants par Université - Donnée 2021' : typeGraphique === 'TE' ? 'Taux d\'encadrement enseignants pour 1000 étudiants par Université - Donnée 2021' : 'Effectif des étudiants par Université - Donnée 2022',
                             data: donneesTriees,
                             backgroundColor: 'rgba(54, 162, 235, 0.2)',
                             borderColor: 'rgba(54, 162, 235, 1)',
@@ -260,39 +312,76 @@
                 });
             }
 
-            // Filtrage
+            function dessinerGraphiqueSecteurs() {
+                if (graphSecteurInstance) {
+                    graphSecteurInstance.destroy();
+                }
+
+                var etabsPublics = etabs.filter(function(etab) {
+                    return etab.Secteur.toLowerCase() === 'public';
+                }).length;
+
+                var etabsPrives = etabs.filter(function(etab) {
+                    return etab.Secteur.toLowerCase() === 'privé';
+                }).length;
+
+                var totalEtabs = etabsPublics + etabsPrives;
+                var pourcentagePublics = (etabsPublics / totalEtabs) * 100;
+                var pourcentagePrives = (etabsPrives / totalEtabs) * 100;
+
+                var ctx = document.getElementById('graphiqueSecteursChart').getContext('2d');
+                graphSecteurInstance = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Public', 'Privé'],
+                        datasets: [{
+                            data: [pourcentagePublics, pourcentagePrives],
+                            backgroundColor: ['#36A2EB', '#FF6384']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Répartition des établissements entre les secteurs public et privé (en %)'
+                            }
+                        }
+                    }
+                });
+            }
+
             $.fn.dataTable.ext.search.push(
                 function(settings, data, dataIndex) {
-                    var filtreTitre = $('#filtreTitle').val().toLowerCase();
-                    var filtreCommune = $('#filtreCommune').val().toLowerCase();
-                    var filtresTypes = $('.filtreType:checked').map(function() {
+                    var filtreNom = $('#filtreNom').val().toLowerCase();
+                    var filtreVille = $('#filtreVille').val().toLowerCase();
+                        var filtresTypes = $('.filtreType:checked').map(function() {
                         return $(this).val().toLowerCase();
-                    }).get();
-                    var filtresSecteurs = $('.filtreSecteur:checked').map(function() {
+                        }).get();
+                        var filtresSecteurs = $('.filtreSecteur:checked').map(function() {
                         return $(this).val().toLowerCase();
-                    }).get();
+                        }).get();
+                        var etablissement = data[1].toLowerCase();
+                        var ville = data[3].toLowerCase();
+                        var type = data[2].toLowerCase();
+                        var secteur = data[4].toLowerCase();
 
-                    var etablissement = data[1].toLowerCase();
-                    var commune = data[3].toLowerCase();
-                    var type = data[2].toLowerCase();
-                    var secteur = data[4].toLowerCase();
+                        var correspondNom = filtreNom === '' || etablissement.includes(filtreNom);
+                        var correspondVille = filtreVille === '' || ville.includes(filtreVille);
+                        var correspondType = filtresTypes.length === 0 || filtresTypes.includes(type);
+                        var correspondSecteur = filtresSecteurs.length === 0 || filtresSecteurs.includes(secteur);
 
-                    var correspondTitre = filtreTitre === '' || etablissement.includes(filtreTitre);
-                    var correspondCommune = filtreCommune === '' || commune.includes(filtreCommune);
-                    var correspondType = filtresTypes.length === 0 || filtresTypes.includes(type);
-                    var correspondSecteur = filtresSecteurs.length === 0 || filtresSecteurs.includes(secteur);
-
-                    return correspondTitre && correspondCommune && correspondType && correspondSecteur;
+                        return correspondNom && correspondVille && correspondType && correspondSecteur;
                 }
             );
 
-            $('#filtreTitle, #filtreCommune').on('input', function() {
+            $('#filtreNom, #filtreVille').on('input', function() {
                 table.draw();
             });
             $('.filtreType, .filtreSecteur').on('change', function() {
                 table.draw();
             });
         });
-   </script>
-
+    </script>
 @endsection
