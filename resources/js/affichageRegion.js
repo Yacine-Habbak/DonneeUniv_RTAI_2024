@@ -50,7 +50,7 @@ function zoom_region(e) {
 function drawRegions() {
     var tab_region = [];
 
-    fetch("resources/France.geojson")
+    fetch("resources/DataRegion/France.geojson")
         .then((response) => response.json())
         .then((fileContent) => {
             //console.log(fileContent);
