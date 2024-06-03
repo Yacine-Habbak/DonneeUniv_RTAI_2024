@@ -55,8 +55,8 @@
                     <button type="button" class="btn btn-outline-primary" data-vue="carte">Vue Carte</button>
                 </div>
                 <div class="btn-group btn-graphique" role="group" id="graphique-options" style="display: none;">
-                <button type="button" class="btn btn-outline-primary active" data-vue="effectif_E">Effectif etudiant</button>
-                    <button type="button" class="btn btn-outline-primary active" data-vue="TE_Global">TE Global</button>
+                    <button type="button" class="btn btn-outline-primary" data-vue="effectif_E">Effectif etudiant</button>
+                    <button type="button" class="btn btn-outline-primary" data-vue="TE_Global">TE Global</button>
                     <button type="button" class="btn btn-outline-primary" data-vue="TE">TE (Enseignants uniquement)</button>
                     <!--<button type="button" class="btn btn-outline-primary" data-vue="TI_Licence">TI en Licence Pro</button>
                     <button type="button" class="btn btn-outline-primary" data-vue="TI_Master">TI en Master LMD/ENS</button>-->
@@ -153,7 +153,7 @@
             var etabs = @json($etablissements);
             var graphInstance = null;
             var graphSecteurInstance = null;
-            var currentGraphType = 'TE_Global';
+            var currentGraphType = 'effectif_E';
             var table = $('#etablissementsTable').DataTable({
                 paging: false,
                 ordering: true,

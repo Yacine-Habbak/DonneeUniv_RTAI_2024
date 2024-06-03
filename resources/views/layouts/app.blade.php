@@ -15,10 +15,10 @@
     @yield('styles')
 </head>
 <body>
-    <div>
+    <div class="d-flex flex-column min-vh-100">
         @yield('content')
+        
+        @include('include.footer')
     </div>
-    
-    @include('include.footer')
 </body>
 </html>

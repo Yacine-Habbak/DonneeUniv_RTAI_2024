@@ -29,7 +29,7 @@ class DisciplineController extends Controller
         
         do {
             try {
-                $reponse = $client->get("https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-insersup/records?group_by=uo_lib%2Cdiscipli_lib%2Ctype_diplome_long%2Clibelle_diplome%2Cnb_poursuivants%2Cnb_sortants&refine=source%3A%22insersup%22&start={$debut}&limit={$limite}&apikey={$cleApi}");
+                $reponse = $client->get("https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-insersup/records?group_by=etablissement%2Cdiscipli_lib%2Ctype_diplome_long%2Clibelle_diplome%2Cnb_poursuivants%2Cnb_sortants&refine=source%3A%22insersup%22&start={$debut}&limit={$limite}&apikey={$cleApi}");
 
                 if ($reponse->getStatusCode() == 200) {
                     $data = json_decode($reponse->getBody(), true);
@@ -55,7 +55,7 @@ class DisciplineController extends Controller
         $etabDiplomes = [];
 
         foreach ($toutesDonnees as $element) {
-            $nomEtab = $element['uo_lib'];
+            $nomEtab = $element['etablissement'];
             $discipline = $element['discipli_lib'];
 
             if ($discipline === 'Toutes disciplines') {
@@ -99,7 +99,7 @@ class DisciplineController extends Controller
 
         foreach ($etabDisciplines as $nomEtab => $disciplines) {
             try {
-                $etablissement = Etablissement::where('Etablissement', $nomEtab)->first();
+                $etablissement = Etablissement::where('id', $nomEtab)->first();
                 if ($etablissement) {
                     $discipline = new Discipline();
                     $discipline->univ_id = $etablissement->id;
@@ -113,7 +113,7 @@ class DisciplineController extends Controller
 
         foreach ($etabDiplomes as $nomEtab => $types) {
             try {
-                $etablissement = Etablissement::where('Etablissement', $nomEtab)->first();
+                $etablissement = Etablissement::where('id', $nomEtab)->first();
                 if ($etablissement) {
                     foreach ($types as $type => $diplomes) {
                         foreach ($diplomes as $libelle => $data) {

@@ -46,7 +46,7 @@ class Etablissement extends Model
 
     public function disciplines()
     {
-        return $this->hasOne(Discipline::class, 'univ_id');
+        return $this->hasMany(Discipline::class, 'univ_id');
     }
 
     public function etudiants()

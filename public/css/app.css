@@ -192,9 +192,6 @@ table th,.table td {
 #graphique-options button.active {
     background-color: #461981;
 }
-#indice{
-    margin-top: 0px;
-}
 /* POUR LA PAGE DETAILS DE L'UNIVERSITE */
 .titre_univ{
     font-size: 1.8vw;
@@ -211,7 +208,7 @@ table th,.table td {
 .texteInfo{
     font-family: 'Arial';
     font-size: 1vw;
-    margin-left: 32%;
+    margin-left: 29%;
 }
 .Info{
     font-weight: 600;
@@ -261,6 +258,30 @@ table th,.table td {
 #btn_retour:active {
     transform: translateY(2px);
 }
+.diplome_titre{
+    font-size: 0.9vw;
+}
+.diplome_champs{
+    font-size: 0.8vw;
+}
+.discipline_champs{
+    font-size: 1vw;
+}
+.defiler_Table {
+    max-height: 500px;
+    overflow-y: auto;
+}
+.btn_eff_etu,.btn_ens,.btn_pers{
+    position: relative;
+    left: 58%;
+    bottom: 1%;
+}
+.btn_graph_ens,.btn_graph_pers{
+    position: relative;
+    left: 21%;
+    top: 5%;
+}
+
 @media (max-width: 767px) {
     .table-responsive-univ,.table-responsive-stat {
         overflow-x: auto;
