@@ -58,9 +58,10 @@
                     <button type="button" class="btn btn-outline-primary active" data-vue="effectif_E">Effectif etudiant</button>
                     <button type="button" class="btn btn-outline-primary" data-vue="TE_Global">TE Global</button>
                     <button type="button" class="btn btn-outline-primary" data-vue="TE">TE (Enseignants uniquement)</button>
-                    <!--<button type="button" class="btn btn-outline-primary" data-vue="TI_Licence">TI en Licence Pro</button>
-                    <button type="button" class="btn btn-outline-primary" data-vue="TI_Master">TI en Master LMD/ENS</button>-->
                     <button type="button" class="btn btn-outline-primary" data-vue="secteur">Secteur Public/Privé</button>
+                    <button type="button" class="btn btn-outline-primary" data-vue="TI_Licence">Taux d'insertion LP</button>
+                    <button type="button" class="btn btn-outline-primary" data-vue="TI_Master_LMD">Taux d'insertion Master LMD</button>
+                    <button type="button" class="btn btn-outline-primary" data-vue="TI_Master_MEEF">Taux d'insertion Master MEEF</button>
                 </div>
 
                 <div class="table-responsive-univ" id="tableau" style="display: block;">
@@ -86,7 +87,7 @@
                         <tbody>
                             @foreach ($etablissements as $index => $etab)
                                 <tr>
-                                    <td>{{ $index + 1 }}</td> <!-- Numéro d'ordre incrémenté -->
+                                    <td>{{ $index + 1 }}</td>
                                     <td><a href="{{ route('etablissements.show', $etab) }}" class="text-decoration-none" style="color: inherit;">{{ $etab->Etablissement }}</a></td>
                                     <td>{{ $etab->Type }}</td>
                                     <td>{{ $etab->Commune }}</td>
@@ -105,8 +106,8 @@
                         </tbody>
                     </table>
                 </div>
-
-                <div id="graphique" style="display: none;">
+                
+                <div id="graphique">
                     <canvas id="tauxEncadrementChart" width="400" height="170"></canvas>
                 </div>
 
@@ -151,6 +152,7 @@
         $(document).ready(function() {
             var etabs = @json($etablissements);
             var graphInstance = null;
+            var chartInstance = null;
             var graphSecteurInstance = null;
             var currentGraphType = 'TE_Global';
             var table = $('#etablissementsTable').DataTable({
@@ -223,6 +225,7 @@
                     $('#indice').show();
                 } else if (vue === 'graphique') {
                     $('#graphique-options').show();
+                    $('#graphique').show();
                     $('#graphique-options button').removeClass('active');
                     $(`#graphique-options button[data-vue="${currentGraphType}"]`).addClass('active');
                     dessinerGraphique(currentGraphType);
@@ -233,6 +236,8 @@
                 var vue = $(this).data('vue');
                 afficherVue(vue);
             });
+
+            var tauxInsertionInstance = null;
 
             $('#graphique-options button').on('click', function() {
                 var typeGraphique = $(this).data('vue');
@@ -245,31 +250,41 @@
                     $('#graphique').hide();
                     $('#graphiqueSecteursContainer').show();
                     dessinerGraphiqueSecteurs();
-                } else {
-                    $('#graphiqueSecteursContainer').hide();
+                } else if (typeGraphique === 'TI_Licence' || typeGraphique === 'TI_Master_LMD' || typeGraphique === 'TI_Master_MEEF') {
                     $('#graphique').show();
+                    $('#graphiqueSecteursContainer').hide();
+                    dessinerGraphiqueTauxInsertion(typeGraphique);
+                } else {
+                    $('#graphique').show();
+                    $('#graphiqueSecteursContainer').hide();
                     dessinerGraphique(typeGraphique);
                 }
             });
 
-            function dessinerGraphique(typeGraphique) {
-                if (graphInstance) {
-                    graphInstance.destroy();
+            function dessinerGraphiqueTauxInsertion(typeGraphique) {
+                if (chartInstance) {
+                    chartInstance.data.datasets[0].label = typeGraphique === 'TI_Licence' ? 'Taux d\'insertion à 18 mois après le diplôme - Licence Pro - Donnée 2023' : typeGraphique === 'TI_Master_LMD' ? 'Taux d\'insertion à 18 mois après le diplôme - Master LMD - Donnée 2023' : 'Taux d\'insertion à 18 mois après le diplôme - Master MEEF - Donnée 2023';
+                    chartInstance.data.datasets[0].data = [];
+                    chartInstance.data.labels = [];
                 }
 
-                var labels = [];
                 var donnees = [];
+                var labels = [];
 
-                etabs.forEach(function (etab) {
+                etabs.forEach(function(etab) {
                     if (etab.Type === 'Université') {
-                        labels.push(etab.Etablissement);
+                        var tauxInsertion;
+                        if (typeGraphique === 'TI_Licence') {
+                            tauxInsertion = etab.insertions && etab.insertions.inser_Licence !== null ? etab.insertions.inser_Licence : null;
+                        } else if (typeGraphique === 'TI_Master_LMD') {
+                            tauxInsertion = etab.insertions && etab.insertions.inser_Master_LMD !== null ? etab.insertions.inser_Master_LMD : null;
+                        } else if (typeGraphique === 'TI_Master_MEEF') {
+                            tauxInsertion = etab.insertions && etab.insertions.inser_Master_MEEF !== null ? etab.insertions.inser_Master_MEEF : null;
+                        }
 
-                        if (typeGraphique === 'TE_Global' && etab.TE_Total !== null) {
-                            donnees.push(etab.TE_Total);
-                        } else if (typeGraphique === 'TE' && etab.TE_enseignants !== null) {
-                            donnees.push(etab.TE_enseignants);
-                        } else if (typeGraphique === 'effectif_E' && etab.etudiants && etab.etudiants.Effectif_2022 !== null) {
-                            donnees.push(etab.etudiants.Effectif_2022);
+                        if (tauxInsertion !== null) {
+                            labels.push(etab.Etablissement);
+                            donnees.push(tauxInsertion);
                         }
                     }
                 });
@@ -287,28 +302,96 @@
                     return item.valeur;
                 });
 
-                var ctx = document.getElementById('tauxEncadrementChart').getContext('2d');
-                graphInstance = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: labelsTriees,
-                        datasets: [{
-                            label: typeGraphique === 'TE_Global' ? 'Taux d\'encadrement total (Personnels + Enseignants) pour 1000 étudiants par Université - Donnée 2021' : typeGraphique === 'TE' ? 'Taux d\'encadrement enseignants pour 1000 étudiants par Université - Donnée 2021' : 'Effectif des étudiants par Université - Donnée 2022',
-                            data: donneesTriees,
-                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        indexAxis: 'x',
-                        scales: {
-                            y: {
-                                beginAtZero: true
+                if (!chartInstance) {
+                    var ctx = document.getElementById('tauxEncadrementChart').getContext('2d');
+                    chartInstance = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: typeGraphique === 'TI_Licence' ? 'Taux d\'insertion à 18 mois après le diplôme - Licence Pro - Donnée 2023' : typeGraphique === 'TI_Master_LMD' ? 'Taux d\'insertion à 18 mois après le diplôme - Master LMD - Donnée 2023' : 'Taux d\'insertion à 18 mois après le diplôme - Master MEEF - Donnée 2023',
+                                data: donnees,
+                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
                             }
+                        }
+                    });
+                } else {
+                    chartInstance.data.datasets[0].data = donneesTriees;
+                    chartInstance.data.labels = labelsTriees;
+                    chartInstance.update();
+                }
+            }
+
+            function dessinerGraphique(typeGraphique) {
+                if (chartInstance) {
+                    chartInstance.data.datasets[0].label = typeGraphique === 'TE_Global' ? 'Taux d\'encadrement total (Personnels + Enseignants) pour 1000 étudiants par Université - Donnée 2021' : typeGraphique === 'TE' ? 'Taux d\'encadrement enseignants pour 1000 étudiants par Université - Donnée 2021' : 'Effectif des étudiants par Université - Donnée 2022';
+                    chartInstance.data.datasets[0].data = [];
+                    chartInstance.data.labels = [];
+                }
+
+                var donnees = {};
+
+                etabs.forEach(function (etab) {
+                    if (etab.Type === 'Université') {
+                        var valeur;
+                        if (typeGraphique === 'TE_Global' && etab.TE_Total !== null) {
+                            valeur = etab.TE_Total;
+                        } else if (typeGraphique === 'TE' && etab.TE_enseignants !== null) {
+                            valeur = etab.TE_enseignants;
+                        } else if (typeGraphique === 'effectif_E' && etab.etudiants && etab.etudiants.Effectif_2022 !== null) {
+                            valeur = etab.etudiants.Effectif_2022;
+                        }
+
+                        if (valeur !== undefined) {
+                            donnees[etab.Etablissement] = valeur;
                         }
                     }
                 });
+
+                var donneesTriees = Object.entries(donnees)
+                    .sort((a, b) => b[1] - a[1])
+                    .map(([label, valeur]) => ({ label, valeur }));
+
+                var labels = donneesTriees.map(item => item.label);
+                var donnees = donneesTriees.map(item => item.valeur);
+
+                if (!chartInstance) {
+                    var ctx = document.getElementById('tauxEncadrementChart').getContext('2d');
+                    chartInstance = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: typeGraphique === 'TE_Global' ? 'Taux d\'encadrement total (Personnels + Enseignants) pour 1000 étudiants par Université - Donnée 2021' : typeGraphique === 'TE' ? 'Taux d\'encadrement enseignants pour 1000 étudiants par Université - Donnée 2021' : 'Effectif des étudiants par Université - Donnée 2022',
+                                data: donnees,
+                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            indexAxis: 'x',
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    chartInstance.data.datasets[0].data = donnees;
+                    chartInstance.data.labels = labels;
+                    chartInstance.update();
+                }
             }
 
             function dessinerGraphiqueSecteurs() {

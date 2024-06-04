@@ -281,6 +281,7 @@
                     <canvas id="graph_genre_pers" class="mt-5" width="100" height="100"></canvas>
                     <canvas id="graph_type_pers" class="mt-5" width="100" height="100"></canvas>
                 </div>
+                <span>* : Donnée 2021</span>
             @endif
         </div>
 
@@ -445,8 +446,7 @@
                         </div>
                     </div>
                 @endif
-                <span class="mt-3">* : Donnée 2021</span>
-                <span class="mt-3">** : Taux d'insertion 18 mois apres le diplome obtenu en 2019/2020</span>
+                <span>** : Taux d'insertion 18 mois apres le diplome obtenu en 2019/2020</span>
             @endif
         </div>
             

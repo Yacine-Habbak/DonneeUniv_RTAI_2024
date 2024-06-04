@@ -115,7 +115,7 @@ h3{
     padding: 5px;
 }
 .table-responsive-univ {
-    max-height: calc(100vh - 2.9%);
+    max-height: calc(100vh - 3%);
     overflow-y: auto;
 }
 .table-responsive-disc {
@@ -123,7 +123,7 @@ h3{
     overflow-y: auto;
 }
 .table-responsive-stat{
-    max-height: calc(100vh - 365px);
+    max-height: calc(100vh - 390px);
     overflow-y: auto;
 }
 thead{
@@ -179,19 +179,19 @@ table th,.table td {
     margin-top: 3%;
 }
 .btn-group{
-    position: absolute;
+    position: relative;
 }
 .btn-univ{
-    right: 5%;
-    top: 28%;
+    margin-top: -3%;
+    margin-left: 80%;
 }
 .btn-graphique{
-    right: 5%;
-    top: 33%;
+    margin-top: -1%;
+    margin-left: 28%;
 }
 .btn-stat{
-    right: 5%;
-    top: 25%;
+    margin-top: -3%;
+    margin-left: 42%;
 }
 #graphique-options button.active {
     background-color: #461981;

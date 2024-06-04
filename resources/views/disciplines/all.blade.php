@@ -11,59 +11,64 @@
                     <input type="text" id="filtreDisc" class="filtreDisc filtre" placeholder="Rechercher une discipline">
                     <div class="filtre-case">
                         <label for="filtreTypeEtab">Type d'établissement :</label><br>
-                        <div class="form-check">
-                            <input class="form-check-input filtreTypeEtab" type="checkbox" name="typeEtab" id="Université" value="Université">
-                            <label class="form-check-label" for="Université">Université</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input filtreTypeEtab" type="checkbox" name="typeEtab" id="Grand établissement" value="Grand établissement">
-                            <label class="form-check-label" for="Grand établissement">Grand établissement</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input filtreTypeEtab" type="checkbox" name="typeEtab" id="Autre établissement" value="Autre établissement">
-                            <label class="form-check-label" for="Autre établissement">Autre établissement</label>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-check">
+                                    <input class="form-check-input filtreTypeEtab" type="checkbox" name="typeEtab" id="Grand établissement" value="Grand établissement">
+                                    <label class="form-check-label" for="Grand établissement">Grand établissement</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input filtreTypeEtab" type="checkbox" name="typeEtab" id="Autre établissement" value="Autre établissement">
+                                    <label class="form-check-label" for="Autre établissement">Autre établissement</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input class="form-check-input filtreTypeEtab" type="checkbox" name="typeEtab" id="Université" value="Université">
+                                    <label class="form-check-label" for="Université">Université</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
                 </div>
 
                 <div class="table-responsive-disc">
-                <table id="disciplineTable" class="table text-center">
-                    <thead class="text-white">
-                        <tr>
-                            <th>Rang</th>
-                            <th style="cursor: pointer;">Etablissement</th>
-                            <th style="cursor: pointer;">Type</th>
-                            <th>Secteur</th>
-                            <th style="cursor: pointer;">Académie</th>
-                            <th>Discipline</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($disciplines as $discipline)
-                            @if ($discipline->etablissement)
-                                <tr>
-                                    <td>{{ $discipline->id }}</td>
-                                    <td><a href="{{ route('etablissements.show', $discipline->etablissement->id) }}" class="text-decoration-none" style="color: inherit;">{{ $discipline->etablissement->Etablissement }}</td>
-                                    <td>{{ $discipline->etablissement->Type }}</td>
-                                    <td>{{ $discipline->etablissement->Secteur }}</td>
-                                    <td>{{ $discipline->etablissement->Academie }}</td>
-                                    <td class="text-start">
-                                        @php
-                                            $Liste_Discipline = explode('//', $discipline->Discipline);
-                                        @endphp
-                                        @foreach ($Liste_Discipline as $index => $element)
-                                            @if($index > 0)
-                                                <br>
-                                            @endif
-                                            {{ $element }}
-                                        @endforeach
-                                    </td>
-                                </tr>
-                            @endif
-                        @endforeach
-                    </tbody>
-                </table>
+                    <table id="disciplineTable" class="table text-center">
+                        <thead class="text-white">
+                            <tr>
+                                <th>Rang</th>
+                                <th style="cursor: pointer;">Etablissement</th>
+                                <th style="cursor: pointer;">Type</th>
+                                <th>Secteur</th>
+                                <th style="cursor: pointer;">Académie</th>
+                                <th>Discipline</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($disciplines as $discipline)
+                                @if ($discipline->etablissement)
+                                    <tr>
+                                        <td>{{ $discipline->id }}</td>
+                                        <td><a href="{{ route('etablissements.show', $discipline->etablissement->id) }}" class="text-decoration-none" style="color: inherit;">{{ $discipline->etablissement->Etablissement }}</td>
+                                        <td>{{ $discipline->etablissement->Type }}</td>
+                                        <td>{{ $discipline->etablissement->Secteur }}</td>
+                                        <td>{{ $discipline->etablissement->Academie }}</td>
+                                        <td class="text-start">
+                                            @php
+                                                $Liste_Discipline = explode('//', $discipline->Discipline);
+                                            @endphp
+                                            @foreach ($Liste_Discipline as $index => $element)
+                                                @if($index > 0)
+                                                    <br>
+                                                @endif
+                                                {{ $element }}
+                                            @endforeach
+                                        </td>
+                                    </tr>
+                                @endif
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
