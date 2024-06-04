@@ -14,7 +14,8 @@ class Insertion extends Model
     protected $fillable = [
         'univ_id',
         'inser_Licence',
-        'inser_Master',
+        'inser_Master_LMD',
+        'inser_Master_MEEF',
     ];
 
     public function etablissement()

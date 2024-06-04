@@ -95,8 +95,7 @@ class DisciplineController extends Controller
         }
 
         Discipline::truncate();
-        Diplome::truncate();
-
+        
         foreach ($etabDisciplines as $nomEtab => $disciplines) {
             try {
                 $etablissement = Etablissement::where('id', $nomEtab)->first();
@@ -110,6 +109,8 @@ class DisciplineController extends Controller
                 Log::error('Erreur lors de l\'enregistrement des données de l\'API : ' . $e->getMessage());
             }
         }
+
+        Diplome::truncate();
 
         foreach ($etabDiplomes as $nomEtab => $types) {
             try {

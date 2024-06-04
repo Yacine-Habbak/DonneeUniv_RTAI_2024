@@ -129,6 +129,13 @@ class EtablissementController extends Controller
                         }
                         $etablissement->save();
                     }
+                    else if ($etablissement->Enseignants && $etudiant->Effectif_2022) {
+                        $etablissement->TE_enseignants = ($etablissement->Enseignants * 1000) / $etudiant->Effectif_2022;
+                        if ($etablissement->Personnels_non_enseignant) {
+                            $etablissement->TE_Total = (($etablissement->Personnels_non_enseignant + $etablissement->Enseignants) * 1000) / $etudiant->Effectif_2022;
+                        }
+                        $etablissement->save();
+                    }
                 }
             } catch (\Exception $e) {
                 \Log::error("Erreur lors du calcul du taux d'encadrement de : {$etablissement->Etablissement} - " . $e->getMessage());

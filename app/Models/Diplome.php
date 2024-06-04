@@ -17,6 +17,7 @@ class Diplome extends Model
         'Diplome',
         'nbr_Pour',
         'nbr_Sort',
+        'TI',
     ];
 
     public function etablissement()

@@ -135,8 +135,10 @@
                 <div class="col-md-4 p-3">
                     <h2 class="text-center sousTitre mt-5 mb-4">Effectifs des Étudiants par Année</h2>
                     <div class="btn-group btn_eff_etu" role="group">
-                        <button type="button" class="btn btn-outline-primary active" data-vue="tab_eff_etu">Vue Tableau</button>
-                        <button type="button" class="btn btn-outline-primary" data-vue="graph_eff_etu">Vue Graphique</button>
+                        @if (($etablissement->etudiants->Effectif_2021) && ($etablissement->etudiants->Effectif_2022))
+                            <button type="button" class="btn btn-outline-primary active" data-vue="tab_eff_etu">Vue Tableau</button>
+                            <button type="button" class="btn btn-outline-primary" data-vue="graph_eff_etu">Vue Graphique</button>
+                        @endif
                     </div>
                     <table id="table_eff_etu" class="table text-center">
                         <thead class="text-white">
@@ -165,7 +167,7 @@
             <!--Tableau du nombre de enseignants-->
             @if ($etablissement->enseignants->isNotEmpty())
                 <div class="col-md-4 p-3">
-                    <h2 class="text-center sousTitre mt-5 mb-4">Les Enseignants</h2>
+                    <h2 class="text-center sousTitre mt-5 mb-4">Les Enseignants<sup>*</sup></h2>
                     <div class="btn-group btn_ens" role="group">
                         <button type="button" class="btn btn-outline-primary active" data-vue="tab_ens">Vue Tableau</button>
                         <button type="button" class="btn btn-outline-primary" data-vue="graph_ens">Vue Graphique</button>
@@ -229,7 +231,7 @@
             <!--Tableau du nombre de personnels-->
             @if ($etablissement->personnels->isNotEmpty())
                 <div class="col-md-4 p-3">
-                    <h2 class="text-center sousTitre mt-5 mb-4">Le Personnel</h2>
+                    <h2 class="text-center sousTitre mt-5 mb-4">Le Personnel<sup>*</sup></h2>
                     <div class="btn-group btn_pers" role="group">
                         <button type="button" class="btn btn-outline-primary active" data-vue="tab_pers">Vue Tableau</button>
                         <button type="button" class="btn btn-outline-primary" data-vue="graph_pers">Vue Graphique</button>
@@ -282,126 +284,172 @@
             @endif
         </div>
 
-            <!-- Liste des disciplines -->
-            @if ($etablissement->disciplines->isNotEmpty())
-                    <h2 class="text-center sousTitre mt-5 mb-4">Les Disciplines enseignées</h2>
-                    <div class="row justify-content-center">
-                        <div class="col-md-4 offset-md-2">
-                            <ul>
-                                @foreach ($etablissement->disciplines as $discipline)
-                                    @php
-                                        $disciplineList = explode('//', $discipline->Discipline);
-                                        $middleIndex = floor(count($disciplineList) / 2);
-                                        $firstHalf = array_slice($disciplineList, 0, $middleIndex);
-                                    @endphp
-                                    @foreach ($firstHalf as $item)
-                                        <li class="discipline_champs">{{ $item }}</li>
-                                    @endforeach
+        <!-- Liste des disciplines -->
+        @if ($etablissement->disciplines->isNotEmpty())
+                <h2 class="text-center sousTitre mt-5 mb-4">Les Disciplines enseignées</h2>
+                <div class="row justify-content-center">
+                    <div class="col-md-4 offset-md-2">
+                        <ul>
+                            @foreach ($etablissement->disciplines as $discipline)
+                                @php
+                                    $disciplineList = explode('//', $discipline->Discipline);
+                                    $middleIndex = floor(count($disciplineList) / 2);
+                                    $firstHalf = array_slice($disciplineList, 0, $middleIndex);
+                                @endphp
+                                @foreach ($firstHalf as $item)
+                                    <li class="discipline_champs">{{ $item }}</li>
                                 @endforeach
-                            </ul>
-                        </div>
-                        <div class="col-md-4">
-                            <ul>
-                                @foreach ($etablissement->disciplines as $discipline)
-                                    @php
-                                        $disciplineList = explode('//', $discipline->Discipline);
-                                        $middleIndex = floor(count($disciplineList) / 2);
-                                        $secondHalf = array_slice($disciplineList, $middleIndex);
-                                    @endphp
-                                    @foreach ($secondHalf as $item)
-                                        <li class="discipline_champs">{{ $item }}</li>
-                                    @endforeach
-                                @endforeach
-                            </ul>
-                        </div>
+                            @endforeach
+                        </ul>
                     </div>
-            @endif
-
-
-
-        <!--Tableau des diplomes -->
-        @if ($etablissement->diplomes->isNotEmpty())
-            <h2 class="text-center sousTitre mt-5 mb-4">Les Diplômes</h2>
-            <div class="row">
-                <div class="col-md-4">
-                    <h3 class="text-center">Licence Professionnelle</h3>
-                    <div class="defiler_Table">
-                        <table id="table-licence" class="table text-center">
-                            <thead class="text-white diplome_titre">
-                                <tr>
-                                    <th style="cursor: pointer;">Nom du Diplôme</th>
-                                    <th style="cursor: pointer;">Nombre de poursuivants</th>
-                                    <th style="cursor: pointer;">Nombre de sortants</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($etablissement->diplomes as $diplome)
-                                    @if ($diplome->Type === "Licence professionnelle")
-                                        <tr>
-                                            <td class="diplome_champs">{{ $diplome->Diplome }}</td>
-                                            <td class="diplome_champs">{{ $diplome->nbr_Pour }}</td>
-                                            <td class="diplome_champs">{{ $diplome->nbr_Sort }}</td>
-                                        </tr>
-                                    @endif
+                    <div class="col-md-4">
+                        <ul>
+                            @foreach ($etablissement->disciplines as $discipline)
+                                @php
+                                    $disciplineList = explode('//', $discipline->Discipline);
+                                    $middleIndex = floor(count($disciplineList) / 2);
+                                    $secondHalf = array_slice($disciplineList, $middleIndex);
+                                @endphp
+                                @foreach ($secondHalf as $item)
+                                    <li class="discipline_champs">{{ $item }}</li>
                                 @endforeach
-                            </tbody>
-                        </table>
+                            @endforeach
+                        </ul>
                     </div>
                 </div>
-
-                <div class="col-md-4">
-                    <h3 class="text-center">Master LMD</h3>
-                    <div class="defiler_Table">
-                        <table id="table-masterLMD" class="table text-center">
-                            <thead class="text-white diplome_titre">
-                                <tr>
-                                    <th style="cursor: pointer;">Nom du Diplôme</th>
-                                    <th style="cursor: pointer;">Nombre de poursuivants</th>
-                                    <th style="cursor: pointer;">Nombre de sortants</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($etablissement->diplomes as $diplome)
-                                    @if ($diplome->Type === "Master LMD")
-                                        <tr>
-                                            <td class="diplome_champs">{{ $diplome->Diplome }}</td>
-                                            <td class="diplome_champs">{{ $diplome->nbr_Pour }}</td>
-                                            <td class="diplome_champs">{{ $diplome->nbr_Sort }}</td>
-                                        </tr>
-                                    @endif
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <h3 class="text-center">Master MEEF</h3>
-                    <div class="defiler_Table">
-                        <table id="table-masterMEEF" class="table text-center">
-                            <thead class="text-white diplome_titre">
-                                <tr>
-                                    <th style="cursor: pointer;">Nom du Diplôme</th>
-                                    <th style="cursor: pointer;">Nombre de poursuivants</th>
-                                    <th style="cursor: pointer;">Nombre de sortants</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($etablissement->diplomes as $diplome)
-                                    @if ($diplome->Type === "Master MEEF")
-                                        <tr>
-                                            <td class="diplome_champs">{{ $diplome->Diplome }}</td>
-                                            <td class="diplome_champs">{{ $diplome->nbr_Pour }}</td>
-                                            <td class="diplome_champs">{{ $diplome->nbr_Sort }}</td>
-                                        </tr>
-                                    @endif
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
         @endif
+
+
+        <div class="row d-flex justify-content-center flex-wrap">
+            <!--Tableau des diplomes -->
+            @if ($etablissement->diplomes->isNotEmpty())
+                <h2 class="text-center sousTitre mt-5 mb-4">Les Diplômes</h2>
+
+                @php
+                    $LicencePro_Dispo = false;
+                    $MasterLMD_Dispo = false;
+                    $MasterMEEF_Dispo = false;
+                    $NbrPour = $etablissement->diplomes->pluck('nbr_Pour')->filter()->isNotEmpty();
+                    $NbrSort = $etablissement->diplomes->pluck('nbr_Sort')->filter()->isNotEmpty();
+                @endphp
+
+                @foreach($etablissement->diplomes as $diplome)
+                    @if ($diplome->Type === "Licence professionnelle")
+                        @php $LicencePro_Dispo = true; @endphp
+                    @elseif ($diplome->Type === "Master LMD")
+                        @php $MasterLMD_Dispo = true; @endphp
+                    @elseif ($diplome->Type === "Master MEEF")
+                        @php $MasterMEEF_Dispo = true; @endphp
+                    @endif
+                @endforeach
+
+                @if ($LicencePro_Dispo)
+                    <div class="col-md-4">
+                        <h3 class="text-center">Licence Professionnelle</h3>
+                        <div class="defiler_Table">
+                            <table id="table-licence" class="table text-center">
+                                <thead class="text-white diplome_titre">
+                                <tr>
+                                    <th style="cursor: pointer;">Nom du Diplôme</th>
+                                    @if ($NbrPour || $NbrSort)
+                                        <th style="cursor: pointer;">Nombre de poursuivants</th>
+                                        <th style="cursor: pointer;">Nombre de sortants</th>
+                                    @endif
+                                    <th style="cursor: pointer;">TI<sup>**</sup></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($etablissement->diplomes as $diplome)
+                                        @if ($diplome->Type === "Licence professionnelle")
+                                            <tr>
+                                                <td class="diplome_champs">{{ $diplome->Diplome }}</td>
+                                                @if ($NbrPour || $NbrSort)
+                                                    <td class="diplome_champs">{{ $diplome->nbr_Pour ?? 'nd'}}</td>
+                                                    <td class="diplome_champs">{{ $diplome->nbr_Sort ?? 'nd'}}</td>
+                                                @endif
+                                                <td class="diplome_champs">{{ $diplome->TI ?? 'nd'}}</td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                @endif
+
+                @if ($MasterLMD_Dispo)
+                    <div class="col-md-4">
+                        <h3 class="text-center">Master LMD</h3>
+                        <div class="defiler_Table">
+                            <table id="table-masterLMD" class="table text-center">
+                                <thead class="text-white diplome_titre">
+                                    <tr>
+                                        <th style="cursor: pointer;">Nom du Diplôme</th>
+                                        @if ($NbrPour || $NbrSort)
+                                            <th style="cursor: pointer;">Nombre de poursuivants</th>
+                                            <th style="cursor: pointer;">Nombre de sortants</th>
+                                        @endif
+                                        <th style="cursor: pointer;">TI<sup>**</sup></th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($etablissement->diplomes as $diplome)
+                                        @if ($diplome->Type === "Master LMD")
+                                            <tr>
+                                                <td class="diplome_champs">{{ $diplome->Diplome }}</td>
+                                                @if ($NbrPour || $NbrSort)
+                                                    <td class="diplome_champs">{{ $diplome->nbr_Pour ?? 'nd'}}</td>
+                                                    <td class="diplome_champs">{{ $diplome->nbr_Sort ?? 'nd'}}</td>
+                                                @endif
+                                                <td class="diplome_champs">{{ $diplome->TI ?? 'nd'}}</td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                @endif
+
+                @if ($MasterMEEF_Dispo)
+                    <div class="col-md-4">
+                        <h3 class="text-center">Master MEEF</h3>
+                        <div class="defiler_Table">
+                            <table id="table-masterMEEF" class="table text-center">
+                                <thead class="text-white diplome_titre">
+                                    <tr>
+                                        <th style="cursor: pointer;">Nom du Diplôme</th>
+                                        @if ($NbrPour || $NbrSort)
+                                            <th style="cursor: pointer;">Nombre de poursuivants</th>
+                                            <th style="cursor: pointer;">Nombre de sortants</th>
+                                        @endif
+                                        <th style="cursor: pointer;">TI<sup>**</sup></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($etablissement->diplomes as $diplome)
+                                        @if ($diplome->Type === "Master MEEF")
+                                            <tr>
+                                                <td class="diplome_champs">{{ $diplome->Diplome }}</td>
+                                                @if ($NbrPour || $NbrSort)
+                                                    <td class="diplome_champs">{{ $diplome->nbr_Pour ?? 'nd'}}</td>
+                                                    <td class="diplome_champs">{{ $diplome->nbr_Sort ?? 'nd'}}</td>
+                                                @endif
+                                                <td class="diplome_champs">{{ $diplome->TI ?? 'nd'}}</td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                @endif
+                <span class="mt-3">* : Donnée 2021</span>
+                <span class="mt-3">** : Taux d'insertion 18 mois apres le diplome obtenu en 2019/2020</span>
+            @endif
+        </div>
+            
 
         <!-- Bouton Telecharger et Retour -->
         <div class="row justify-content-center mt-5">
@@ -432,7 +480,6 @@
                     paging: false,
                     info: false,
                     searching: false,
-                    language: {},
                     rowCallback: function(row, data, index) {
                         if ($(row).hasClass('total')) {
                             $(row).appendTo($(row).closest('table').find('tbody'));
@@ -449,23 +496,9 @@
             var tablePersonnels = initialiserDataTable('#table_personnels');
             var tableEnseignants = initialiserDataTable('#table_enseignants');
 
-            var tableLicence = initialiserDataTable('#table-licence', {
-                language: {
-                    "emptyTable": "Aucun diplome n'est proposé"
-                }
-            });
-
-            var tableMasterLMD = initialiserDataTable('#table-masterLMD', {
-                language: {
-                    "emptyTable": "Aucun diplome n'est proposé"
-                }
-            });
-
-            var tableMasterMEEF = initialiserDataTable('#table-masterMEEF', {
-                language: {
-                    "emptyTable": "Aucun diplome n'est proposé"
-                }
-            });
+            var tableLicence = initialiserDataTable('#table-licence');
+            var tableMasterLMD = initialiserDataTable('#table-masterLMD');
+            var tableMasterMEEF = initialiserDataTable('#table-masterMEEF');
 
 
             // Fonction pour créer un graphique lineaire
@@ -480,7 +513,7 @@
                     data: {
                         labels: data.map(item => item.annee),
                         datasets: [{
-                            label: 'Nombre d\'étudiants',
+                            label: 'Evolution des effectifs étudiant',
                             data: data.map(item => item.nombre),
                             backgroundColor: 'rgba(54, 162, 235, 0.5)',
                             borderColor: 'rgba(54, 162, 235, 1)',
@@ -520,7 +553,7 @@
                         plugins: {
                             title: {
                                 display: true,
-                                text: 'Répartition par genre'
+                                text: 'Répartition par genre - Donnée 2021'
                             }
                         }
                     }
@@ -703,7 +736,7 @@
                         plugins: {
                             title: {
                                 display: true,
-                                text: 'Répartition par type d\'enseignant'
+                                text: 'Répartition par type d\'enseignant - Donnée 2021'
                             }
                         }
                     }
@@ -733,7 +766,7 @@
                         plugins: {
                             title: {
                                 display: true,
-                                text: 'Répartition par type de personnel'
+                                text: 'Répartition par type de personnel - Donnée 2021'
                             }
                         }
                     }

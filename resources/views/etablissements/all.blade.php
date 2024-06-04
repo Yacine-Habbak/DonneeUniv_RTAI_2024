@@ -55,7 +55,7 @@
                     <button type="button" class="btn btn-outline-primary" data-vue="carte">Vue Carte</button>
                 </div>
                 <div class="btn-group btn-graphique" role="group" id="graphique-options" style="display: none;">
-                    <button type="button" class="btn btn-outline-primary" data-vue="effectif_E">Effectif etudiant</button>
+                    <button type="button" class="btn btn-outline-primary active" data-vue="effectif_E">Effectif etudiant</button>
                     <button type="button" class="btn btn-outline-primary" data-vue="TE_Global">TE Global</button>
                     <button type="button" class="btn btn-outline-primary" data-vue="TE">TE (Enseignants uniquement)</button>
                     <!--<button type="button" class="btn btn-outline-primary" data-vue="TI_Licence">TI en Licence Pro</button>
@@ -78,14 +78,15 @@
                                 <th style="cursor: pointer;">TE<sup>3</sup></th>
                                 <th style="cursor: pointer;">TE Global<sup>4</sup></th>
                                 <th style="cursor: pointer;">TI Licence Pro<sup>5</sup></th>
-                                <th style="cursor: pointer;">TI Master<sup>6</sup></th>
+                                <th style="cursor: pointer;">TI Master LMD<sup>5</sup></th>
+                                <th style="cursor: pointer;">TI Master MEEF<sup>5</sup></th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($etablissements as $etab)
+                            @foreach ($etablissements as $index => $etab)
                                 <tr>
-                                    <td>{{ $etab->id }}</td>
+                                    <td>{{ $index + 1 }}</td> <!-- Numéro d'ordre incrémenté -->
                                     <td><a href="{{ route('etablissements.show', $etab) }}" class="text-decoration-none" style="color: inherit;">{{ $etab->Etablissement }}</a></td>
                                     <td>{{ $etab->Type }}</td>
                                     <td>{{ $etab->Commune }}</td>
@@ -96,7 +97,8 @@
                                     <td>{{ $etab->TE_enseignants ?? 'nd' }}</td>
                                     <td>{{ $etab->TE_Total ?? 'nd' }}</td>
                                     <td>{{ $etab->insertions->inser_Licence ?? 'nd' }}</td>
-                                    <td>{{ $etab->insertions->inser_Master ?? 'nd' }}</td>
+                                    <td>{{ $etab->insertions->inser_Master_LMD ?? 'nd' }}</td>
+                                    <td>{{ $etab->insertions->inser_Master_MEEF ?? 'nd' }}</td>
                                     <td><a href="#"><img src="{{ asset('images/fiche.png') }}" class="icone-img" alt="Fiche de l'établissement"></a></td>
                                 </tr>
                             @endforeach
@@ -133,10 +135,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <span><sup>5</sup> Taux d'insertion 18 mois apres le diplome en Licence Professionnel en 2020</span>
-                        </div>
-                        <div class="col-md-6">
-                            <span><sup>6</sup> Taux d'insertion 18 mois apres le diplome en Master LMD/ENS en 2020</span>
+                            <span><sup>5</sup> Taux d'insertion 18 mois apres le diplome en 2023</span>
                         </div>
                     </div>
                 </div>
@@ -153,7 +152,7 @@
             var etabs = @json($etablissements);
             var graphInstance = null;
             var graphSecteurInstance = null;
-            var currentGraphType = 'effectif_E';
+            var currentGraphType = 'TE_Global';
             var table = $('#etablissementsTable').DataTable({
                 paging: false,
                 ordering: true,
@@ -193,7 +192,6 @@
                     "emptyTable": "Aucun résultat trouvé",
                     "zeroRecords": "Aucun résultat trouvé",
                     "info": "Affichage de _TOTAL_ données",
-                    "infoEmpty": "Aucun résultat trouvé",
                     "infoFiltered": "(filtré)",
                 },
                 drawCallback: function() {
@@ -346,7 +344,7 @@
                         plugins: {
                             title: {
                                 display: true,
-                                text: 'Répartition des établissements entre les secteurs public et privé (en %)'
+                                text: 'Répartition des établissements entre les secteurs public et privé (en %) - Au 1er Janvier 2024'
                             }
                         }
                     }

@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('insertions', function (Blueprint $table) {
             $table->id();
             $table->string('univ_id');
-            $table->decimal('inser_Licence',4,1)->nullable();
-            $table->decimal('inser_Master',4,1)->nullable();
+            $table->decimal('inser_Licence',5,2)->nullable();
+            $table->decimal('inser_Master_LMD',5,2)->nullable();
+            $table->decimal('inser_Master_MEEF',5,2)->nullable();
             $table->timestamps();
 
             $table->foreign('univ_id')->references('id')->on('etablissements')->onDelete('cascade');

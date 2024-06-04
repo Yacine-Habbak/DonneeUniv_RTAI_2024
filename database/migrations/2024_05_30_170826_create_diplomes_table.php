@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('Diplome');
             $table->integer('nbr_Pour')->nullable();
             $table->integer('nbr_Sort')->nullable();
+            $table->decimal('TI',5,2)->nullable();
 
             $table->timestamps();
 
