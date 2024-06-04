@@ -41,24 +41,26 @@
                     </thead>
                     <tbody>
                         @foreach ($disciplines as $discipline)
-                            <tr>
-                                <td>{{ $discipline->id }}</td>
-                                <td><a href="{{ route('etablissements.show', $discipline->etablissement->id) }}" class="text-decoration-none" style="color: inherit;">{{ $discipline->etablissement->Etablissement }}</td>
-                                <td>{{ $discipline->etablissement->Type }}</td>
-                                <td>{{ $discipline->etablissement->Secteur }}</td>
-                                <td>{{ $discipline->etablissement->Academie }}</td>
-                                <td class="text-start">
-                                    @php
-                                        $Liste_Discipline = explode('//', $discipline->Discipline);
-                                    @endphp
-                                    @foreach ($Liste_Discipline as $index => $element)
-                                        @if($index > 0)
-                                            <br>
-                                        @endif
-                                        {{ $element }}
-                                    @endforeach
-                                </td>
-                            </tr>
+                            @if ($discipline->etablissement)
+                                <tr>
+                                    <td>{{ $discipline->id }}</td>
+                                    <td><a href="{{ route('etablissements.show', $discipline->etablissement->id) }}" class="text-decoration-none" style="color: inherit;">{{ $discipline->etablissement->Etablissement }}</td>
+                                    <td>{{ $discipline->etablissement->Type }}</td>
+                                    <td>{{ $discipline->etablissement->Secteur }}</td>
+                                    <td>{{ $discipline->etablissement->Academie }}</td>
+                                    <td class="text-start">
+                                        @php
+                                            $Liste_Discipline = explode('//', $discipline->Discipline);
+                                        @endphp
+                                        @foreach ($Liste_Discipline as $index => $element)
+                                            @if($index > 0)
+                                                <br>
+                                            @endif
+                                            {{ $element }}
+                                        @endforeach
+                                    </td>
+                                </tr>
+                            @endif
                         @endforeach
                     </tbody>
                 </table>
