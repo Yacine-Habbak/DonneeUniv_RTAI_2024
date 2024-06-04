@@ -468,7 +468,7 @@
             });
 
 
-            // Fonction pour créer un graphique à barres
+            // Fonction pour créer un graphique lineaire
             function dessinerGraphique(data, canvasId) {
                 var ctx = document.getElementById(canvasId);
                 
@@ -476,7 +476,7 @@
                     Chart.getChart(ctx).destroy();
                 }
                 var chart = new Chart(ctx, {
-                    type: 'bar',
+                    type: 'line',
                     data: {
                         labels: data.map(item => item.annee),
                         datasets: [{

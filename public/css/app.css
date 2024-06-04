@@ -118,6 +118,10 @@ h3{
     max-height: calc(100vh - 2.9%);
     overflow-y: auto;
 }
+.table-responsive-disc {
+    max-height: calc(100vh - 2.7%);
+    overflow-y: auto;
+}
 .table-responsive-stat{
     max-height: calc(100vh - 365px);
     overflow-y: auto;

@@ -193,6 +193,7 @@
                     "emptyTable": "Aucun résultat trouvé",
                     "zeroRecords": "Aucun résultat trouvé",
                     "info": "Affichage de _TOTAL_ données",
+                    "infoEmpty": "Aucun résultat trouvé",
                     "infoFiltered": "(filtré)",
                 },
                 drawCallback: function() {

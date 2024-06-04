@@ -6,62 +6,62 @@
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="mb-3 d-flex">
-                    <input type="text" id="filtreDiscipline" class="filtreDiscipline filtre" placeholder="Rechercher une discipline">
-                    <input type="text" id="filtreEtablissement" class="filtreEtablissement filtre" placeholder="Rechercher un établissement">
-                    <input type="text" id="filtreVille" class="filtreVille filtre" placeholder="Rechercher une ville">
+                    <input type="text" id="filtreEtab" class="filtreEtab filtre" placeholder="Rechercher un établissement">
+                    <input type="text" id="filtreAcad" class="filtreAcad filtre" placeholder="Rechercher une académie">
+                    <input type="text" id="filtreDisc" class="filtreDisc filtre" placeholder="Rechercher une discipline">
                     <div class="filtre-case">
-                        <label for="filtreDiplome">Type de diplome :</label><br>
+                        <label for="filtreTypeEtab">Type d'établissement :</label><br>
                         <div class="form-check">
-                            <input class="form-check-input filtreDiplome" type="checkbox" name="typeDiplome" id="Licence professionnelle" value="Licence professionnelle">
-                            <label class="form-check-label" for="Licence professionnelle">Licence professionnelle</label>
+                            <input class="form-check-input filtreTypeEtab" type="checkbox" name="typeEtab" id="Université" value="Université">
+                            <label class="form-check-label" for="Université">Université</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input filtreDiplome" type="checkbox" name="typeDiplome" id="Master LMD" value="Master LMD">
-                            <label class="form-check-label" for="Master LMD">Master LMD</label>
+                            <input class="form-check-input filtreTypeEtab" type="checkbox" name="typeEtab" id="Grand établissement" value="Grand établissement">
+                            <label class="form-check-label" for="Grand établissement">Grand établissement</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input filtreDiplome" type="checkbox" name="typeDiplome" id="Master MEEF" value="Master MEEF">
-                            <label class="form-check-label" for="Master MEEF">Master MEEF</label>
+                            <input class="form-check-input filtreTypeEtab" type="checkbox" name="typeEtab" id="Autre établissement" value="Autre établissement">
+                            <label class="form-check-label" for="Autre établissement">Autre établissement</label>
                         </div>
                     </div>
-                </div>
-                <div class="btn-group mb-3" role="group">
-                    <button type="button" class="btn btn-outline-primary">Vue Graphique</button>
+
                 </div>
 
-                <div class="table-responsive-stat">
-                    <table id="disciplineTable" class="table text-center">
-                        <thead class="text-white">
+                <div class="table-responsive-disc">
+                <table id="disciplineTable" class="table text-center">
+                    <thead class="text-white">
+                        <tr>
+                            <th>Rang</th>
+                            <th style="cursor: pointer;">Etablissement</th>
+                            <th style="cursor: pointer;">Type</th>
+                            <th>Secteur</th>
+                            <th style="cursor: pointer;">Académie</th>
+                            <th>Discipline</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($disciplines as $discipline)
                             <tr>
-                                <th>Rang</th>
-                                <th style="cursor: pointer;">Discipline</th>
-                                <th style="cursor: pointer;">Etablissement</th>
-                                <th style="cursor: pointer;">Commune</th>
-                                <th style="cursor: pointer;">Type de diplome</th>
-                                <th style="cursor: pointer;">Nom du diplome</th>
-                                <th style="cursor: pointer;">Date d'insertion</th>
-                                <th style="cursor: pointer;">TR</th>
-                                <th style="cursor: pointer;">TE</th>
-                                <th style="cursor: pointer;">TI</th>
+                                <td>{{ $discipline->id }}</td>
+                                <td><a href="{{ route('etablissements.show', $discipline->etablissement->id) }}" class="text-decoration-none" style="color: inherit;">{{ $discipline->etablissement->Etablissement }}</td>
+                                <td>{{ $discipline->etablissement->Type }}</td>
+                                <td>{{ $discipline->etablissement->Secteur }}</td>
+                                <td>{{ $discipline->etablissement->Academie }}</td>
+                                <td class="text-start">
+                                    @php
+                                        $Liste_Discipline = explode('//', $discipline->Discipline);
+                                    @endphp
+                                    @foreach ($Liste_Discipline as $index => $element)
+                                        @if($index > 0)
+                                            <br>
+                                        @endif
+                                        {{ $element }}
+                                    @endforeach
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($disciplines as $discipline)
-                                <tr>
-                                    <td>{{ $discipline->id }}</td>
-                                    <td>{{ $discipline->Discipline }}</td>
-                                    <td>{{ $discipline->etablissement->Etablissement }}</td>
-                                    <td>{{ $discipline->etablissement->Commune }}</td>
-                                    <td>{{ $discipline->Type_diplome }}</td>
-                                    <td>{{ $discipline->Nom_diplome }}</td>
-                                    <td>{{ $discipline->Date_insertion }}</td>
-                                    <td>{{ $discipline->Taux_reussite ? $discipline->Taux_reussite . ' %' : 'nd' }}</td>
-                                    <td>-</td>
-                                    <td>{{ $discipline->Taux_insertion }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                        @endforeach
+                    </tbody>
+                </table>
                 </div>
             </div>
         </div>
@@ -77,13 +77,14 @@
                 orderCellsTop: true,
                 fixedHeader: true,
                 columnDefs: [
-                    { orderable: false, targets: 0 }
+                    { orderable: false, targets: [0, 5] }
                 ],
                 dom: 'lrtip',
                 language: {
                     "emptyTable": "Aucun résultat trouvé",
                     "zeroRecords": "Aucun résultat trouvé",
                     "info": "Affichage de _TOTAL_ données",
+                    "infoEmpty": "Aucun résultat trouvé",
                     "infoFiltered": "(filtré)",
                 },
                 drawCallback: function() {
@@ -98,35 +99,35 @@
             // Filtrage
             $.fn.dataTable.ext.search.push(
                 function(settings, data, dataIndex) {
-                    var filtreDiscipline = $('#filtreDiscipline').val().toLowerCase();
-                    var filtreEtablissement = $('#filtreEtablissement').val().toLowerCase();
-                    var filtreVille = $('#filtreVille').val().toLowerCase();
-                    var filtreDiplome = $('.filtreDiplome:checked').map(function() {
+                    var filtreDisc = $('#filtreDisc').val().toLowerCase();
+                    var filtreEtab = $('#filtreEtab').val().toLowerCase();
+                    var filtreAcad = $('#filtreAcad').val().toLowerCase();
+                    var filtreTypeEtab = $('.filtreTypeEtab:checked').map(function() {
                         return $(this).val().toLowerCase();
                     }).get();
 
-                    var discipline = data[1].toLowerCase();
-                    var etablissement = data[2].toLowerCase();
-                    var ville = data[3].toLowerCase();
-                    var diplome = data[4].toLowerCase();
+                    var etablissement = data[1].toLowerCase();
+                    var type = data[2].toLowerCase();
+                    var acad = data[4].toLowerCase();
+                    var discipline = data[5].toLowerCase();
 
-                    var matchesDiscipline = filtreDiscipline === '' || discipline.includes(filtreDiscipline);
-                    var matchesEtablissement = filtreEtablissement === '' || etablissement.includes(filtreEtablissement);
-                    var matchesVille = filtreVille === '' || ville.includes(filtreVille);
-                    var matchesDiplome = filtreDiplome.length === 0 || filtreDiplome.includes(filtreDiplome);
+                    var matchesDiscipline = filtreDisc === '' || discipline.includes(filtreDisc);
+                    var matchesEtablissement = filtreEtab === '' || etablissement.includes(filtreEtab);
+                    var matchesAcad = filtreAcad === '' || acad.includes(filtreAcad);
+                    var matchesType = filtreTypeEtab.length === 0 || filtreTypeEtab.includes(type);
 
-                    return matchesDiscipline && matchesEtablissement && matchesVille && matchesDiplome;
+                    return matchesDiscipline && matchesEtablissement && matchesAcad && matchesType;
                 }
             );
 
-            $('#filtreDiscipline, #filtreEtablissement, #filtreVille').on('input', function() {
+            $('#filtreDisc, #filtreEtab, #filtreAcad').on('input', function() {
                 table.draw();
             });
-            $('.filtreDiplome').on('change', function() {
+            $('.filtreTypeEtab').on('change', function() {
                 table.draw();
             });
         });
-    </script>
+</script>
 
 
 @endsection
