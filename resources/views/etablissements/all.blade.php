@@ -59,6 +59,7 @@
                     <button type="button" class="btn btn-outline-primary" data-vue="TE_Global">TE Global</button>
                     <button type="button" class="btn btn-outline-primary" data-vue="TE">TE (Enseignants uniquement)</button>
                     <button type="button" class="btn btn-outline-primary" data-vue="secteur">Secteur Public/Privé</button>
+                    <button type="button" class="btn btn-outline-primary" data-vue="type_Etab">Type d'établissement</button>
                     <button type="button" class="btn btn-outline-primary" data-vue="TI_Licence">Taux d'insertion LP</button>
                     <button type="button" class="btn btn-outline-primary" data-vue="TI_Master_LMD">Taux d'insertion Master LMD</button>
                     <button type="button" class="btn btn-outline-primary" data-vue="TI_Master_MEEF">Taux d'insertion Master MEEF</button>
@@ -108,11 +109,15 @@
                 </div>
                 
                 <div id="graphique">
-                    <canvas id="tauxEncadrementChart" width="400" height="170"></canvas>
+                    <canvas id="tauxEncadrementChart" width="400" height="160"></canvas>
                 </div>
 
                 <div id="graphiqueSecteursContainer" style="display: none;">
-                    <canvas id="graphiqueSecteursChart" width="1300" height="700"></canvas>
+                    <canvas id="graphiqueSecteursChart" width="1300" height="660"></canvas>
+                </div>
+
+                <div id="graphiqueTypesContainer" style="display: none;">
+                    <canvas id="graphiqueTypesChart" width="1300" height="660"></canvas>
                 </div>
                 
                 <div id="carte" style="display: none;">
@@ -154,6 +159,7 @@
             var graphInstance = null;
             var chartInstance = null;
             var graphSecteurInstance = null;
+            var graphTypeInstance = null;
             var currentGraphType = 'TE_Global';
             var table = $('#etablissementsTable').DataTable({
                 paging: false,
@@ -246,20 +252,83 @@
                 $('#graphique-options button').removeClass('active');
                 $(this).addClass('active');
 
+                if (chartInstance) {
+                    chartInstance.destroy();
+                    chartInstance = null;
+                }
+                if (graphSecteurInstance) {
+                    graphSecteurInstance.destroy();
+                    graphSecteurInstance = null;
+                }
+                if (graphTypeInstance) {
+                    graphTypeInstance.destroy();
+                    graphTypeInstance = null;
+                }
+
                 if (typeGraphique === 'secteur') {
                     $('#graphique').hide();
                     $('#graphiqueSecteursContainer').show();
+                    $('#graphiqueTypesContainer').hide();
                     dessinerGraphiqueSecteurs();
                 } else if (typeGraphique === 'TI_Licence' || typeGraphique === 'TI_Master_LMD' || typeGraphique === 'TI_Master_MEEF') {
                     $('#graphique').show();
                     $('#graphiqueSecteursContainer').hide();
+                    $('#graphiqueTypesContainer').hide();
                     dessinerGraphiqueTauxInsertion(typeGraphique);
+                } else if (typeGraphique === 'type_Etab') {
+                    $('#graphique').hide();
+                    $('#graphiqueSecteursContainer').hide();
+                    $('#graphiqueTypesContainer').show();
+                    dessinerGraphiqueTypes();
                 } else {
                     $('#graphique').show();
                     $('#graphiqueSecteursContainer').hide();
+                    $('#graphiqueTypesContainer').hide();
                     dessinerGraphique(typeGraphique);
                 }
             });
+
+            function dessinerGraphiqueTypes() {
+                if (graphTypeInstance) {
+                    graphTypeInstance.destroy();
+                }
+
+                var compteTypes = {
+                    'Université': 0,
+                    'Grand établissement': 0,
+                    'Autre établissement': 0,
+                    'École': 0,
+                };
+
+                etabs.forEach(function(etab) {
+                    compteTypes[etab.Type]++;
+                });
+
+                var labels = Object.keys(compteTypes);
+                var donnees = Object.values(compteTypes);
+
+                var ctx = document.getElementById('graphiqueTypesChart').getContext('2d');
+                graphTypeInstance = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: donnees,
+                            backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56', '#027908']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Répartition des établissements par type - Au 1er Janvier 2024'
+                            }
+                        }
+                    }
+                });
+            }
 
             function dessinerGraphiqueTauxInsertion(typeGraphique) {
                 if (chartInstance) {
@@ -283,12 +352,13 @@
                         }
 
                         if (tauxInsertion !== null) {
-                            labels.push(etab.Etablissement);
                             donnees.push(tauxInsertion);
+                            labels.push(etab.Etablissement);
                         }
                     }
                 });
 
+                // Trier les données par ordre décroissant
                 var donneesTriees = donnees.map(function (valeur, index) {
                     return { valeur: valeur, index: index };
                 }).sort(function (a, b) {
@@ -307,10 +377,10 @@
                     chartInstance = new Chart(ctx, {
                         type: 'bar',
                         data: {
-                            labels: labels,
+                            labels: labelsTriees,
                             datasets: [{
                                 label: typeGraphique === 'TI_Licence' ? 'Taux d\'insertion à 18 mois après le diplôme - Licence Pro - Donnée 2023' : typeGraphique === 'TI_Master_LMD' ? 'Taux d\'insertion à 18 mois après le diplôme - Master LMD - Donnée 2023' : 'Taux d\'insertion à 18 mois après le diplôme - Master MEEF - Donnée 2023',
-                                data: donnees,
+                                data: donneesTriees,
                                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                                 borderColor: 'rgba(54, 162, 235, 1)',
                                 borderWidth: 1

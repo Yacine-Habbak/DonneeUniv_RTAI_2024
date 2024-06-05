@@ -27,7 +27,7 @@
                                 <th style="cursor: pointer;">Rentrée</th>
                                 <th style="cursor: pointer;">Etablissement</th>
                                 <th style="cursor: pointer;">Commune</th>
-                                <th style="cursor: pointer;">Effectif etudiants</th>
+                                <th style="cursor: pointer;">Nouveaux etudiants</th>
                                 <th style="cursor: pointer;">Homme</th>
                                 <th style="cursor: pointer;">Femme</th>
                                 <th style="cursor: pointer;">Niveau BAC+4</th>
@@ -59,7 +59,7 @@
                                 <th style="cursor: pointer;">Rentrée</th>
                                 <th style="cursor: pointer;">Etablissement</th>
                                 <th style="cursor: pointer;">Commune</th>
-                                <th style="cursor: pointer;">Effectif etudiants</th>
+                                <th style="cursor: pointer;">Nouveaux etudiants</th>
                                 <th style="cursor: pointer;">BAC Général</th>
                                 <th style="cursor: pointer;">BAC STMG</th>
                                 <th style="cursor: pointer;">BAC : Autres series technologiques</th>
@@ -100,7 +100,7 @@
                                 <th style="cursor: pointer;">Rentrée</th>
                                 <th style="cursor: pointer;">Etablissement</th>
                                 <th style="cursor: pointer;">Commune</th>
-                                <th style="cursor: pointer;">Effectif etudiants</th>
+                                <th style="cursor: pointer;">Nouveaux etudiants</th>
                                 <th style="cursor: pointer;">Etudiants en mobilité</th>
                             </tr>
                         </thead>
@@ -242,8 +242,8 @@
                 ],
                 dom: 'lrtip',
                 language: {
-                    "emptyTable": "Aucun résultat trouvé",
-                    "zeroRecords": "Aucun résultat trouvé",
+                    "emptyTable": "Aucune donnée trouvée",
+                    "zeroRecords": "Aucune donnée trouvée",
                     "info": "",
                     "infoEmpty": "",
                     "infoFiltered": "",

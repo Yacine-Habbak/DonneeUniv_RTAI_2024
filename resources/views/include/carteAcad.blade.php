@@ -7,11 +7,12 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
       #map {
-            height: 420px;
-            width: 35%;
-            left: 30%;
-            top: 180px; 
             position: absolute;
+            border-radius: 40px;
+            height: 65%;
+            width: 35%;
+            left: 35%;
+            top: 20%;
         }
         .container-barre {
             position: absolute;
