@@ -7,6 +7,7 @@ use App\Http\Controllers\EnseignantController;
 use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\StatistiqueController;
 use App\Http\Controllers\InsertionController;
+use App\Http\Controllers\PDFController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -36,3 +37,8 @@ Route::get('/detailsEtablissement/{id}', [EtablissementController::class, 'showE
 
 Route::get('/listeDiscipline', [DisciplineController::class, 'allDiscipline'])->name('disciplines.all');
 Route::get('/statistiques', [StatistiqueController::class, 'allStatistique'])->name('statistiques.index');
+
+
+
+
+Route::get('/telecharger-pdf/{id}', [PDFController::class, 'telechargerPDF'])->name('telecharger.pdf');

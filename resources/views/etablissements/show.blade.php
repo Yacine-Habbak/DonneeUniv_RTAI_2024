@@ -453,7 +453,7 @@
 
         <!-- Bouton Telecharger et Retour -->
         <div class="row justify-content-center mt-5">
-            <a href="#" class="text-decoration-none justify-content-end btn_telecharger">Télécharger la fiche</a>
+            <a href="{{ route('telecharger.pdf', $etablissement->id) }}" class="text-decoration-none justify-content-end btn_telecharger">Télécharger la fiche</a>
             <a href="#" id="btn_retour" class="text-decoration-none justify-content-end">Retour</a>
         </div>
     </div>
