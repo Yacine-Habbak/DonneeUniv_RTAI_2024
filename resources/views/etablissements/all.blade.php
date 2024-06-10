@@ -2,7 +2,13 @@
 
 @section('content')
     <div class="container-fluid">
-        <h1>Principaux établissements de l'enseignement supérieur</h1>
+        @if (!isset($academie))
+            <h1>Principaux établissements de l'enseignement supérieur</h1>
+        @else
+            <h1>Principaux établissements du {{ $academie }}</h1>
+        @endif
+
+        
         <div id="filtres" style="display: none;">
             <div class="mb-3 d-flex">
                 <input type="text" id="filtreNom" class="filtreNom filtre" placeholder="Rechercher un établissement">

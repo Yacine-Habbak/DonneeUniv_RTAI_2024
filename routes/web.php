@@ -31,6 +31,7 @@ Route::get('/carte', function () {
 })->name('carte');
 
 Route::get('/listeEtablissement', [EtablissementController::class, 'allEtablissement'])->name('etablissements.all');
+Route::get('/listeEtablissement/{Acad}', [EtablissementController::class, 'allEtablissementAcad'])->name('etablissements.all.Acad');
 Route::get('/etablissements', [EtablissementController::class, 'index'])->name('etablissements.index');
 
 Route::get('/detailsEtablissement/{id}', [EtablissementController::class, 'showEtablissement'])->name('etablissements.show');

@@ -156,9 +156,18 @@
         map.addControl(new controleAccueil());
 
         function voirEtablissements(uai_identifiant) {
-            id = uai_identifiant; // stocker le nom de l'académie sélectionnée
+            var academieSelectionnee = donneesAcademies.features.find(function(academie) {
+                return academie.properties.uai_identifiant === uai_identifiant;
+            });
 
-            console.log(id); // pour tester
+            if (academieSelectionnee) {
+                var nomAcademie = academieSelectionnee.properties.libelle;
+                var url = "{{ route('etablissements.all.Acad', ['Acad' => ':nomAcademie']) }}";
+                url = url.replace(':nomAcademie', nomAcademie);
+                window.location.href = url;
+            } else {
+                console.log("Académie non trouvée");
+            }
         }
 
        

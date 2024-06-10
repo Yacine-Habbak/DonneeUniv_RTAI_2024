@@ -16,6 +16,21 @@ class EtablissementController extends Controller
         return view('etablissements.all', compact('etablissements'));
     }
 
+    public function allEtablissementAcad($academie)
+    {
+        $etablissements = Etablissement::all();
+    
+        $filteredEtablissements = $etablissements->filter(function ($etablissement) use ($academie) {
+            return strpos($academie, $etablissement->Academie) !== false;
+        });
+    
+        return view('etablissements.all', [
+            'etablissements' => $filteredEtablissements,
+            'academie' => $academie
+        ]);
+    }
+    
+
     public function showEtablissement($id)
     {
         $etablissement = Etablissement::findOrFail($id);
