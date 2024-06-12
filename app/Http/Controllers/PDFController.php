@@ -11,9 +11,10 @@ class PDFController extends Controller
     public function telechargerPDF($id)
     {
         $etablissement = Etablissement::findOrFail($id);
-
         $pdf = PDF::loadView('etablissements.pdf', compact('etablissement'));
-
-        return $pdf->download('fiche_etablissement.pdf');
+    
+        $nomFichier = str_replace(' ', '_', 'fiche_' . $etablissement->Etablissement . '.pdf');
+    
+        return $pdf->download($nomFichier);
     }
 }

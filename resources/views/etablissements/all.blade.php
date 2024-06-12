@@ -107,7 +107,7 @@
                                     <td>{{ $etab->insertions->inser_Licence ?? 'nd' }}</td>
                                     <td>{{ $etab->insertions->inser_Master_LMD ?? 'nd' }}</td>
                                     <td>{{ $etab->insertions->inser_Master_MEEF ?? 'nd' }}</td>
-                                    <td><a href="#"><img src="{{ asset('images/fiche.png') }}" class="icone-img" alt="Fiche de l'établissement"></a></td>
+                                    <td><a href="{{ route('telecharger.pdf', $etab->id) }}"><img src="{{ asset('images/fiche.png') }}" class="icone-img" alt="Fiche de l'établissement"></a></td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -147,7 +147,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <span><sup>5</sup> Taux d'insertion 18 mois apres le diplome en 2023</span>
+                            <span><sup>5</sup> Taux d'insertion 18 mois apres le diplome obtenu en 2020</span>
                         </div>
                     </div>
                 </div>
