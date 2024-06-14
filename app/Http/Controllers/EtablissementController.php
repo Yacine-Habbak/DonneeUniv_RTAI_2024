@@ -161,8 +161,14 @@ class EtablissementController extends Controller
         ->with('success', 'Les taux d\'encadrement ont bien été mis à jour.');
     }
 
+
     public function carte()
     {
-        return view('carte');
+        $coordonnes = Etablissement::select('lat', 'lon', 'Etablissement')->get();
+    
+        return view('carteEtab', ['coordonnes' => $coordonnes]);
     }
+    
+
+
 }
