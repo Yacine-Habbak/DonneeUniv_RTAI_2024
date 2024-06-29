@@ -127,8 +127,36 @@
                 </div>
                 
                 <div id="carte" style="display: none;">
-                    <!-- Tu mets la carte juste la -->
-                </div>
+                    <div id="filtres" style="display: none;">
+                        <div class="mb-3 d-flex">
+                            <input type="text" id="filtreNom" class="filtreNom filtre" placeholder="Rechercher un établissement">
+                            <input type="text" id="filtreVille" class="filtreVille filtre" placeholder="Rechercher une ville">
+                            <div class="filtre-case">
+                                <label for="filtreType">Type d'établissement :</label><br>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input filtreType" type="checkbox" name="typeEtablissement" id="typeUniversite" value="Université">
+                                            <label class="form-check-label" for="typeUniversite">Université</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input filtreType" type="checkbox" name="typeEtablissement" id="typeEcole" value="École">
+                                            <label class="form-check-label" for="typeEcole">École</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="form-check">
+                                            <input class="form-check-input filtreType" type="checkbox" name="typeEtablissement" id="typeGrand" value="Grand établissement">
+                                            <label class="form-check-label" for="typeGrand">Grand établissement</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input filtreType" type="checkbox" name="typeEtablissement" id="typeAutre" value="Autre établissement">
+                                            <label class="form-check-label" for="typeAutre">Autre établissement</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                    
+                        </div>
                 
                 <div id="indice">
                     <div class="row">

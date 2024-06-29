@@ -164,9 +164,9 @@ class EtablissementController extends Controller
 
     public function carte()
     {
-        $coordonnes = Etablissement::select('lat', 'lon', 'Etablissement')->get();
-    
+        $coordonnes = Etablissement::select('lat', 'lon', 'Etablissement', 'Type', 'Secteur')->get();
         return view('carteEtab', ['coordonnes' => $coordonnes]);
+
     }
     
 
