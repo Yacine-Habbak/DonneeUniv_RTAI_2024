@@ -108,7 +108,7 @@ class EnseignantController extends Controller
             }
         }
 
-        return redirect()->route('CalculTE')
-        ->with('success', 'Les données des enseignants ont bien été mis à jour.');
+        return redirect()->route('DataEnsNonPerm')
+        ->with('success', 'Les données des enseignants titulaires ont bien été mis à jour.');
     }
 }
