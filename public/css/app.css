@@ -196,6 +196,9 @@ table th,.table td {
 #graphique-options button.active {
     background-color: #461981;
 }
+#vue-options button.active {
+    background-color: #191b81;
+}
 /* POUR LA PAGE DETAILS DE L'UNIVERSITE */
 .titre_univ{
     font-size: 1.8vw;
@@ -280,10 +283,23 @@ table th,.table td {
     left: 58%;
     bottom: 1%;
 }
-.btn_graph_ens,.btn_graph_pers{
+.btn_ens{
+    margin-bottom: 1%;
+}
+.btn_ens_vue{
+    position: relative;
+    left: 15%;
+    margin-top: 11%;
+    margin-bottom: 1%;
+}
+.btn_graph_pers{
     position: relative;
     left: 21%;
     top: 5%;
+}
+.btn_graph_ens{
+    position: relative;
+    left: 50%;
 }
 
 @media (max-width: 767px) {

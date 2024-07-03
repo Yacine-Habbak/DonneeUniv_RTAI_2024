@@ -13,6 +13,7 @@ class EnsNonPerm extends Model
 
     protected $fillable = [
         'univ_id',
+        'Type',
         'Effectif',
         'Effectif_H',
         'Effectif_F',

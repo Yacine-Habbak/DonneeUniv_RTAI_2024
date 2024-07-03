@@ -25,6 +25,7 @@ return new class extends Migration
             $table->integer('Personnels_non_enseignant_H')->nullable();
             $table->integer('Personnels_non_enseignant_F')->nullable();
             $table->integer('Enseignants')->nullable();
+            $table->integer('EnsNonPerm')->nullable();
             $table->decimal('TE_enseignants', 8, 2)->nullable();
             $table->decimal('TE_Total', 8, 2)->nullable();
             $table->string('siret')->nullable();

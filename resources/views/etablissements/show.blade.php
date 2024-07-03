@@ -169,6 +169,10 @@
                 <div class="col-md-4 p-3">
                     <h2 class="text-center sousTitre mt-5 mb-4">Les Enseignants<sup>*</sup></h2>
                     <div class="btn-group btn_ens" role="group">
+                        <button type="button" class="btn btn-outline-primary active" data-vue="tab_ens_Titu">Titulaires</button>
+                        <button type="button" class="btn btn-outline-primary" data-vue="tab_ens_NP">Non Permanents</button>
+                    </div>
+                    <div class="btn-group btn_ens_vue" role="group" id="vue-options">
                         <button type="button" class="btn btn-outline-primary active" data-vue="tab_ens">Vue Tableau</button>
                         <button type="button" class="btn btn-outline-primary" data-vue="graph_ens">Vue Graphique</button>
                     </div>
@@ -176,7 +180,7 @@
                         <button type="button" class="btn btn-outline-primary active" data-vue="graph_type_ens">Type d'enseignant</button>
                         <button type="button" class="btn btn-outline-primary" data-vue="graph_genre_ens">Genre</button>
                     </div>
-                    <table id="table_enseignants" class="table text-center">
+                    <table id="table_ens_Titu" class="table text-center">
                         <thead class="text-white">
                             <tr>
                                 <th></th>
@@ -223,6 +227,136 @@
                             </tfoot>
                         </tbody>
                     </table>
+
+                    <table id="table_ens_NP" class="table text-center">
+                        <thead class="text-white">
+                            <tr>
+                                <th></th>
+                                <th style="cursor: pointer;">Effectif Total</th>
+                                <th style="cursor: pointer;">Effectif Homme</th>
+                                <th style="cursor: pointer;">Effectif Femme</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th class="text-white" style="background-color: #274CFF;">Attaché temporaire d'enseignement et de recherche</th>
+                                @php
+                                    $attacheTemporaire = $etablissement->ensnonperm->where('Type', 'Attaché temporaire d\'enseignement et de recherche')->first();
+                                @endphp
+                                <td>{{ $attacheTemporaire->Effectif ?? 'nd' }}</td>
+                                <td>{{ $attacheTemporaire->Effectif_H ?? 'nd' }}</td>
+                                <td>{{ $attacheTemporaire->Effectif_F ?? 'nd' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-white" style="background-color: #274CFF;">Doctorant contractuel sans service d'enseignement</th>
+                                @php
+                                    $doctorantSansService = $etablissement->ensnonperm->where('Type', 'Doctorant contractuel sans service d\'enseignement')->first();
+                                @endphp
+                                <td>{{ $doctorantSansService->Effectif ?? 'nd' }}</td>
+                                <td>{{ $doctorantSansService->Effectif_H ?? 'nd' }}</td>
+                                <td>{{ $doctorantSansService->Effectif_F ?? 'nd' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-white" style="background-color: #274CFF;">Doctorant contractuel avec service d'enseignement</th>
+                                @php
+                                    $doctorantAvecService = $etablissement->ensnonperm->where('Type', 'Doctorant contractuel avec service d\'enseignement')->first();
+                                @endphp
+                                <td>{{ $doctorantAvecService->Effectif ?? 'nd' }}</td>
+                                <td>{{ $doctorantAvecService->Effectif_H ?? 'nd' }}</td>
+                                <td>{{ $doctorantAvecService->Effectif_F ?? 'nd' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-white" style="background-color: #274CFF;">Contractuel LRU</th>
+                                @php
+                                    $contractuelLRU = $etablissement->ensnonperm->where('Type', 'Contractuel LRU')->first();
+                                @endphp
+                                <td>{{ $contractuelLRU->Effectif ?? 'nd' }}</td>
+                                <td>{{ $contractuelLRU->Effectif_H ?? 'nd' }}</td>
+                                <td>{{ $contractuelLRU->Effectif_F ?? 'nd' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-white" style="background-color: #274CFF;">Maître de conférences associé</th>
+                                @php
+                                    $maitreConferencesAssocie = $etablissement->ensnonperm->where('Type', 'Maître de conférences associé')->first();
+                                @endphp
+                                <td>{{ $maitreConferencesAssocie->Effectif ?? 'nd' }}</td>
+                                <td>{{ $maitreConferencesAssocie->Effectif_H ?? 'nd' }}</td>
+                                <td>{{ $maitreConferencesAssocie->Effectif_F ?? 'nd' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-white" style="background-color: #274CFF;">Contractuel 2nd degré</th>
+                                @php
+                                    $contractuel2ndDegre = $etablissement->ensnonperm->where('Type', 'Contractuel 2nd degré')->first();
+                                @endphp
+                                <td>{{ $contractuel2ndDegre->Effectif ?? 'nd' }}</td>
+                                <td>{{ $contractuel2ndDegre->Effectif_H ?? 'nd' }}</td>
+                                <td>{{ $contractuel2ndDegre->Effectif_F ?? 'nd' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-white" style="background-color: #274CFF;">Professeur des universités associé</th>
+                                @php
+                                    $professeurAssocie = $etablissement->ensnonperm->where('Type', 'Professeur des universités associé')->first();
+                                @endphp
+                                <td>{{ $professeurAssocie->Effectif ?? 'nd' }}</td>
+                                <td>{{ $professeurAssocie->Effectif_H ?? 'nd' }}</td>
+                                <td>{{ $professeurAssocie->Effectif_F ?? 'nd' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-white" style="background-color: #274CFF;">Professeur des universités invité</th>
+                                @php
+                                    $professeurInvite = $etablissement->ensnonperm->where('Type', 'Professeur des universités invité')->first();
+                                @endphp
+                                <td>{{ $professeurInvite->Effectif ?? 'nd' }}</td>
+                                <td>{{ $professeurInvite->Effectif_H ?? 'nd' }}</td>
+                                <td>{{ $professeurInvite->Effectif_F ?? 'nd' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-white" style="background-color: #274CFF;">Lecteur et répétiteur de langues étrangères</th>
+                                @php
+                                    $lecteurRepetiteur = $etablissement->ensnonperm->where('Type', 'Lecteur et répétiteur de langues étrangères')->first();
+                                @endphp
+                                <td>{{ $lecteurRepetiteur->Effectif ?? 'nd' }}</td>
+                                <td>{{ $lecteurRepetiteur->Effectif_H ?? 'nd' }}</td>
+                                <td>{{ $lecteurRepetiteur->Effectif_F ?? 'nd' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-white" style="background-color: #274CFF;">Maître de conférences invité</th>
+                                @php
+                                    $maitreConferencesInvite = $etablissement->ensnonperm->where('Type', 'Maître de conférences invité')->first();
+                                @endphp
+                                <td>{{ $maitreConferencesInvite->Effectif ?? 'nd' }}</td>
+                                <td>{{ $maitreConferencesInvite->Effectif_H ?? 'nd' }}</td>
+                                <td>{{ $maitreConferencesInvite->Effectif_F ?? 'nd' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-white" style="background-color: #274CFF;">Maître de langues étrangères</th>
+                                @php
+                                    $maitreLanguesEtrangeres = $etablissement->ensnonperm->where('Type', 'Maître de langues étrangères')->first();
+                                @endphp
+                                <td>{{ $maitreLanguesEtrangeres->Effectif ?? 'nd' }}</td>
+                                <td>{{ $maitreLanguesEtrangeres->Effectif_H ?? 'nd' }}</td>
+                                <td>{{ $maitreLanguesEtrangeres->Effectif_F ?? 'nd' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-white" style="background-color: #274CFF;">Invité (corps non renseigné)</th>
+                                @php
+                                    $inviteNonRenseigne = $etablissement->ensnonperm->where('Type', 'Invité (corps non renseigné)')->first();
+                                @endphp
+                                <td>{{ $inviteNonRenseigne->Effectif ?? 'nd' }}</td>
+                                <td>{{ $inviteNonRenseigne->Effectif_H ?? 'nd' }}</td>
+                                <td>{{ $inviteNonRenseigne->Effectif_F ?? 'nd' }}</td>
+                            </tr>
+                            <tfoot>
+                                <tr>
+                                    <th class="text-white" style="background-color: #274CFF;font-size: 1vw;">Total</th>
+                                    <td>{{ ($attacheTemporaire->Effectif ?? 0) + ($doctorantSansService->Effectif ?? 0) + ($doctorantAvecService->Effectif ?? 0) + ($contractuelLRU->Effectif ?? 0) + ($maitreConferencesAssocie->Effectif ?? 0) + ($contractuel2ndDegre->Effectif ?? 0) + ($professeurAssocie->Effectif ?? 0) + ($professeurInvite->Effectif ?? 0) + ($lecteurRepetiteur->Effectif ?? 0) + ($maitreConferencesInvite->Effectif ?? 0) + ($maitreLanguesEtrangeres->Effectif ?? 0) + ($inviteNonRenseigne->Effectif ?? 0) }}</td>
+                                    <td>{{ ($attacheTemporaire->Effectif_H ?? 0) + ($doctorantSansService->Effectif_H ?? 0) + ($doctorantAvecService->Effectif_H ?? 0) + ($contractuelLRU->Effectif_H ?? 0) + ($maitreConferencesAssocie->Effectif_H ?? 0) + ($contractuel2ndDegre->Effectif_H ?? 0) + ($professeurAssocie->Effectif_H ?? 0) + ($professeurInvite->Effectif_H ?? 0) + ($lecteurRepetiteur->Effectif_H ?? 0) + ($maitreConferencesInvite->Effectif_H ?? 0) + ($maitreLanguesEtrangeres->Effectif_H ?? 0) + ($inviteNonRenseigne->Effectif_H ?? 0) }}</td>
+                                    <td>{{ ($attacheTemporaire->Effectif_F ?? 0) + ($doctorantSansService->Effectif_F ?? 0) + ($doctorantAvecService->Effectif_F ?? 0) + ($contractuelLRU->Effectif_F ?? 0) + ($maitreConferencesAssocie->Effectif_F ?? 0) + ($contractuel2ndDegre->Effectif_F ?? 0) + ($professeurAssocie->Effectif_F ?? 0) + ($professeurInvite->Effectif_F ?? 0) + ($lecteurRepetiteur->Effectif_F ?? 0) + ($maitreConferencesInvite->Effectif_F ?? 0) + ($maitreLanguesEtrangeres->Effectif_F ?? 0) + ($inviteNonRenseigne->Effectif_F ?? 0) }}</td>
+                                </tr>
+                            </tfoot>
+                        </tbody>
+                    </table>
+
                     <canvas id="graph_genre_ens" class="mt-5" width="100" height="100"></canvas>
                     <canvas id="graph_type_ens" class="mt-5" width="100" height="100"></canvas>
                 </div>
@@ -494,14 +628,13 @@
 
             var tableEtudiants = initialiserDataTable('#table_eff_etu');
             var tablePersonnels = initialiserDataTable('#table_personnels');
-            var tableEnseignants = initialiserDataTable('#table_enseignants');
-
+            var tableEnseignantsTitu = initialiserDataTable('#table_ens_Titu');
+            var tableEnseignantsNP = initialiserDataTable('#table_ens_NP');
             var tableLicence = initialiserDataTable('#table-licence');
             var tableMasterLMD = initialiserDataTable('#table-masterLMD');
             var tableMasterMEEF = initialiserDataTable('#table-masterMEEF');
 
-
-            // Fonction pour créer un graphique lineaire
+            // Fonction pour créer un graphique linéaire
             function dessinerGraphique(data, canvasId) {
                 var ctx = document.getElementById(canvasId);
                 
@@ -618,7 +751,6 @@
                     $('#graph_genre_pers').show();
                     $('#graph_type_pers').hide();
 
-
                     var hommes = parseInt($('#table_personnels tfoot tr td:nth-child(3)').text());
                     var femmes = parseInt($('#table_personnels tfoot tr td:nth-child(4)').text());
 
@@ -642,76 +774,100 @@
                     ];
 
                     if (graphTypePersonnels) {
-                        graphTypePersionnels.destroy();
+                        graphTypePersonnels.destroy();
                     }
                     graphTypePersonnels = Camembert_type_pers(typeData, 'graph_type_pers');
                 }
                 $(this).addClass('active').siblings().removeClass('active');
             });
 
-            // Boutons pour les enseignants
-            var graphGenreEnseignants;
-            var graphTypeEnseignants;
-            $('.btn_ens button').on('click', function() {
-                var vue = $(this).data('vue');
-                if (vue === 'tab_ens') {
-                    $('#table_enseignants').show();
-                    $('#graph_genre_ens').hide();
-                    $('#graph_type_ens').hide();
-                    if (graphGenreEnseignants) {
-                        graphGenreEnseignants.destroy();
-                    }
-                    if (graphTypeEnseignants) {
-                        graphTypeEnseignants.destroy();
-                    }
-                    $('.btn_graph_ens').hide();
+            // gérer les enseignants (titulaires et non permanents)
+            var graphGenreEnsTitu, graphTypeEnsTitu, graphGenreEnsNP, graphTypeEnsNP;
+
+            function gererAffichageEns(typeDonnees, typeVue) {
+                $('#table_ens_Titu, #table_ens_NP, #graph_genre_ens, #graph_type_ens').hide();
+                $('.btn_graph_ens').hide();
+
+                if (typeVue === 'tab_ens') {
+                    $(`#table_ens_${typeDonnees}`).show();
                 } else {
-                    $('#table_enseignants').hide();
                     $('.btn_graph_ens').show();
-                    $('.btn_graph_ens button').first().trigger('click');
+                    let activeGraphType = $('.btn_graph_ens .active').data('vue');
+                    $(`#${activeGraphType}`).show();
+
+                    let ctx = document.getElementById(activeGraphType).getContext('2d');
+                    let data, labels, title;
+
+                    if (activeGraphType === 'graph_genre_ens') {
+                        if (typeDonnees === 'Titu') {
+                            let hommes = parseInt($('#table_ens_Titu tfoot tr td:nth-child(3)').text());
+                            let femmes = parseInt($('#table_ens_Titu tfoot tr td:nth-child(4)').text());
+                            data = [hommes, femmes];
+                            labels = ['Hommes', 'Femmes'];
+                            title = 'Répartition par genre - Enseignants Titulaires';
+                            graphGenreEnsTitu = Camembert_genre({ hommes: hommes, femmes: femmes }, 'graph_genre_ens');
+                        } else {
+                            let hommes = parseInt($('#table_ens_NP tfoot tr td:nth-child(3)').text());
+                            let femmes = parseInt($('#table_ens_NP tfoot tr td:nth-child(4)').text());
+                            data = [hommes, femmes];
+                            labels = ['Hommes', 'Femmes'];
+                            title = 'Répartition par genre - Enseignants Non Permanents';
+                            graphGenreEnsNP = Camembert_genre({ hommes: hommes, femmes: femmes }, 'graph_genre_ens');
+                        }
+                    } else {
+                        if (typeDonnees === 'Titu') {
+                            let rawData = $('#table_ens_Titu tbody tr').map(function() {
+                                return {
+                                    label: $(this).find('th').text(),
+                                    value: parseInt($(this).find('td:nth-child(2)').text()) || 0
+                                };
+                            }).get();
+
+                            let filteredData = rawData.filter(item => item.value > 0);
+                            data = filteredData.map(item => item.value);
+                            labels = filteredData.map(item => item.label);
+                            title = 'Répartition par type - Enseignants Titulaires';
+                            graphTypeEnsTitu = Camembert_type_ens(filteredData, 'graph_type_ens');
+                        } else {
+                            let rawData = $('#table_ens_NP tbody tr').map(function() {
+                                return {
+                                    label: $(this).find('th').text(),
+                                    value: parseInt($(this).find('td:nth-child(2)').text()) || 0
+                                };
+                            }).get();
+
+                            let filteredData = rawData.filter(item => item.value > 0);
+                            data = filteredData.map(item => item.value);
+                            labels = filteredData.map(item => item.label);
+                            title = 'Répartition par type - Enseignants Non Permanents';
+                            graphTypeEnsNP = Camembert_type_ens(filteredData, 'graph_type_ens');
+                        }
+                    }
                 }
+            }
+
+            $('.btn_ens button').on('click', function() {
                 $(this).addClass('active').siblings().removeClass('active');
+                let typeDonnees = $(this).data('vue').split('_')[2];
+                let typeVue = $('.btn_ens_vue .active').data('vue');
+                gererAffichageEns(typeDonnees, typeVue);
+            });
+
+            $('.btn_ens_vue button').on('click', function() {
+                $(this).addClass('active').siblings().removeClass('active');
+                let typeDonnees = $('.btn_ens .active').data('vue').split('_')[2];
+                let typeVue = $(this).data('vue');
+                gererAffichageEns(typeDonnees, typeVue);
             });
 
             $('.btn_graph_ens button').on('click', function() {
-                var vue = $(this).data('vue');
-                if (vue === 'graph_genre_ens') {
-                    $('#graph_genre_ens').show();
-                    $('#graph_type_ens').hide();
-
-                    var hommes = parseInt($('#table_enseignants tfoot tr td:nth-child(3)').text());
-                    var femmes = parseInt($('#table_enseignants tfoot tr td:nth-child(4)').text());
-
-                    if (graphGenreEnseignants) {
-                        graphGenreEnseignants.destroy();
-                    }
-                    graphGenreEnseignants = Camembert_genre({ hommes: hommes, femmes: femmes }, 'graph_genre_ens');
-                } else if (vue === 'graph_type_ens') {
-                    $('#graph_genre_ens').hide();
-                    $('#graph_type_ens').show();
-
-                    var typeData = [
-                        {
-                            label: "Enseignants du 2nd degré et Arts et métiers",
-                            value: parseInt($('#table_enseignants tbody tr:nth-child(1) td:nth-child(2)').text()) || 0
-                        },
-                        {
-                            label: "Maître de conférences et assimilés",
-                            value: parseInt($('#table_enseignants tbody tr:nth-child(2) td:nth-child(2)').text()) || 0
-                        },
-                        {
-                            label: "Professeur et assimilés",
-                            value: parseInt($('#table_enseignants tbody tr:nth-child(3) td:nth-child(2)').text()) || 0
-                        }
-                    ];
-
-                    if (graphTypeEnseignants) {
-                        graphTypeEnseignants.destroy();
-                    }
-                    graphTypeEnseignants = Camembert_type_ens(typeData, 'graph_type_ens');
-                }
                 $(this).addClass('active').siblings().removeClass('active');
+                let typeDonnees = $('.btn_ens .active').data('vue').split('_')[2];
+                let typeVue = 'graph_ens';
+                gererAffichageEns(typeDonnees, typeVue);
             });
+
+            gererAffichageEns('Titu', 'tab_ens');
 
             // Fonction pour créer un graphique camembert des types d'enseignants
             function Camembert_type_ens(data, containerId) {
@@ -721,14 +877,22 @@
                     Chart.getChart(ctx).destroy();
                 }
 
+                var colors = [
+                    'rgba(54, 162, 235, 0.5)', 'rgba(255, 99, 132, 0.5)', 'rgba(255, 206, 86, 0.5)',
+                    'rgba(75, 192, 192, 0.5)', 'rgba(153, 102, 255, 0.5)', 'rgba(255, 159, 64, 0.5)',
+                    'rgba(199, 199, 199, 0.5)', 'rgba(83, 102, 255, 0.5)', 'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)', 'rgba(255, 206, 86, 0.5)', 'rgba(75, 192, 192, 0.5)'
+                ];
+                var borderColors = colors.map(color => color.replace('0.5', '1'));
+
                 var chart = new Chart(ctx, {
                     type: 'pie',
                     data: {
                         labels: data.map(item => item.label),
                         datasets: [{
                             data: data.map(item => item.value),
-                            backgroundColor: ['rgba(54, 162, 235, 0.5)', 'rgba(255, 99, 132, 0.5)', 'rgba(219, 217, 54, 1)'],
-                            borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)', 'rgba(219, 217, 54, 1)'],
+                            backgroundColor: colors.slice(0, data.length),
+                            borderColor: borderColors.slice(0, data.length),
                             borderWidth: 1
                         }]
                     },
@@ -742,6 +906,7 @@
                     }
                 });
             }
+
 
             // Fonction pour créer un graphique camembert des types de personnels
             function Camembert_type_pers(data, containerId) {
@@ -772,6 +937,6 @@
                     }
                 });
             }
-        })
+        });
     </script>
 @endsection

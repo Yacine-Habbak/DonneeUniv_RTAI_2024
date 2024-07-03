@@ -82,7 +82,8 @@
                                 <th style="cursor: pointer;">Secteur</th>
                                 <th style="cursor: pointer;">Étudiants inscrits<sup>1</sup></th>
                                 <th style="cursor: pointer;">Effectif Personnels<sup>2</sup></th>
-                                <th style="cursor: pointer;">Effectif enseignants</th>
+                                <th style="cursor: pointer;">Effectif enseignants Titulaires</th>
+                                <th style="cursor: pointer;">Effectif enseignants Non Permanents</th>
                                 <th style="cursor: pointer;">TE<sup>3</sup></th>
                                 <th style="cursor: pointer;">TE Global<sup>4</sup></th>
                                 <th style="cursor: pointer;">TI Licence Pro<sup>5</sup></th>
@@ -102,6 +103,7 @@
                                     <td>{{ $etab->etudiants->Effectif_2022 ?? 'nd' }}</td>
                                     <td>{{ $etab->Personnels_non_enseignant == 0 ? 'nd' : $etab->Personnels_non_enseignant ?? 'nd' }}</td>
                                     <td>{{ $etab->Enseignants == 0 ? 'nd' : $etab->Enseignants ?? 'nd' }}</td>
+                                    <td>{{ $etab->EnsNonPerm == 0 ? 'nd' : $etab->EnsNonPerm ?? 'nd' }}</td>
                                     <td>{{ $etab->TE_enseignants ?? 'nd' }}</td>
                                     <td>{{ $etab->TE_Total ?? 'nd' }}</td>
                                     <td>{{ $etab->insertions->inser_Licence ?? 'nd' }}</td>

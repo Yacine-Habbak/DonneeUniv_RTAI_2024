@@ -18,10 +18,10 @@ class EnseignantController extends Controller
         $limite = 1000;
         $cleApi = '9a63b08bae72b9014f2a17c4c47f428ccec2c5b6d3e97cf7f6aa480e';
         $toutesDonnees = [];
-        
+
         do {
             try {
-                $reponse = $client->get("https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-enseignants-titulaires-esr-public/records?group_by=etablissement_lib%2Ccategorie_assimilation%2Ceffectif%2Csexe&refine=rentree%3A%222021%22&start={$debut}&limit={$limite}&apikey={$cleApi}");
+                $reponse = $client->get("https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-enseignants-titulaires-esr-public/records?group_by=etablissement_lib%2Cetablissement_id_uai%2Ccategorie_assimilation%2Ceffectif%2Csexe&refine=rentree%3A%222021%22&start={$debut}&limit={$limite}&apikey={$cleApi}");
 
                 if ($reponse->getStatusCode() == 200) {
                     $data = json_decode($reponse->getBody(), true);
@@ -46,17 +46,21 @@ class EnseignantController extends Controller
         $donneesTriees = [];
 
         foreach ($toutesDonnees as $donnee) {
+            $etabID = $donnee['etablissement_id_uai'];
             $etabLib = $donnee['etablissement_lib'];
             $type = $donnee['categorie_assimilation'];
             $sexe = $donnee['sexe'];
             $effectif = $donnee['effectif'];
-            
-            if (!isset($donneesTriees[$etabLib])) {
-                $donneesTriees[$etabLib] = [];
+
+            if (!isset($donneesTriees[$etabID])) {
+                $donneesTriees[$etabID] = [
+                    'etab_lib' => $etabLib,
+                    'types' => []
+                ];
             }
 
-            if (!isset($donneesTriees[$etabLib][$type])) {
-                $donneesTriees[$etabLib][$type] = [
+            if (!isset($donneesTriees[$etabID]['types'][$type])) {
+                $donneesTriees[$etabID]['types'][$type] = [
                     'effectif_total' => 0,
                     'effectif_h' => 0,
                     'effectif_f' => 0
@@ -64,18 +68,24 @@ class EnseignantController extends Controller
             }
 
             if ($sexe == 'Homme') {
-                $donneesTriees[$etabLib][$type]['effectif_h'] += $effectif;
+                $donneesTriees[$etabID]['types'][$type]['effectif_h'] += $effectif;
             } else if ($sexe == 'Femme') {
-                $donneesTriees[$etabLib][$type]['effectif_f'] += $effectif;
+                $donneesTriees[$etabID]['types'][$type]['effectif_f'] += $effectif;
             }
 
-            $donneesTriees[$etabLib][$type]['effectif_total'] += $effectif;
+            $donneesTriees[$etabID]['types'][$type]['effectif_total'] += $effectif;
         }
 
         Enseignant::truncate();
 
-        foreach ($donneesTriees as $etabLib => $types) {
-            $etab = Etablissement::where('Etablissement', $etabLib)->first();
+        foreach ($donneesTriees as $etabID => $details) {
+            $etabLib = $details['etab_lib'];
+            $types = $details['types'];
+            $etab = Etablissement::where('id', $etabID)->first();
+
+            if (!$etab) {
+                $etab = Etablissement::where('Etablissement', $etabLib)->first();
+            }
 
             if ($etab) {
                 $effectifTotalUniv = 0;
@@ -109,6 +119,6 @@ class EnseignantController extends Controller
         }
 
         return redirect()->route('DataEnsNonPerm')
-        ->with('success', 'Les données des enseignants titulaires ont bien été mis à jour.');
+            ->with('success', 'Les données des enseignants titulaires ont bien été mis à jour.');
     }
 }

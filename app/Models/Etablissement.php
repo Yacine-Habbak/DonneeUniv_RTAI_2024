@@ -32,6 +32,7 @@ class Etablissement extends Model
         'Personnels_non_enseignant_H',
         'Personnels_non_enseignant_F',
         'Enseignants',
+        'EnsNonPerm',
         'TE_Total',
         'TE_enseignants',
         'siret',
@@ -64,7 +65,7 @@ class Etablissement extends Model
         return $this->hasMany(Enseignant::class, 'univ_id');
     }
 
-    public function EnsNonPerm()
+    public function ensnonperm()
     {
         return $this->hasMany(EnsNonPerm::class, 'univ_id');
     }

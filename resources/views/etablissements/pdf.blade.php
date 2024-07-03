@@ -138,7 +138,7 @@
 
     <!-- Tableau du nombre de enseignants -->
     @if ($etablissement->enseignants->isNotEmpty())
-        <h2 class="soustitre">Les Enseignants</h2>
+        <h2 class="soustitre">Les Enseignants Titulaires</h2>
         <table class="table">
             <thead>
                 <tr>
@@ -181,6 +181,137 @@
                     <td>{{ ($arts->Effectif ?? 0) + ($conference->Effectif ?? 0) + ($prof->Effectif ?? 0) }}</td>
                     <td>{{ ($arts->Effectif_H ?? 0) + ($conference->Effectif_H ?? 0) + ($prof->Effectif_H ?? 0) }}</td>
                     <td>{{ ($arts->Effectif_F ?? 0) + ($conference->Effectif_F ?? 0) + ($prof->Effectif_F ?? 0) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    @endif
+
+
+    @if ($etablissement->ensnonperm->isNotEmpty())
+        <h2 class="soustitre">Les Enseignants Non Permanents</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th class="Titre_Table">Effectif Total</th>
+                    <th class="Titre_Table">Effectif Homme</th>
+                    <th class="Titre_Table">Effectif Femme</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th class="Titre_Table">Attaché temporaire d'enseignement et de recherche</th>
+                    @php
+                        $attacheTemporaire = $etablissement->ensnonperm->where('Type', 'Attaché temporaire d\'enseignement et de recherche')->first();
+                    @endphp
+                    <td>{{ $attacheTemporaire->Effectif ?? 'nd' }}</td>
+                    <td>{{ $attacheTemporaire->Effectif_H ?? 'nd' }}</td>
+                    <td>{{ $attacheTemporaire->Effectif_F ?? 'nd' }}</td>
+                </tr>
+                <tr>
+                    <th class="Titre_Table">Doctorant contractuel sans service d'enseignement</th>
+                    @php
+                        $doctorantSansService = $etablissement->ensnonperm->where('Type', 'Doctorant contractuel sans service d\'enseignement')->first();
+                    @endphp
+                    <td>{{ $doctorantSansService->Effectif ?? 'nd' }}</td>
+                    <td>{{ $doctorantSansService->Effectif_H ?? 'nd' }}</td>
+                    <td>{{ $doctorantSansService->Effectif_F ?? 'nd' }}</td>
+                </tr>
+                <tr>
+                    <th class="Titre_Table">Doctorant contractuel avec service d'enseignement</th>
+                    @php
+                        $doctorantAvecService = $etablissement->ensnonperm->where('Type', 'Doctorant contractuel avec service d\'enseignement')->first();
+                    @endphp
+                    <td>{{ $doctorantAvecService->Effectif ?? 'nd' }}</td>
+                    <td>{{ $doctorantAvecService->Effectif_H ?? 'nd' }}</td>
+                    <td>{{ $doctorantAvecService->Effectif_F ?? 'nd' }}</td>
+                </tr>
+                <tr>
+                    <th class="Titre_Table">Contractuel LRU</th>
+                    @php
+                        $contractuelLRU = $etablissement->ensnonperm->where('Type', 'Contractuel LRU')->first();
+                    @endphp
+                    <td>{{ $contractuelLRU->Effectif ?? 'nd' }}</td>
+                    <td>{{ $contractuelLRU->Effectif_H ?? 'nd' }}</td>
+                    <td>{{ $contractuelLRU->Effectif_F ?? 'nd' }}</td>
+                </tr>
+                <tr>
+                    <th class="Titre_Table">Maître de conférences associé</th>
+                    @php
+                        $maitreConferencesAssocie = $etablissement->ensnonperm->where('Type', 'Maître de conférences associé')->first();
+                    @endphp
+                    <td>{{ $maitreConferencesAssocie->Effectif ?? 'nd' }}</td>
+                    <td>{{ $maitreConferencesAssocie->Effectif_H ?? 'nd' }}</td>
+                    <td>{{ $maitreConferencesAssocie->Effectif_F ?? 'nd' }}</td>
+                </tr>
+                <tr>
+                    <th class="Titre_Table">Contractuel 2nd degré</th>
+                    @php
+                        $contractuel2ndDegre = $etablissement->ensnonperm->where('Type', 'Contractuel 2nd degré')->first();
+                    @endphp
+                    <td>{{ $contractuel2ndDegre->Effectif ?? 'nd' }}</td>
+                    <td>{{ $contractuel2ndDegre->Effectif_H ?? 'nd' }}</td>
+                    <td>{{ $contractuel2ndDegre->Effectif_F ?? 'nd' }}</td>
+                </tr>
+                <tr>
+                    <th class="Titre_Table">Professeur des universités associé</th>
+                    @php
+                        $professeurAssocie = $etablissement->ensnonperm->where('Type', 'Professeur des universités associé')->first();
+                    @endphp
+                    <td>{{ $professeurAssocie->Effectif ?? 'nd' }}</td>
+                    <td>{{ $professeurAssocie->Effectif_H ?? 'nd' }}</td>
+                    <td>{{ $professeurAssocie->Effectif_F ?? 'nd' }}</td>
+                </tr>
+                <tr>
+                    <th class="Titre_Table">Professeur des universités invité</th>
+                    @php
+                        $professeurInvite = $etablissement->ensnonperm->where('Type', 'Professeur des universités invité')->first();
+                    @endphp
+                    <td>{{ $professeurInvite->Effectif ?? 'nd' }}</td>
+                    <td>{{ $professeurInvite->Effectif_H ?? 'nd' }}</td>
+                    <td>{{ $professeurInvite->Effectif_F ?? 'nd' }}</td>
+                </tr>
+                <tr>
+                    <th class="Titre_Table">Lecteur et répétiteur de langues étrangères</th>
+                    @php
+                        $lecteurRepetiteur = $etablissement->ensnonperm->where('Type', 'Lecteur et répétiteur de langues étrangères')->first();
+                    @endphp
+                    <td>{{ $lecteurRepetiteur->Effectif ?? 'nd' }}</td>
+                    <td>{{ $lecteurRepetiteur->Effectif_H ?? 'nd' }}</td>
+                    <td>{{ $lecteurRepetiteur->Effectif_F ?? 'nd' }}</td>
+                </tr>
+                <tr>
+                    <th class="Titre_Table">Maître de conférences invité</th>
+                    @php
+                        $maitreConferencesInvite = $etablissement->ensnonperm->where('Type', 'Maître de conférences invité')->first();
+                    @endphp
+                    <td>{{ $maitreConferencesInvite->Effectif ?? 'nd' }}</td>
+                    <td>{{ $maitreConferencesInvite->Effectif_H ?? 'nd' }}</td>
+                    <td>{{ $maitreConferencesInvite->Effectif_F ?? 'nd' }}</td>
+                </tr>
+                <tr>
+                    <th class="Titre_Table">Maître de langues étrangères</th>
+                    @php
+                        $maitreLanguesEtrangeres = $etablissement->ensnonperm->where('Type', 'Maître de langues étrangères')->first();
+                    @endphp
+                    <td>{{ $maitreLanguesEtrangeres->Effectif ?? 'nd' }}</td>
+                    <td>{{ $maitreLanguesEtrangeres->Effectif_H ?? 'nd' }}</td>
+                    <td>{{ $maitreLanguesEtrangeres->Effectif_F ?? 'nd' }}</td>
+                </tr>
+                <tr>
+                    <th class="Titre_Table">Invité (corps non renseigné)</th>
+                    @php
+                        $inviteNonRenseigne = $etablissement->ensnonperm->where('Type', 'Invité (corps non renseigné)')->first();
+                    @endphp
+                    <td>{{ $inviteNonRenseigne->Effectif ?? 'nd' }}</td>
+                    <td>{{ $inviteNonRenseigne->Effectif_H ?? 'nd' }}</td>
+                    <td>{{ $inviteNonRenseigne->Effectif_F ?? 'nd' }}</td>
+                </tr>
+                <tr>
+                    <th class="Titre_Table">Total</th>
+                    <td>{{ ($attacheTemporaire->Effectif ?? 0) + ($doctorantSansService->Effectif ?? 0) + ($doctorantAvecService->Effectif ?? 0) + ($contractuelLRU->Effectif ?? 0) + ($maitreConferencesAssocie->Effectif ?? 0) + ($contractuel2ndDegre->Effectif ?? 0) + ($professeurAssocie->Effectif ?? 0) + ($professeurInvite->Effectif ?? 0) + ($lecteurRepetiteur->Effectif ?? 0) + ($maitreConferencesInvite->Effectif ?? 0) + ($maitreLanguesEtrangeres->Effectif ?? 0) + ($inviteNonRenseigne->Effectif ?? 0) }}</td>
+                    <td>{{ ($attacheTemporaire->Effectif_H ?? 0) + ($doctorantSansService->Effectif_H ?? 0) + ($doctorantAvecService->Effectif_H ?? 0) + ($contractuelLRU->Effectif_H ?? 0) + ($maitreConferencesAssocie->Effectif_H ?? 0) + ($contractuel2ndDegre->Effectif_H ?? 0) + ($professeurAssocie->Effectif_H ?? 0) + ($professeurInvite->Effectif_H ?? 0) + ($lecteurRepetiteur->Effectif_H ?? 0) + ($maitreConferencesInvite->Effectif_H ?? 0) + ($maitreLanguesEtrangeres->Effectif_H ?? 0) + ($inviteNonRenseigne->Effectif_H ?? 0) }}</td>
+                    <td>{{ ($attacheTemporaire->Effectif_F ?? 0) + ($doctorantSansService->Effectif_F ?? 0) + ($doctorantAvecService->Effectif_F ?? 0) + ($contractuelLRU->Effectif_F ?? 0) + ($maitreConferencesAssocie->Effectif_F ?? 0) + ($contractuel2ndDegre->Effectif_F ?? 0) + ($professeurAssocie->Effectif_F ?? 0) + ($professeurInvite->Effectif_F ?? 0) + ($lecteurRepetiteur->Effectif_F ?? 0) + ($maitreConferencesInvite->Effectif_F ?? 0) + ($maitreLanguesEtrangeres->Effectif_F ?? 0) + ($inviteNonRenseigne->Effectif_F ?? 0) }}</td>
                 </tr>
             </tbody>
         </table>

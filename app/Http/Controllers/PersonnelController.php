@@ -21,7 +21,7 @@ class PersonnelController extends Controller
         
         do {
             try {
-                $reponse = $client->get("https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-personnels-biatss-etablissements-publics/records?group_by=etablissement_lib%2Ctype_personnel%2Ceffectif%2Ceffectif_hommes%2Ceffectif_femmes&refine=rentree%3A%222021%22&start={$debut}&limit={$limite}&apikey={$cleApi}");
+                $reponse = $client->get("https://data.enseignementsup-recherche.gouv.fr/api/explore/v2.1/catalog/datasets/fr-esr-personnels-biatss-etablissements-publics/records?group_by=etablissement_id_uai%2Ctype_personnel%2Ceffectif%2Ceffectif_hommes%2Ceffectif_femmes&refine=rentree%3A%222021%22&start={$debut}&limit={$limite}&apikey={$cleApi}");
 
                 if ($reponse->getStatusCode() == 200) {
                     $data = json_decode($reponse->getBody(), true);
@@ -47,7 +47,7 @@ class PersonnelController extends Controller
         $donneeTriee = [];
 
         foreach ($toutesDonnees as $donnee) {
-            $etabLib = $donnee['etablissement_lib'];
+            $etabLib = $donnee['etablissement_id_uai'];
             $typePers = $donnee['type_personnel'];
             
             if (!isset($donneeTriee[$etabLib])) {
@@ -83,7 +83,7 @@ class PersonnelController extends Controller
         Personnel::truncate();
 
         foreach ($donneeTriee as $etabLib => $typesPers) {
-            $etab = Etablissement::where('Etablissement', $etabLib)->first();
+            $etab = Etablissement::where('id', $etabLib)->first();
 
             if ($etab) {
                 foreach ($typesPers as $typePers => $effectifs) {
