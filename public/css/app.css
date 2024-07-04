@@ -115,11 +115,11 @@ h3{
     padding: 5px;
 }
 .table-responsive-univ {
-    max-height: calc(100vh - 3%);
+    max-height: calc(100vh - 2.4%);
     overflow-y: auto;
 }
 .table-responsive-disc {
-    max-height: calc(100vh - 2.7%);
+    max-height: calc(100vh - 2.4%);
     overflow-y: auto;
 }
 .table-responsive-stat{
