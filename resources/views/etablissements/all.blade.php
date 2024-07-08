@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+
 @section('content')
     <div class="container-fluid">
         @if (!isset($academie))
@@ -56,9 +57,11 @@
         <div class="row justify-content-center">
             <div class="col-md-11">
                 <div class="btn-group btn-univ" role="group">
-                    <button type="button" class="btn btn-outline-primary active" data-vue="tableau">Vue Tableau</button>
-                    <button type="button" class="btn btn-outline-primary" data-vue="graphique">Vue Graphique</button>
-                    <button type="button" class="btn btn-outline-primary" data-vue="carte">Vue Carte</button>
+                    @if (!isset($academie))
+                        <button type="button" class="btn btn-outline-primary active" data-vue="tableau">Vue Tableau</button>
+                        <button type="button" class="btn btn-outline-primary" data-vue="graphique">Vue Graphique</button>
+                        <button type="button" class="btn btn-outline-primary" data-vue="carte">Vue Carte</button>
+                    @endif
                 </div>
                 <div class="btn-group btn-graphique" role="group" id="graphique-options" style="display: none;">
                     <button type="button" class="btn btn-outline-primary active" data-vue="effectif_E">Effectif etudiant</button>
@@ -128,37 +131,12 @@
                     <canvas id="graphiqueTypesChart" width="1300" height="660"></canvas>
                 </div>
                 
-                <div id="carte" style="display: none;">
-                    <div id="filtres" style="display: none;">
-                        <div class="mb-3 d-flex">
-                            <input type="text" id="filtreNom" class="filtreNom filtre" placeholder="Rechercher un établissement">
-                            <input type="text" id="filtreVille" class="filtreVille filtre" placeholder="Rechercher une ville">
-                            <div class="filtre-case">
-                                <label for="filtreType">Type d'établissement :</label><br>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-check">
-                                            <input class="form-check-input filtreType" type="checkbox" name="typeEtablissement" id="typeUniversite" value="Université">
-                                            <label class="form-check-label" for="typeUniversite">Université</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input filtreType" type="checkbox" name="typeEtablissement" id="typeEcole" value="École">
-                                            <label class="form-check-label" for="typeEcole">École</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="form-check">
-                                            <input class="form-check-input filtreType" type="checkbox" name="typeEtablissement" id="typeGrand" value="Grand établissement">
-                                            <label class="form-check-label" for="typeGrand">Grand établissement</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input filtreType" type="checkbox" name="typeEtablissement" id="typeAutre" value="Autre établissement">
-                                            <label class="form-check-label" for="typeAutre">Autre établissement</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>                    
-                        </div>
+                <div id="VueCarte" style="display: none;">
+                    <div id="carte-container">
+
+                    </div>
+                </div>
+
                 
                 <div id="indice">
                     <div class="row">
@@ -189,6 +167,9 @@
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
     <script>
         $(document).ready(function() {
             var etabs = @json($etablissements);
@@ -197,6 +178,9 @@
             var graphSecteurInstance = null;
             var graphTypeInstance = null;
             var currentGraphType = 'TE_Global';
+            var carte = null;
+            var marqueurs = [];
+
             var table = $('#etablissementsTable').DataTable({
                 paging: false,
                 ordering: true,
@@ -247,39 +231,115 @@
                 }
             });
 
-
             afficherVue('tableau');
 
-            function afficherVue(vue) {
-                $('#tableau').hide();
-                $('#graphique').hide();
-                $('#carte').hide();
-                $('#filtres').hide();
-                $('#indice').hide();
-                $('#graphique-options').hide();
-                $('#graphiqueSecteursContainer').hide();
-                $('.btn-group.btn-univ button').removeClass('active');
-                $(`#${vue}`).show();
-                $(`.btn-group.btn-univ button[data-vue="${vue}"]`).addClass('active');
+            
 
-                if (vue === 'tableau') {
-                    $('#filtres').show();
-                    $('#indice').show();
-                } else if (vue === 'graphique') {
-                    $('#graphique-options').show();
-                    $('#graphique').show();
-                    $('#graphique-options button').removeClass('active');
-                    $(`#graphique-options button[data-vue="${currentGraphType}"]`).addClass('active');
-                    dessinerGraphique(currentGraphType);
+            function initialiserCarte() {
+                var iconeGenerale = L.icon({
+                    iconUrl: 'images/icon_acad.png',
+                    iconSize: [25, 25],
+                    iconAnchor: [12, 41],
+                    popupAnchor: [1, -34],
+                    shadowSize: [41, 41]
+                });
+                if (!carte) {
+                    $('#VueCarte').css('height', '520px'); // Assurez-vous que le conteneur a une hauteur
+                    carte = L.map('VueCarte').setView([46.603354, 1.888334], 5);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap contributors'
+                    }).addTo(carte);
+
+                    etabs.forEach(function(etablissement) {
+                        if (etablissement.lat && etablissement.lon) {
+                            var popupContent = `
+                                <b>${etablissement.Etablissement}</b><br>
+                                Type: ${etablissement.Type}<br>
+                                Secteur: ${etablissement.Secteur}<br>
+                                <a href="${etablissement.url}" class="text-decoration-none">Plus de détails</a>
+                            `;
+                            var marqueur = L.marker([etablissement.lat, etablissement.lon], { icon: iconeGenerale })
+                                .bindPopup(popupContent);
+                            marqueurs.push({marqueur: marqueur, etab: etablissement});
+                            marqueur.addTo(carte);
+                        }
+                    });
                 }
+                setTimeout(function() {
+                    carte.invalidateSize();
+                }, 100);
+            }
+
+            function appliquerFiltresCarte() {
+                var filtreNom = $('#filtreNom').val().toLowerCase();
+                var filtreVille = $('#filtreVille').val().toLowerCase();
+                var filtresTypes = $('.filtreType:checked').map(function() {
+                    return $(this).val().toLowerCase();
+                }).get();
+                var filtresSecteurs = $('.filtreSecteur:checked').map(function() {
+                    return $(this).val().toLowerCase();
+                }).get();
+
+                marqueurs.forEach(function(item) {
+                    var etab = item.etab;
+                    var marqueur = item.marqueur;
+
+                    var correspondNom = filtreNom === '' || etab.Etablissement.toLowerCase().includes(filtreNom);
+                    var correspondVille = filtreVille === '' || etab.Commune.toLowerCase().includes(filtreVille);
+                    var correspondType = filtresTypes.length === 0 || filtresTypes.includes(etab.Type.toLowerCase());
+                    var correspondSecteur = filtresSecteurs.length === 0 || filtresSecteurs.includes(etab.Secteur.toLowerCase());
+
+                    if (correspondNom && correspondVille && correspondType && correspondSecteur) {
+                        carte.addLayer(marqueur);
+                    } else {
+                        carte.removeLayer(marqueur);
+                    }
+                });
+            }
+
+            $('#filtreNom, #filtreVille').on('input', function() {
+                if ($('#VueCarte').is(':visible')) {
+                    appliquerFiltresCarte();
+                } else {
+                    table.draw();
+                }
+            });
+
+            $('.filtreType, .filtreSecteur').on('change', function() {
+                if ($('#VueCarte').is(':visible')) {
+                    appliquerFiltresCarte();
+                } else {
+                    table.draw();
+                }
+            });
+
+            function afficherVue(vue) {
+                $('#tableau, #graphique, #VueCarte, #filtres, #indice, #graphique-options, #graphiqueSecteursContainer, #graphiqueTypesContainer').hide();
+                $('.btn-group.btn-univ button').removeClass('active');
+
+                switch(vue) {
+                    case 'tableau':
+                        $('#tableau, #filtres, #indice').show();
+                        break;
+                    case 'graphique':
+                        $('#graphique, #graphique-options').show();
+                        $('#graphique-options button').removeClass('active');
+                        $(`#graphique-options button[data-vue="${currentGraphType}"]`).addClass('active');
+                        dessinerGraphique(currentGraphType);
+                        break;
+                    case 'carte':
+                        $('#VueCarte, #filtres').show();
+                        setTimeout(initialiserCarte, 100);
+                        break;
+                }
+
+                $(`.btn-group.btn-univ button[data-vue="${vue}"]`).addClass('active');
             }
 
             $('.btn-group.btn-univ button').on('click', function() {
                 var vue = $(this).data('vue');
                 afficherVue(vue);
             });
-
-            var tauxInsertionInstance = null;
 
             $('#graphique-options button').on('click', function() {
                 var typeGraphique = $(this).data('vue');
@@ -301,26 +361,30 @@
                     graphTypeInstance = null;
                 }
 
-                if (typeGraphique === 'secteur') {
-                    $('#graphique').hide();
-                    $('#graphiqueSecteursContainer').show();
-                    $('#graphiqueTypesContainer').hide();
-                    dessinerGraphiqueSecteurs();
-                } else if (typeGraphique === 'TI_Licence' || typeGraphique === 'TI_Master_LMD' || typeGraphique === 'TI_Master_MEEF') {
-                    $('#graphique').show();
-                    $('#graphiqueSecteursContainer').hide();
-                    $('#graphiqueTypesContainer').hide();
-                    dessinerGraphiqueTauxInsertion(typeGraphique);
-                } else if (typeGraphique === 'type_Etab') {
-                    $('#graphique').hide();
-                    $('#graphiqueSecteursContainer').hide();
-                    $('#graphiqueTypesContainer').show();
-                    dessinerGraphiqueTypes();
-                } else {
-                    $('#graphique').show();
-                    $('#graphiqueSecteursContainer').hide();
-                    $('#graphiqueTypesContainer').hide();
-                    dessinerGraphique(typeGraphique);
+                switch(typeGraphique) {
+                    case 'secteur':
+                        $('#graphique').hide();
+                        $('#graphiqueSecteursContainer').show();
+                        $('#graphiqueTypesContainer').hide();
+                        dessinerGraphiqueSecteurs();
+                        break;
+                    case 'TI_Licence':
+                    case 'TI_Master_LMD':
+                    case 'TI_Master_MEEF':
+                        $('#graphique').show();
+                        $('#graphiqueSecteursContainer, #graphiqueTypesContainer').hide();
+                        dessinerGraphiqueTauxInsertion(typeGraphique);
+                        break;
+                    case 'type_Etab':
+                        $('#graphique').hide();
+                        $('#graphiqueSecteursContainer').hide();
+                        $('#graphiqueTypesContainer').show();
+                        dessinerGraphiqueTypes();
+                        break;
+                    default:
+                        $('#graphique').show();
+                        $('#graphiqueSecteursContainer, #graphiqueTypesContainer').hide();
+                        dessinerGraphique(typeGraphique);
                 }
             });
 
@@ -540,33 +604,36 @@
                 });
             }
 
+             // Filtres pour le tableau
             $.fn.dataTable.ext.search.push(
                 function(settings, data, dataIndex) {
                     var filtreNom = $('#filtreNom').val().toLowerCase();
                     var filtreVille = $('#filtreVille').val().toLowerCase();
-                        var filtresTypes = $('.filtreType:checked').map(function() {
+                    var filtresTypes = $('.filtreType:checked').map(function() {
                         return $(this).val().toLowerCase();
-                        }).get();
-                        var filtresSecteurs = $('.filtreSecteur:checked').map(function() {
+                    }).get();
+                    var filtresSecteurs = $('.filtreSecteur:checked').map(function() {
                         return $(this).val().toLowerCase();
-                        }).get();
-                        var etablissement = data[1].toLowerCase();
-                        var ville = data[3].toLowerCase();
-                        var type = data[2].toLowerCase();
-                        var secteur = data[4].toLowerCase();
+                    }).get();
+                    
+                    var etablissement = data[1].toLowerCase();
+                    var ville = data[3].toLowerCase();
+                    var type = data[2].toLowerCase();
+                    var secteur = data[4].toLowerCase();
 
-                        var correspondNom = filtreNom === '' || etablissement.includes(filtreNom);
-                        var correspondVille = filtreVille === '' || ville.includes(filtreVille);
-                        var correspondType = filtresTypes.length === 0 || filtresTypes.includes(type);
-                        var correspondSecteur = filtresSecteurs.length === 0 || filtresSecteurs.includes(secteur);
+                    var correspondNom = filtreNom === '' || etablissement.includes(filtreNom);
+                    var correspondVille = filtreVille === '' || ville.includes(filtreVille);
+                    var correspondType = filtresTypes.length === 0 || filtresTypes.includes(type);
+                    var correspondSecteur = filtresSecteurs.length === 0 || filtresSecteurs.includes(secteur);
 
-                        return correspondNom && correspondVille && correspondType && correspondSecteur;
+                    return correspondNom && correspondVille && correspondType && correspondSecteur;
                 }
             );
 
             $('#filtreNom, #filtreVille').on('input', function() {
                 table.draw();
             });
+
             $('.filtreType, .filtreSecteur').on('change', function() {
                 table.draw();
             });

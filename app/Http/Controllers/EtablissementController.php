@@ -12,7 +12,10 @@ class EtablissementController extends Controller
 {
     public function allEtablissement()
     {
-        $etablissements = Etablissement::all();
+        $etablissements = Etablissement::all()->map(function ($etablissement) {
+            $etablissement->url = route('etablissements.show', $etablissement->id);
+            return $etablissement;
+        });
         return view('etablissements.all', compact('etablissements'));
     }
 
@@ -22,6 +25,9 @@ class EtablissementController extends Controller
     
         $filteredEtablissements = $etablissements->filter(function ($etablissement) use ($academie) {
             return strpos($academie, $etablissement->Academie) !== false;
+        })->map(function ($etablissement) {
+            $etablissement->url = route('etablissements.show', $etablissement->id);
+            return $etablissement;
         });
     
         return view('etablissements.all', [
@@ -160,15 +166,4 @@ class EtablissementController extends Controller
         return redirect()->route('DataDiscipline')
         ->with('success', 'Les taux d\'encadrement ont bien été mis à jour.');
     }
-
-
-    public function carte()
-    {
-        $coordonnes = Etablissement::select('lat', 'lon', 'Etablissement', 'Type', 'Secteur')->get();
-        return view('carteEtab', ['coordonnes' => $coordonnes]);
-
-    }
-    
-
-
 }
