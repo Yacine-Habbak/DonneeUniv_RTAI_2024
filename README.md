@@ -24,6 +24,12 @@ Nous pouvons d'ores et deja séléctionner une académie française afin d'affic
 </p>
 
 
+* <h3>Carte de la liste des établissements</h3>
+<p align="center">
+  <img src="public/images/Capture_Ecran/Liste_Etab_Carte.PNG" title="liste des établissements">
+</p>
+
+
 * <h3>Le détail d'un établissement séléctionné</h3>
 <p align="center">
   <img src="public/images/Capture_Ecran/Detail_Univ.PNG" title="Details en graphe">
